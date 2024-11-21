@@ -1,120 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>happyippieecake</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-        }
-    </style>
-<!-- Header -->
-<header class="bg-white shadow header-animate">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>happyippieecake</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+
+  <!-- Header -->
+  <header class="bg-white shadow">
     <div class="container mx-auto flex justify-between items-center py-4 px-6">
-      <div class="text-3xl font-bold text-gray-800 flex items-center space-x-1">
-        <!-- Logo -->
-        <img 
-          src="gambar/happycake.png" 
-          alt="Logo Happyicakee" 
-          class="w-10 h-10 object-contain"
-        />
-        <!-- Nama Brand -->
+      <!-- Logo -->
+      <div class="flex items-center space-x-2 text-xl font-bold">
+        <img src="gambar/happycake.png" alt="Logo Happyicakee" class="w-10 h-10 object-contain">
         <span>happyi</span>
         <span class="text-yellow-500">ppieecake</span>
       </div>
+
       <!-- Navigation -->
-      <nav class="flex space-x-6">
+      <nav class="hidden md:flex space-x-6">
         <a class="text-gray-600 hover:text-gray-800 hover:underline" href="#">Produk</a>
         <a class="text-gray-600 hover:text-gray-800 hover:underline" href="#">Momen</a>
         <a class="text-gray-600 hover:text-gray-800 hover:underline" href="maps.html">Location</a>
         <a class="text-red-600 hover:text-red-800 font-semibold" href="#">For Business</a>
       </nav>
-      <!-- Icons -->
-      <div class="flex space-x-4">
-        <a class="text-gray-600 hover:text-gray-800 hover:scale-110 transition" href="#"><i class="fas fa-user"></i></a>
-        <a class="text-gray-600 hover:text-gray-800 hover:scale-110 transition" href="#"><i class="fas fa-shopping-cart"></i></a>
+
+      <!-- Menu Icon (Mobile) -->
+      <div class="md:hidden">
+        <button id="menu-toggle" class="text-gray-600">
+          <i class="fas fa-bars"></i>
+        </button>
       </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg">
+      <a class="block px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100" href="#">Produk</a>
+      <a class="block px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100" href="#">Momen</a>
+      <a class="block px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100" href="maps.html">Location</a>
+      <a class="block px-4 py-2 text-red-600 hover:text-red-800" href="#">For Business</a>
     </div>
   </header>
 
-    <!-- Main Content -->
-    <main class="flex flex-col items-center justify-center p-8">
-        <div class="flex flex-col items-center space-y-8">
-            <!-- Image Section -->
-            <img src="https://storage.googleapis.com/a1aa/image/mDQ3vHbneM22F6mDkeUrOaEru5UJlx1Rdm9tPN8eZSG8Q4knA.jpg" 
-                 alt="Chocolate cake" 
-                 class="w-72 h-72 object-cover rounded-lg shadow-lg">
+  <!-- Main Content -->
+  <main class="container mx-auto p-4 lg:p-8">
+    <div class="flex flex-col lg:flex-row items-center space-y-6 lg:space-y-0 lg:space-x-8">
+      <!-- Image Section -->
+      <img src="https://storage.googleapis.com/a1aa/image/mDQ3vHbneM22F6mDkeUrOaEru5UJlx1Rdm9tPN8eZSG8Q4knA.jpg" 
+           alt="Chocolate cake" 
+           class="w-full max-w-md object-cover rounded-lg shadow-lg">
 
-            <!-- Product Details -->
-            <div class="text-center">
-                <h2 class="text-2xl font-bold">Coco Cake - Jakarta (d16cm)</h2>
-                <p class="text-xl text-red-600 font-semibold">Rp 559.000</p>
-                <ul class="list-disc list-inside text-left space-y-2 mt-4">
-                    <li>Premium Coco Cake dengan cita rasa berkualitas dengan topping chocolate</li>
-                    <li>Lapisan buttercream cokelat dan hiasan serpihan cokelat menyelimuti kelembutan kue sponge cokelat</li>
-                    <li>Di dominasi dengan cake warna coklat</li>
-                    <li>Terbuat dari bahan - bahan yang premium</li>
-                    <li>Produk ini khusus pengiriman di kota: Jakarta dan sekitarnya</li>
-                </ul>
-                <h3 class="font-semibold mt-6">Rekomendasi untuk moment atau acara:</h3>
-                <p>Anniversary, Wisuda, Ulang Tahun, Terima Kasih</p>
-            </div>
+      <!-- Product Details -->
+      <div class="text-center lg:text-left">
+        <h2 class="text-2xl font-bold">Coco Cake - Jakarta (d16cm)</h2>
+        <p class="text-xl text-red-600 font-semibold mt-2">Rp 559.000</p>
+        <ul class="list-disc list-inside text-left space-y-2 mt-4">
+          <li>Premium Coco Cake dengan topping chocolate</li>
+          <li>Lapisan buttercream cokelat dengan serpihan cokelat</li>
+          <li>Dominasi warna coklat yang elegan</li>
+          <li>Terbuat dari bahan-bahan premium</li>
+          <li>Khusus pengiriman di Jakarta dan sekitarnya</li>
+        </ul>
+        <h3 class="font-semibold mt-6">Rekomendasi untuk:</h3>
+        <p>Anniversary, Wisuda, Ulang Tahun, Terima Kasih</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Order Form -->
+  <section class="bg-white shadow rounded-lg p-6 max-w-lg mx-auto">
+    <h2 class="text-lg font-semibold text-center mb-4">Form Pemesanan</h2>
+    <form>
+      <div class="mb-4">
+        <label for="kota-pengiriman" class="block text-sm font-medium text-gray-700">Kota Pengiriman</label>
+        <select id="kota-pengiriman" class="block w-full border border-gray-300 rounded-md p-2">
+          <option>Pilih Kota Pengiriman</option>
+        </select>
+      </div>
+
+      <!-- Shipping Options -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Opsi Pengiriman</label>
+        <div class="flex items-center space-x-4">
+          <label class="flex items-center space-x-2">
+            <input type="radio" name="pengiriman" checked class="h-4 w-4 text-red-600">
+            <span>Mobil (Lebih Aman)</span>
+          </label>
+          <label class="flex items-center space-x-2">
+            <input type="radio" name="pengiriman" class="h-4 w-4 text-red-600">
+            <span>Motor</span>
+          </label>
         </div>
-    </main>
+      </div>
 
-    <!-- Order Form -->
-    <section class="w-full max-w-md bg-white p-6 rounded-lg shadow-lg mt-8">
-        <h2 class="text-lg font-semibold text-center mb-4">Form Pemesanan</h2>
-        <form>
-            <div class="mb-4">
-                <label for="kota-pengiriman" class="block text-sm font-medium text-gray-700 mb-1">Kota Pengiriman</label>
-                <select id="kota-pengiriman" class="block w-full border border-gray-300 rounded-md p-2">
-                    <option>Pilih Kota Pengiriman</option>
-                </select>
-            </div>
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Opsi Pengiriman</label>
-                <div class="flex items-center">
-                    <input id="mobil" name="opsi-pengiriman" type="radio" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500" checked>
-                    <label for="mobil" class="ml-2 block text-sm text-gray-700">Mobil (Lebih Aman)</label>
-                </div>
-                <div class="flex items-center mt-2">
-                    <input id="motor" name="opsi-pengiriman" type="radio" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500">
-                    <label for="motor" class="ml-2 block text-sm text-gray-700">Motor</label>
-                </div>
-            </div>
-            <div class="mb-4">
-                <label for="alamat-pesanan" class="block text-sm font-medium text-gray-700 mb-1">Alamat Pesanan</label>
-                <textarea
-                  id="alamat-pesanan" 
-                  rows="3" 
-                  class="block w-full border border-gray-300 rounded-md p-2" 
-                  placeholder="Masukkan alamat lengkap pengiriman, termasuk jalan, nomor rumah, kecamatan, kota, dan kode pos">
-                </textarea>
-              </div>
-            <div class="mb-4">
-                <label for="tanggal-kirim" class="block text-sm font-medium text-gray-700 mb-1">Jam & Tanggal Kirim</label>
-                <input type="text" id="tanggal-kirim" class="block w-full border border-gray-300 rounded-md p-2" value="20 November 2024 11:00">
-            </div>
-            <div class="mb-4">
-                <label for="ucapan" class="block text-sm font-medium text-gray-700 mb-1">Ucapan</label>
-                <textarea id="ucapan" rows="3" class="block w-full border border-gray-300 rounded-md p-2"></textarea>
-                <p class="text-right text-sm text-gray-500">Max: 500</p>
-            </div>
-            <div class="flex justify-between">
-                <a href="https://wa.me/089533124304" target="_blank" class="bg-green-500 text-white px-4 py-2 rounded-md flex items-center">
-                    <i class="fab fa-whatsapp mr-2"></i>WHATSAPP
-                </a>
-                <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-md flex items-center">
-                    <i class="fas fa-shopping-cart mr-2"></i>PESAN SEKARANG
-                </button>
-            </div>
-        </form>
-    </section>
+      <!-- Address -->
+      <div class="mb-4">
+        <label for="alamat-pesanan" class="block text-sm font-medium text-gray-700">Alamat Pesanan</label>
+        <textarea id="alamat-pesanan" rows="3" class="block w-full border border-gray-300 rounded-md p-2"></textarea>
+      </div>
+
+      <!-- Delivery Time -->
+      <div class="mb-4">
+        <label for="tanggal-kirim" class="block text-sm font-medium text-gray-700">Jam & Tanggal Kirim</label>
+        <input type="datetime-local" id="tanggal-kirim" class="block w-full border border-gray-300 rounded-md p-2">
+      </div>
+
+      <!-- Greeting Message -->
+      <div class="mb-4">
+        <label for="ucapan" class="block text-sm font-medium text-gray-700">Ucapan</label>
+        <textarea id="ucapan" rows="3" class="block w-full border border-gray-300 rounded-md p-2"></textarea>
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex justify-between">
+        <a href="https://wa.me/089533124304" target="_blank" class="bg-green-500 text-white px-4 py-2 rounded-md">
+          <i class="fab fa-whatsapp"></i> WhatsApp
+        </a>
+        <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-md">
+          <i class="fas fa-shopping-cart"></i> Pesan Sekarang
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <script>
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+  </script>
 
 </body>
 </html>
