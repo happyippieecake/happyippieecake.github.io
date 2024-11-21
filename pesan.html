@@ -12,25 +12,34 @@
             font-family: 'Roboto', sans-serif;
         }
     </style>
-</head>
+<!-- Header -->
+<header class="bg-white shadow header-animate">
     <div class="container mx-auto flex justify-between items-center py-4 px-6">
       <div class="text-3xl font-bold text-gray-800 flex items-center space-x-1">
+        <!-- Logo -->
+        <img 
+          src="gambar/happycake.png" 
+          alt="Logo Happyicakee" 
+          class="w-10 h-10 object-contain"
+        />
+        <!-- Nama Brand -->
         <span>happyi</span>
         <span class="text-yellow-500">ppieecake</span>
       </div>
+      <!-- Navigation -->
       <nav class="flex space-x-6">
-        <a class="text-gray-600 hover:text-gray-800 hover:underline" href="index.html">Produk</a>
+        <a class="text-gray-600 hover:text-gray-800 hover:underline" href="#">Produk</a>
         <a class="text-gray-600 hover:text-gray-800 hover:underline" href="#">Momen</a>
         <a class="text-gray-600 hover:text-gray-800 hover:underline" href="maps.html">Location</a>
-        <a class="text-gray-600 hover:text-gray-800 hover:underline" href="#">Promo</a>
         <a class="text-red-600 hover:text-red-800 font-semibold" href="#">For Business</a>
       </nav>
+      <!-- Icons -->
       <div class="flex space-x-4">
         <a class="text-gray-600 hover:text-gray-800 hover:scale-110 transition" href="#"><i class="fas fa-user"></i></a>
         <a class="text-gray-600 hover:text-gray-800 hover:scale-110 transition" href="#"><i class="fas fa-shopping-cart"></i></a>
       </div>
     </div>
-    </header>
+  </header>
 
     <!-- Main Content -->
     <main class="flex flex-col items-center justify-center p-8">
@@ -80,7 +89,7 @@
             </div>
             <div class="mb-4">
                 <label for="alamat-pesanan" class="block text-sm font-medium text-gray-700 mb-1">Alamat Pesanan</label>
-                <textarea 
+                <textarea
                   id="alamat-pesanan" 
                   rows="3" 
                   class="block w-full border border-gray-300 rounded-md p-2" 

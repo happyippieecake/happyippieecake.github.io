@@ -11,25 +11,34 @@
 </head>
 <body class="bg-gray-100">
 
-  <!-- Header -->
-  <header class="bg-white shadow header-animate">
-    <div class="container mx-auto flex justify-between items-center py-4 px-6">
-      <div class="text-3xl font-bold text-gray-800 flex items-center space-x-1">
-        <span>happyi</span>
-        <span class="text-yellow-500">ppieecake</span>
-      </div>
-      <nav class="flex space-x-6">
-        <a class="text-gray-600 hover:text-gray-800 hover:underline" href="#">Produk</a>
-        <a class="text-gray-600 hover:text-gray-800 hover:underline" href="#">Momen</a>
-        <a class="text-gray-600 hover:text-gray-800 hover:underline" href="maps.html">Location</a>
-        <a class="text-red-600 hover:text-red-800 font-semibold" href="#">For Business</a>
-      </nav>
-      <div class="flex space-x-4">
-        <a class="text-gray-600 hover:text-gray-800 hover:scale-110 transition" href="#"><i class="fas fa-user"></i></a>
-        <a class="text-gray-600 hover:text-gray-800 hover:scale-110 transition" href="#"><i class="fas fa-shopping-cart"></i></a>
-      </div>
+ <!-- Header -->
+<header class="bg-white shadow header-animate">
+  <div class="container mx-auto flex justify-between items-center py-4 px-6">
+    <div class="text-3xl font-bold text-gray-800 flex items-center space-x-1">
+      <!-- Logo -->
+      <img 
+        src="gambar/happycake.png" 
+        alt="Logo Happyicakee" 
+        class="w-10 h-10 object-contain"
+      />
+      <!-- Nama Brand -->
+      <span>happyi</span>
+      <span class="text-yellow-500">ppieecake</span>
     </div>
-  </header>
+    <!-- Navigation -->
+    <nav class="flex space-x-6">
+      <a class="text-gray-600 hover:text-gray-800 hover:underline" href="#">Produk</a>
+      <a class="text-gray-600 hover:text-gray-800 hover:underline" href="#">Momen</a>
+      <a class="text-gray-600 hover:text-gray-800 hover:underline" href="maps.html">Location</a>
+      <a class="text-red-600 hover:text-red-800 font-semibold" href="#">For Business</a>
+    </nav>
+    <!-- Icons -->
+    <div class="flex space-x-4">
+      <a class="text-gray-600 hover:text-gray-800 hover:scale-110 transition" href="#"><i class="fas fa-user"></i></a>
+      <a class="text-gray-600 hover:text-gray-800 hover:scale-110 transition" href="#"><i class="fas fa-shopping-cart"></i></a>
+    </div>
+  </div>
+</header>
 
   <!-- Main Content -->
   <main class="bg-pink-50 py-12 fade-in">
@@ -54,23 +63,50 @@
           <button class="bg-gray-200 text-gray-600 px-4 py-2 rounded hover:bg-gray-300">Urutkan</button>
         </div>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 horizontal-layout">
         <!-- Product 1 -->
         <div class="bg-white shadow rounded-lg p-4 hover-scale">
           <div class="relative">
-            <img alt="Mocca Nougat Cake" class="w-full h-48 object-cover rounded-lg" src="https://storage.googleapis.com/a1aa/image/nEpHWgY37uqLClq4faz46HgpItZb0XCeeeVk9k0ffcA9FIn8E.jpg" />
-            <span class="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded shadow">SALE</span>
+            <img
+              alt="Mocca Nougat Cake"
+              class="w-full h-48 object-cover rounded-lg"
+              src="https://storage.googleapis.com/a1aa/image/nEpHWgY37uqLClq4faz46HgpItZb0XCeeeVk9k0ffcA9FIn8E.jpg"
+            />
+            <span
+              class="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded shadow"
+              >SALE</span
+            >
           </div>
           <h3 class="text-gray-800 font-semibold mt-4">Mocca Nougat - Jakarta</h3>
           <p class="text-red-600 line-through">Rp. 619.000</p>
           <p class="text-gray-800 font-bold">Rp. 549.000</p>
-          <a 
-          class="mt-4 block bg-yellow-500 text-white text-center py-2 rounded shadow hover:bg-yellow-600 transition" 
-          href="pesan.html"
-          target="_blank"
-        >
-          Pesan Sekarang
-        </a>
+          <a
+            class="mt-4 block bg-yellow-500 text-white text-center py-2 rounded shadow hover:bg-yellow-600 transition"
+            href="pesan.html"
+            target="_blank"
+          >
+            Pesan Sekarang
+          </a>
+          
+
+        </div>
+        <!-- Tambahkan produk lain dengan pola yang sama -->
+      </div>
+      
+      <style>
+        /* Untuk layout horizontal */
+        .horizontal-layout {
+          display: grid;
+          grid-auto-flow: column; /* Menjadikan elemen grid menambah ke samping */
+          overflow-x: auto; /* Menambahkan scrollbar jika melebihi layar */
+        }
+      
+        /* Styling untuk membuat tampilan lebih rapi */
+        .horizontal-layout > div {
+          min-width: 200px; /* Menentukan lebar minimum item dalam grid */
+        }
+      </style>
+      
         
 
         </div>
