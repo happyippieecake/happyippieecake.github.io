@@ -158,23 +158,5 @@
         }
     }
 </script>
-
-<script>
-    function sendToWhatsApp() {
-        const name = document.getElementById('name').value;
-        const product = document.getElementById('product').value;
-        const quantity = document.getElementById('quantity').value;
-
-        if (name && product && quantity) {
-            const message = `Halo, saya ingin memesan:\n\nNama: ${name}\nProduk: ${product}\nJumlah: ${quantity} $`;
-            const phoneNumber = "6285722341788"; // Ganti dengan nomor WhatsApp tujuan (format internasional tanpa tanda +)
-            const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-            window.open(url, '_blank');
-        } else {
-            alert('Harap isi semua data pada formulir.');
-        }
-    }
-</script>
-
 </body>
 </html>
