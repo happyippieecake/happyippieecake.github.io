@@ -1,30 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Map Integration</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Map Integration</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* Styling Global */
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to bottom, #ffafbd, #ffc3a0);
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .content {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      max-width: 800px;
+      width: 90%;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      color: #090808;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+
+    /* Styling Google Maps */
+    iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+    }
+
+    /* Styling Social Media Icons */
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .social-icons a {
+      font-size: 2rem;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      text-decoration: none;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .social-icons a:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .tiktok {
+      background: #000;
+    }
+
+    .instagram {
+      background: #000;
+    }
+
+    .youtube {
+      background:  #000;
+    }
+
+    .whatsapp {
+      background: #000;
+    }
+
+    /* Responsif */
+    @media (max-width: 768px) {
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      iframe {
+        height: 200px;
+      }
+
+      .social-icons a {
+        width: 40px;
+        height: 40px;
+        font-size: 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .content {
+        padding: 1.5rem;
+      }
+
+      h2 {
+        font-size: 1.3rem;
+      }
+
+      .social-icons {
+        gap: 0.8rem;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<!-- Kode Google Maps Embed -->
 <div class="content">
-    <h2>Our Location</h2>
-    <iframe 
+  <h2>Our Location</h2>
+  <iframe 
     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.875158727673!2d107.53109057419263!3d-6.90552886757998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e569a8e9d7bb%3A0x142ecf9a09a7f3e7!2shappyippieecake!5e0!3m2!1sid!2sid!4v1732258887111!5m2!1sid!2sid"
     allowfullscreen="" 
-    loading="lazy"></iframe>
+    loading="lazy">
+  </iframe>
 
-    <h2>Follow Us on Social Mediaa</h2>
-<div class="social-icons">
+  <h2>Follow Us on Social Media</h2>
+  <div class="social-icons">
     <a href="https://vt.tiktok.com/ZSjywD9oy/?poisharing=D%2527Edge-Coffeelink" target="_blank" class="tiktok"><i class="fab fa-tiktok"></i></a>
     <a href="https://www.instagram.com/happyippieecake?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" class="instagram"><i class="fab fa-instagram"></i></a>
     <a href="https://www.youtube.com/channel/UCxxxx" target="_blank" class="youtube"><i class="fab fa-youtube"></i></a>
     <a href="https://wa.me/+62 089533124304" target="_blank" class="whatsapp"><i class="fab fa-whatsapp"></i></a>
-</div>
-
+  </div>
 </div>
 
 </body>

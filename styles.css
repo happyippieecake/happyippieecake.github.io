@@ -30,6 +30,8 @@ body {
     transition: transform 0.3s ease-in-out;
   }
 
+  
+
   body {
     font-family: Arial, sans-serif;
     margin: 20px;
@@ -63,11 +65,11 @@ input, button {
     transition: border-color 0.3s;
 }
 input:focus {
-    border-color: #25D366;
+    border-color: #e43b9b;
     outline: none;
 }
 button {
-    background-color: #25D366;
+    background-color: #e43b9b;
     color: white;
     font-size: 16px;
     cursor: pointer;
