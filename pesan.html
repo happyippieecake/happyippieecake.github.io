@@ -124,6 +124,9 @@
     <label for="address">Alamat:</label>
     <input type="text" id="address" name="address" placeholder="Masukkan alamat Anda" required>
 
+    <label for="ucapan">Ucapan:</label>
+    <input type="text" id="ucapan" name="ucapan" placeholder="Masukkan ucapan Anda" required>
+
     <button type="button" onclick="sendToWhatsApp()">Kirim Pesanan</button>
 </form>
 
@@ -133,14 +136,16 @@
         const product = document.getElementById('product').value;
         const quantity = document.getElementById('quantity').value;
         const address = document.getElementById('address').value;
+        const ucapan = document.getElementById('ucapan').value;
 
-        if (name && product && quantity && address) {
+        if (name && product && quantity && address && ucapan) {
             // Membuat pesan
             const message = `Halo, saya ingin memesan:\n\n` +
                             `Nama: ${name}\n` +
                             `Produk: ${product}\n` +
                             `Jumlah: ${quantity}\n` +
-                            `Alamat: ${address}`;
+                            `Alamat: ${address} \n` +
+                            `ucapan: ${ucapan}`;
             
             // Nomor WhatsApp tujuan (gunakan format internasional tanpa tanda +)
             const phoneNumber = "6285722341788"; // Ganti dengan nomor Anda
