@@ -43,7 +43,12 @@
       </div>
     </div>
 
-  
+    <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg max-h-0 overflow-hidden transition-all duration-300">
+        <a class="block px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100" href="index.html">Produk</a>
+        <a class="block px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100" href="#">Momen</a>
+        <a class="block px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100" href="maps.html">Location</a>
+        <a class="block px-4 py-2 text-red-600 hover:text-red-800" href="#">For Business</a>
+    </div>
     
     <script>
         const menuToggle = document.getElementById("menu-toggle");
@@ -58,11 +63,7 @@
                 setTimeout(() => mobileMenu.classList.add("hidden"), 300);
             }
         });
-    </script>
-    
-
-
-  
+    </script>  
   <style>
     /* Styling Global */
     body {
