@@ -1,237 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Pemesanan Kue</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="styles.css">
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <title>Dashboard Admin - Pemesanan Kue</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-  <div class="d-flex">
-    <!-- Sidebar -->
-    <nav class="bg-dark text-white sidebar p-3">
-      <h3 class="text-center">Kue Dashboard</h3>
-      <ul class="nav flex-column mt-4">
-        <li class="nav-item">
-          <a href="#overview" class="nav-link text-white">
-            <i class="fas fa-chart-pie me-2"></i> Overview
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="#orders" class="nav-link text-white">
-            <i class="fas fa-box me-2"></i> Orders
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="#cakes" class="nav-link text-white">
-            <i class="fas fa-birthday-cake me-2"></i> Manage Cakes
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="#logout" class="nav-link text-white">
-            <i class="fas fa-sign-out-alt me-2"></i> Logout
-          </a>
-        </li>
+<body class="bg-gray-100">
+
+  <!-- Sidebar -->
+  <div class="flex h-screen">
+    <div class="w-64 bg-gray-800 text-white p-5">
+      <h2 class="text-2xl font-semibold mb-6">Admin Dashboard</h2>
+      <ul>
+        <li><a href="#" class="block py-2 px-3 mb-2 bg-gray-700 rounded">Dashboard</a></li>
+        <li><a href="#" class="block py-2 px-3 mb-2 bg-gray-700 rounded">Pemesanan</a></li>
+        <li><a href="#" class="block py-2 px-3 mb-2 bg-gray-700 rounded">Menu Kue</a></li>
       </ul>
-    </nav>
+    </div>
 
     <!-- Main Content -->
-    <div class="content p-4" id="content">
-      <!-- Overview -->
-      <div id="overview">
-        <h1 class="mb-4">Overview</h1>
-        <div class="row g-4">
-          <div class="col-md-4">
-            <div class="card text-white bg-primary shadow">
-              <div class="card-body">
-                <h5 class="card-title">Total Orders</h5>
-                <p class="card-text fs-3" id="totalOrders">125</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card text-white bg-success shadow">
-              <div class="card-body">
-                <h5 class="card-title">Revenue</h5>
-                <p class="card-text fs-3" id="revenue">Rp 50,000,000</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card text-white bg-warning shadow">
-              <div class="card-body">
-                <h5 class="card-title">Pending Orders</h5>
-                <p class="card-text fs-3" id="pendingOrders">12</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="flex-1 p-6">
+      <h1 class="text-3xl font-semibold mb-6">Dashboard</h1>
 
-      <!-- Orders -->
-      <div id="orders" style="display:none;">
-        <h1 class="mb-4">Orders</h1>
-        <table class="table table-bordered">
-          <thead class="table-dark">
-            <tr>
-              <th>#</th>
-              <th>Customer</th>
-              <th>Order Date</th>
-              <th>Status</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody id="ordersTable">
-            <!-- Orders will be loaded dynamically -->
-          </tbody>
-        </table>
-      </div> 
+      <!-- Button to Open Modal -->
+      <button class="bg-blue-500 text-white px-4 py-2 rounded" onclick="openModal()">Tambah Menu</button>
 
-      <!-- Manage Cakes -->
-      <div id="cakes" style="display:none;">
-        <h1 class="mb-4">Manage Cakes</h1>
-        <button class="btn btn-primary mb-3" id="addCake">
-          <i class="fas fa-plus me-2"></i> Add Cake
-        </button>
-        <table class="table table-bordered">
-          <thead class="table-dark">
-            <tr>
-              <th>#</th>
-              <th>Image</th>
-              <th>Name</th>
-              <th>Price</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="cakesTable">
-            <div class="modal fade" id="editCakeModal" tabindex="-1" aria-labelledby="editCakeModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="editCakeModalLabel">Edit Cake</h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                      <form id="editCakeForm">
-                        <div class="mb-3">
-                          <label for="editCakeName" class="form-label">Cake Name</label>
-                          <input type="text" class="form-control" id="editCakeName" required>
-                        </div>
-                        <div class="mb-3">
-                          <label for="editCakePrice" class="form-label">Price</label>
-                          <input type="number" class="form-control" id="editCakePrice" required>
-                        </div>
-                        <div class="mb-3">
-                          <label for="editCakeImage" class="form-label">Image URL</label>
-                          <input type="text" class="form-control" id="editCakeImage" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-            <!-- Cake list will be loaded dynamically -->
-          </tbody>
-        </table>
-      </div>
+      <!-- Table for Menu Kue -->
+      <table class="w-full mt-6 bg-white rounded shadow-md">
+        <thead>
+          <tr class="bg-gray-200">
+            <th class="p-3 text-left">Nama Kue</th>
+            <th class="p-3 text-left">Harga</th>
+            <th class="p-3 text-left">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Data Menu Kue -->
+          <tr>
+            <td class="p-3">Kue Coklat</td>
+            <td class="p-3">Rp 50.000</td>
+            <td class="p-3">
+              <button class="bg-yellow-500 text-white px-3 py-1 rounded">Edit</button>
+              <button class="bg-red-500 text-white px-3 py-1 rounded">Hapus</button>
+            </td>
+          </tr>
+          <!-- Tambahkan menu lain di sini -->
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="scripts.js"></script>
+  <!-- Modal untuk Tambah Menu -->
+  <div id="modalTambahMenu" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded-lg w-96">
+      <h2 class="text-xl font-semibold mb-4">Tambah Menu Kue</h2>
+      <form>
+        <label for="namaKue" class="block text-sm font-medium text-gray-700">Nama Kue</label>
+        <input type="text" id="namaKue" class="w-full p-2 mb-4 border border-gray-300 rounded" required>
+
+        <label for="hargaKue" class="block text-sm font-medium text-gray-700">Harga</label>
+        <input type="number" id="hargaKue" class="w-full p-2 mb-4 border border-gray-300 rounded" required>
+
+        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Simpan</button>
+        <button type="button" class="bg-red-500 text-white px-4 py-2 rounded ml-2" onclick="closeModal()">Batal</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Fungsi untuk membuka modal
+    function openModal() {
+      document.getElementById('modalTambahMenu').classList.remove('hidden');
+    }
+
+    // Fungsi untuk menutup modal
+    function closeModal() {
+      document.getElementById('modalTambahMenu').classList.add('hidden');
+    }
+  </script>
+
 </body>
 </html>
-
-
-<script>
-    $(document).ready(function () {
-  // Navigation functionality
-  $(".nav-link").click(function (e) {
-    e.preventDefault();
-    const target = $(this).attr("href").substring(1);
-    $(".content > div").hide();
-    $(`#${target}`).show();
-  });
-
-  // Sample Orders Data
-  const orders = [
-    { id: 1, customer: "Alice", date: "2024-12-01", status: "Completed", total: "Rp 500,000" },
-    { id: 2, customer: "Bob", date: "2024-12-02", status: "Pending", total: "Rp 300,000" },
-    { id: 3, customer: "Charlie", date: "2024-12-03", status: "Processing", total: "Rp 700,000" },
-  ];
-
-  const cakes = [
-    { id: 1, image: "https://via.placeholder.com/50", name: "Chocolate Cake", price: "Rp 200,000" },
-    { id: 2, image: "https://via.placeholder.com/50", name: "Cheesecake", price: "Rp 250,000" },
-  ];
-
-  // Load Orders Table
-  function loadOrders() {
-    $("#ordersTable").empty();
-    orders.forEach((order) => {
-      $("#ordersTable").append(`
-        <tr>
-          <td>${order.id}</td>
-          <td>${order.customer}</td>
-          <td>${order.date}</td>
-          <td>${order.status}</td>
-          <td>${order.total}</td>
-        </tr>
-      `);
-    });
-  }
-
-  // Load Cakes Table
-  function loadCakes() {
-    $("#cakesTable").empty();
-    cakes.forEach((cake, index) => {
-      $("#cakesTable").append(`
-        <tr>
-          <td>${index + 1}</td>
-          <td><img src="${cake.image}" alt="${cake.name}" width="50"></td>
-          <td>${cake.name}</td>
-          <td>${cake.price}</td>
-          <td>
-            <button class="btn btn-sm btn-warning editCake" data-id="${cake.id}">Edit</button>
-            <button class="btn btn-sm btn-danger deleteCake" data-id="${cake.id}">Delete</button>
-          </td>
-        </tr>
-      `);
-    });
-  }
-
-  // Initial Load
-  loadOrders();
-  loadCakes();
-
-  // Add Cake Modal
-  $("#addCakeBtn").click(function () {
-    $("#addCakeModal").modal("show");
-  });
-
-  // Add Cake Functionality
-  $("#addCakeForm").submit(function (e) {
-    e.preventDefault();
-
-    // Get form values
-    const cakeName = $("#cakeName").val();
-    const cakePrice = `Rp ${parseInt($("#cakePrice").val()).toLocaleString()}`;
-    const cakeImage = $("#cakeImage").val();
-
-    // Push new cake to array
-    cakes.push({ id: cakes.length + 1, image: cakeImage, name: cakeName, price: cakePrice });
-
-    // Reload cakes table
-    loadCakes();
-
-    // Hide modal and reset form
-    $("#addCakeModal").modal("hide");
-    $("#addCakeForm")[0].reset();
-  });
-});
-
-</script>

@@ -7,19 +7,41 @@ $(document).ready(function () {
       $(`#${target}`).show();
     });
   
-    // Sample Data
+    // Sample Orders Data
+    const orders = [
+      { id: 1, customer: "Alice", date: "2024-12-01", status: "Completed", total: "Rp 500,000" },
+      { id: 2, customer: "Bob", date: "2024-12-02", status: "Pending", total: "Rp 300,000" },
+      { id: 3, customer: "Charlie", date: "2024-12-03", status: "Processing", total: "Rp 700,000" },
+    ];
+  
     const cakes = [
       { id: 1, image: "https://via.placeholder.com/50", name: "Chocolate Cake", price: "Rp 200,000" },
       { id: 2, image: "https://via.placeholder.com/50", name: "Cheesecake", price: "Rp 250,000" },
     ];
   
+    // Load Orders Table
+    function loadOrders() {
+      $("#ordersTable").empty();
+      orders.forEach((order) => {
+        $("#ordersTable").append(`
+          <tr>
+            <td>${order.id}</td>
+            <td>${order.customer}</td>
+            <td>${order.date}</td>
+            <td>${order.status}</td>
+            <td>${order.total}</td>
+          </tr>
+        `);
+      });
+    }
+  
     // Load Cakes Table
     function loadCakes() {
       $("#cakesTable").empty();
-      cakes.forEach((cake, index) => {
+      cakes.forEach((cake) => {
         $("#cakesTable").append(`
           <tr>
-            <td>${index + 1}</td>
+            <td>${cake.id}</td>
             <td><img src="${cake.image}" alt="${cake.name}" width="50"></td>
             <td>${cake.name}</td>
             <td>${cake.price}</td>
@@ -33,38 +55,7 @@ $(document).ready(function () {
     }
   
     // Initial Load
+    loadOrders();
     loadCakes();
-  
-    // Edit Cake Modal
-    let editIndex = null;
-    $(document).on("click", ".editCake", function () {
-      const id = $(this).data("id");
-      const cake = cakes.find((c) => c.id === id);
-      editIndex = cakes.findIndex((c) => c.id === id);
-  
-      // Populate modal with current data
-      $("#editCakeName").val(cake.name);
-      $("#editCakePrice").val(cake.price.replace(/[^\d]/g, ""));
-      $("#editCakeImage").val(cake.image);
-  
-      // Show modal
-      $("#editCakeModal").modal("show");
-    });
-  
-    // Save Edited Cake
-    $("#editCakeForm").submit(function (e) {
-      e.preventDefault();
-  
-      // Update cake data
-      cakes[editIndex].name = $("#editCakeName").val();
-      cakes[editIndex].price = `Rp ${parseInt($("#editCakePrice").val()).toLocaleString()}`;
-      cakes[editIndex].image = $("#editCakeImage").val();
-  
-      // Reload table
-      loadCakes();
-  
-      // Hide modal
-      $("#editCakeModal").modal("hide");
-    });
   });
   
