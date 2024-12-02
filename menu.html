@@ -24,12 +24,14 @@
           <button class="btn btn-primary" onclick="openAddModal()">Tambah Menu</button>
         </header>
         <table class="table">
-          <thead>
-            <tr>
-              <th>Nama Kue</th>
-              <th>Harga</th>
-              <th>Aksi</th>
-            </tr>
+            <thead>
+                <tr>
+                  <th>Nama Kue</th>
+                  <th>Harga</th>
+                  <th>Gambar</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
           </thead>
           <tbody id="menuTable">
             <!-- Data menu akan diisi melalui JavaScript -->
@@ -47,6 +49,11 @@
             
             <label for="hargaKue">Harga</label>
             <input type="number" id="hargaKue" required>
+
+            <label for="gambarKue">Gambar Kue</label>
+            <input type="file" id="gambarKue" accept="image/*" class="file-input" required>
+      
+      
             
             <div class="modal-actions">
               <button type="submit" class="btn btn-success">Simpan</button>
@@ -57,163 +64,251 @@
       </div>
     
       <script>
-        let menuData = [
-      { id: 1, nama: "Kue Coklat", harga: 50000 },
-      { id: 2, nama: "Kue Keju", harga: 60000 },
-    ];
-    
-    let editId = null;
-    
-    // Render Menu Table
-    function renderTable() {
-      const menuTable = document.getElementById("menuTable");
-      menuTable.innerHTML = menuData
-        .map(
-          (menu) => `
-          <tr>
-            <td>${menu.nama}</td>
-            <td>Rp ${menu.harga.toLocaleString()}</td>
-            <td>
-              <button class="btn btn-success" onclick="editMenu(${menu.id})">Edit</button>
-              <button class="btn btn-danger" onclick="deleteMenu(${menu.id})">Hapus</button>
-            </td>
-          </tr>
-        `
-        )
-        .join("");
-    }
-    
-    // Open Add Menu Modal
-    function openAddModal() {
-      editId = null;
-      document.getElementById("modalTitle").innerText = "Tambah Menu";
-      document.getElementById("namaKue").value = "";
-      document.getElementById("hargaKue").value = "";
-      document.getElementById("menuModal").classList.remove("hidden");
-    }
-    
-    // Open Edit Menu Modal
-    function editMenu(id) {
-      const menu = menuData.find((item) => item.id === id);
-      editId = id;
-      document.getElementById("modalTitle").innerText = "Edit Menu";
-      document.getElementById("namaKue").value = menu.nama;
-      document.getElementById("hargaKue").value = menu.harga;
-      document.getElementById("menuModal").classList.remove("hidden");
-    }
-    
-    // Save Menu (Add or Edit)
-    document.getElementById("menuForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const namaKue = document.getElementById("namaKue").value;
-      const hargaKue = parseInt(document.getElementById("hargaKue").value, 10);
-    
-      if (editId) {
-        // Edit existing menu
-        const menu = menuData.find((item) => item.id === editId);
-        menu.nama = namaKue;
-        menu.harga = hargaKue;
-      } else {
-        // Add new menu
-        menuData.push({ id: Date.now(), nama: namaKue, harga: hargaKue });
-      }
-    
-      closeModal();
-      renderTable();
-    });
-    
-    // Delete Menu
-    function deleteMenu(id) {
-      menuData = menuData.filter((item) => item.id !== id);
-      renderTable();
-    }
-    
-    // Close Modal
-    function closeModal() {
-      document.getElementById("menuModal").classList.add("hidden");
-    }
-    
-    // Initialize Table
-    document.addEventListener("DOMContentLoaded", renderTable);
-    
+      let menuData = [
+  {
+    id: 1,
+    nama: "Kue Coklat",
+    harga: 50000,
+    gambar: "https://via.placeholder.com/150/0000FF/808080?text=Kue+Coklat", // Gambar Kue Coklat
+  },
+  {
+    id: 2,
+    nama: "Kue Keju",
+    harga: 60000,
+    gambar: "https://via.placeholder.com/150/FF0000/FFFFFF?text=Kue+Keju", // Gambar Kue Keju
+  },
+];
+
+
+let editId = null;
+
+// Render Menu Table
+function renderTable() {
+  const menuTable = document.getElementById("menuTable");
+  menuTable.innerHTML = menuData
+    .map(
+      (menu) => `
+      <tr>
+        <td>${menu.nama}</td>
+        <td>Rp ${menu.harga.toLocaleString()}</td>
+        <td>
+          ${
+            menu.gambar
+              ? `<img src="${menu.gambar}" alt="${menu.nama}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;">`
+              : "Tidak ada gambar"
+          }
+        </td>
+        <td>
+          <button class="btn btn-success" onclick="editMenu(${menu.id})">Edit</button>
+          <button class="btn btn-danger" onclick="deleteMenu(${menu.id})">Hapus</button>
+        </td>
+      </tr>
+    `
+    )
+    .join("");
+}
+
+
+// Open Add Menu Modal
+function openAddModal() {
+  editId = null;
+  document.getElementById("modalTitle").innerText = "Tambah Menu";
+  document.getElementById("namaKue").value = "";
+  document.getElementById("hargaKue").value = "";
+  document.getElementById("gambarKue").value = "";
+  document.getElementById("menuModal").classList.remove("hidden");
+}
+
+// Open Edit Menu Modal
+function editMenu(id) {
+  const menu = menuData.find((item) => item.id === id);
+  editId = id;
+  document.getElementById("modalTitle").innerText = "Edit Menu";
+  document.getElementById("namaKue").value = menu.nama;
+  document.getElementById("hargaKue").value = menu.harga;
+  document.getElementById("gambarKue").value = "";
+  document.getElementById("menuModal").classList.remove("hidden");
+}
+
+// Save Menu (Add or Edit)
+document.getElementById("menuForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const namaKue = document.getElementById("namaKue").value;
+  const hargaKue = parseInt(document.getElementById("hargaKue").value, 10);
+  const gambarKue = document.getElementById("gambarKue").files[0];
+
+  let gambarUrl = "";
+  if (gambarKue) {
+    gambarUrl = URL.createObjectURL(gambarKue); // Generate preview URL untuk file
+  }
+
+  if (editId) {
+    // Edit existing menu
+    const menu = menuData.find((item) => item.id === editId);
+    menu.nama = namaKue;
+    menu.harga = hargaKue;
+    menu.gambar = gambarUrl;
+  } else {
+    // Add new menu
+    menuData.push({ id: Date.now(), nama: namaKue, harga: hargaKue, gambar: gambarUrl });
+  }
+
+  closeModal();
+  renderTable();
+});
+
+// Delete Menu
+function deleteMenu(id) {
+  menuData = menuData.filter((item) => item.id !== id);
+  renderTable();
+}
+
+// Close Modal
+function closeModal() {
+  document.getElementById("menuModal").classList.add("hidden");
+}
+
+// Initialize Table
+document.addEventListener("DOMContentLoaded", renderTable);
+
       </script>
     
     </body>
     </html>
     
     <style>
+  table img {
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
         /* Modal Styling */
-    .modal {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 1000;
-    }
-    
-    .modal.hidden {
-      display: none;
-    }
-    
-    .modal-content {
-      background: #fff;
-      padding: 1.5rem;
-      border-radius: 8px;
-      width: 400px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    
-    .modal-content h2 {
-      margin-bottom: 1rem;
-    }
-    
-    .modal-content label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
-    }
-    
-    .modal-content input {
-      width: 100%;
-      padding: 0.75rem;
-      margin-bottom: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    
-    /* Button Styling */
-    .btn {
-      display: inline-block;
-      padding: 0.75rem 1rem;
-      font-size: 1rem;
-      text-align: center;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    
-    .btn-primary {
-      background-color: #3b82f6;
-      color: #fff;
-      border: none;
-    }
-    
-    .btn-primary:hover {
-      background-color: #2563eb;
-    }
-    
-    .btn-success {
-      background-color: #10b981;
-      color: #fff;
-    }
-    
-    .btn-danger {
-      background-color: #ef4444;
-      color: #fff;
-    }
-    
-    </style>
+        .modal {
+          position: fixed;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(0, 0, 0, 0.6); /* Lebih gelap untuk fokus */
+          z-index: 1000;
+          animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        .modal.hidden {
+          display: none;
+        }
+        
+        .modal-content {
+          background: linear-gradient(135deg, #ffffff, #f3f4f6); /* Gradasi lembut */
+          padding: 2rem;
+          border-radius: 12px; /* Lebih melengkung */
+          width: 420px;
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Shadow lebih nyata */
+          transform: scale(0.9); /* Animasi masuk */
+          animation: scaleUp 0.3s ease-in-out forwards;
+        }
+        
+        /* Modal Title */
+        .modal-content h2 {
+          margin-bottom: 1.5rem;
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #1f2937; /* Warna teks lebih gelap */
+          text-align: center;
+          border-bottom: 2px solid #e5e7eb;
+          padding-bottom: 0.5rem;
+        }
+        
+        /* Label Styling */
+        .modal-content label {
+          display: block;
+          margin-bottom: 0.5rem;
+          font-weight: 600;
+          color: #4b5563; /* Warna abu lembut */
+        }
+        
+        /* Input Styling */
+        .modal-content input {
+          width: 100%;
+          padding: 0.8rem;
+          margin-bottom: 1.5rem;
+          border: 2px solid #d1d5db;
+          border-radius: 8px;
+          outline: none;
+          transition: border-color 0.2s;
+        }
+        
+        .modal-content input:focus {
+          border-color: #2563eb; /* Fokus dengan warna biru */
+          box-shadow: 0 0 5px rgba(37, 99, 235, 0.5);
+        }
+        
+        /* Button Styling */
+        .btn {
+          display: inline-block;
+          padding: 0.8rem 1.2rem;
+          font-size: 1rem;
+          font-weight: 600;
+          text-align: center;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-primary {
+          background-color: #3b82f6;
+          color: #fff;
+        }
+        
+        .btn-primary:hover {
+          background-color: #2563eb;
+        }
+        
+        .btn-success {
+          background-color: #10b981;
+          color: #fff;
+        }
+        
+        .btn-success:hover {
+          background-color: #059669;
+        }
+        
+        .btn-danger {
+          background-color: #ef4444;
+          color: #fff;
+        }
+        
+        .btn-danger:hover {
+          background-color: #dc2626;
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+          from {
+            background: rgba(0, 0, 0, 0);
+          }
+          to {
+            background: rgba(0, 0, 0, 0.6);
+          }
+        }
+        
+        @keyframes scaleUp {
+          from {
+            transform: scale(0.9);
+          }
+          to {
+            transform: scale(1);
+          }
+        }
+        </style>
+        
   
     <script>
       // Logout Function
