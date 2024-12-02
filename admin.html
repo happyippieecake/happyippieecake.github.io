@@ -1,84 +1,152 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Admin - Pemesanan Kue</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css" rel="stylesheet">
+  <title>Admin Dashboard - Cake Order</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/script.js" defer></script>
 </head>
-<body class="bg-gray-100">
-
-  <!-- Sidebar -->
-  <div class="flex h-screen">
-    <div class="w-64 bg-gray-800 text-white p-5">
-      <h2 class="text-2xl font-semibold mb-6">Admin Dashboard</h2>
-      <ul>
-        <li><a href="#" class="block py-2 px-3 mb-2 bg-gray-700 rounded">Dashboard</a></li>
-        <li><a href="#" class="block py-2 px-3 mb-2 bg-gray-700 rounded">Pemesanan</a></li>
-        <li><a href="#" class="block py-2 px-3 mb-2 bg-gray-700 rounded">Menu Kue</a></li>
-      </ul>
-    </div>
-
-    <!-- Main Content -->
-    <div class="flex-1 p-6">
-      <h1 class="text-3xl font-semibold mb-6">Dashboard</h1>
-
-      <!-- Button to Open Modal -->
-      <button class="bg-blue-500 text-white px-4 py-2 rounded" onclick="openModal()">Tambah Menu</button>
-
-      <!-- Table for Menu Kue -->
-      <table class="w-full mt-6 bg-white rounded shadow-md">
-        <thead>
-          <tr class="bg-gray-200">
-            <th class="p-3 text-left">Nama Kue</th>
-            <th class="p-3 text-left">Harga</th>
-            <th class="p-3 text-left">Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Data Menu Kue -->
-          <tr>
-            <td class="p-3">Kue Coklat</td>
-            <td class="p-3">Rp 50.000</td>
-            <td class="p-3">
-              <button class="bg-yellow-500 text-white px-3 py-1 rounded">Edit</button>
-              <button class="bg-red-500 text-white px-3 py-1 rounded">Hapus</button>
-            </td>
-          </tr>
-          <!-- Tambahkan menu lain di sini -->
-        </tbody>
-      </table>
-    </div>
+<body>
+  <div class="sidebar">
+    <h2 class="logo">CakeAdmin</h2>
+    <ul>
+      <li><a href="main-content" class="active">Dashboard</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="orders.html">Pesanan</a></li>
+      <li><a href="users.html">Pengguna</a></li>
+      <li><a href="#" onclick="logout()">Logout</a></li>
+    </ul>
   </div>
-
-  <!-- Modal untuk Tambah Menu -->
-  <div id="modalTambahMenu" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-    <div class="bg-white p-6 rounded-lg w-96">
-      <h2 class="text-xl font-semibold mb-4">Tambah Menu Kue</h2>
-      <form>
-        <label for="namaKue" class="block text-sm font-medium text-gray-700">Nama Kue</label>
-        <input type="text" id="namaKue" class="w-full p-2 mb-4 border border-gray-300 rounded" required>
-
-        <label for="hargaKue" class="block text-sm font-medium text-gray-700">Harga</label>
-        <input type="number" id="hargaKue" class="w-full p-2 mb-4 border border-gray-300 rounded" required>
-
-        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Simpan</button>
-        <button type="button" class="bg-red-500 text-white px-4 py-2 rounded ml-2" onclick="closeModal()">Batal</button>
-      </form>
+  <div class="main-content">
+    <header>
+      <h1>Dashboard</h1>
+    </header>
+    <div class="cards">
+      <div class="card">
+        <h2>Pesanan Hari Ini</h2>
+        <p>25</p>
+      </div>
+      <div class="card">
+        <h2>Total Menu</h2>
+        <p>15</p>
+      </div>
+      <div class="card">
+        <h2>Pengguna Aktif</h2>
+        <p>50</p>
+      </div>
     </div>
   </div>
 
   <script>
-    // Fungsi untuk membuka modal
-    function openModal() {
-      document.getElementById('modalTambahMenu').classList.remove('hidden');
-    }
-
-    // Fungsi untuk menutup modal
-    function closeModal() {
-      document.getElementById('modalTambahMenu').classList.add('hidden');
-    }
+    // Logout Function
+function logout() {
+  alert("Anda berhasil logout!");
+  window.location.href = "login.html"; // Redirect ke halaman login
+}
   </script>
-
 </body>
 </html>
+
+<style>
+    /* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Body Styling */
+body {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f9fafb;
+}
+
+/* Sidebar Styling */
+.sidebar {
+  width: 250px;
+  background-color: #1f2937;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.sidebar .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar ul li {
+  margin-bottom: 1rem;
+}
+
+.sidebar ul li a {
+  text-decoration: none;
+  color: #d1d5db;
+  padding: 0.75rem;
+  display: block;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar ul li a:hover,
+.sidebar ul li a.active {
+  background-color: #3b82f6;
+  color: #fff;
+}
+
+/* Main Content Styling */
+.main-content {
+  flex: 1;
+  padding: 2rem;
+}
+
+.main-content header {
+  margin-bottom: 2rem;
+}
+
+.main-content .cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.main-content .card {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.main-content .card h2 {
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.main-content .card p {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #3b82f6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .main-content {
+    padding: 1rem;
+  }
+}
+</style>
