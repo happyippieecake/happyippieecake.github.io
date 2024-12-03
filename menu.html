@@ -175,6 +175,65 @@ document.addEventListener("DOMContentLoaded", renderTable);
     
     </body>
     </html>
+
+    <style>
+      /* Styling Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+table th, table td {
+  padding: 1rem;
+  text-align: left;
+}
+
+table th {
+  background-color: #3b82f6;
+  color: #ffffff;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+table td {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+table tr:last-child td {
+  border-bottom: none;
+}
+
+table tr:hover {
+  background-color: #f3f4f6;
+  transition: background-color 0.2s ease;
+}
+
+table img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 4px;
+  display: block;
+}
+
+.table-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.table-actions .btn {
+  font-size: 0.9rem;
+  padding: 0.5rem 0.8rem;
+}
+
+
+      </style>
     
     <style>
   table img {
