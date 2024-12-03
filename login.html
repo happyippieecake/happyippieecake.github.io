@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Admin - Cake Order</title>
+  <title>Login - Cake Order</title>
   <style>
     /* General Reset */
     * {
@@ -48,23 +48,23 @@
       font-weight: 600;
     }
 
-      .login-container .logo {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 1rem auto;
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Tambahkan bayangan */
-     }
+    .login-container .logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1rem auto;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Tambahkan bayangan */
+    }
 
-  .login-container .logo i {
-    font-size: 2.5rem;
-    color: white;
-    transform: rotate(0deg); /* Pastikan tidak ada rotasi */
-     }
+    .login-container .logo i {
+      font-size: 2.5rem;
+      color: white;
+      transform: rotate(0deg); /* Pastikan tidak ada rotasi */
+    }
 
     .login-container input {
       width: 100%;
@@ -124,23 +124,31 @@
 <body>
   <div class="login-container">
     <div class="logo">
-      <i> 🎂 </i>
+      <i>🎂</i>
     </div>
-    <h1>Login Admin</h1>
+    <h1>Login</h1>
     <div id="errorMessage" class="error"></div>
     <form id="loginForm">
       <input type="text" id="username" placeholder="Username" required>
       <input type="password" id="password" placeholder="Password" required>
       <button type="submit">Login</button>
     </form>
-    <p class="note">Admin Login Only</p>
+    <p class="note">Login as Admin or User</p>
   </div>
 
   <script>
-    // Dummy admin credentials
-    const ADMIN_CREDENTIALS = {
-      username: "admin",
-      password: "admin123",
+    // Dummy credentials for Admin and User
+    const CREDENTIALS = {
+      admin: {
+        username: "admin",
+        password: "admin123",
+        redirect: "admin.html"
+      },
+      user: {
+        username: "user",
+        password: "user123",
+        redirect: "index.html" // Update this to redirect to index.html
+      }
     };
 
     const loginForm = document.getElementById("loginForm");
@@ -152,13 +160,18 @@
       const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
 
-      // Validate credentials
+      // Validate credentials for Admin or User
       if (
-        username === ADMIN_CREDENTIALS.username &&
-        password === ADMIN_CREDENTIALS.password
+        (username === CREDENTIALS.admin.username && password === CREDENTIALS.admin.password) ||
+        (username === CREDENTIALS.user.username && password === CREDENTIALS.user.password)
       ) {
-        alert("Login berhasil!");
-        window.location.href = "admin.html"; // Redirect to admin page
+        if (username === CREDENTIALS.admin.username) {
+          alert("Login sebagai Admin berhasil!");
+          window.location.href = CREDENTIALS.admin.redirect; // Redirect to admin page
+        } else {
+          alert("Login sebagai User berhasil!");
+          window.location.href = CREDENTIALS.user.redirect; // Redirect to index.html for user
+        }
       } else {
         errorMessage.textContent = "Username atau password salah!";
       }
