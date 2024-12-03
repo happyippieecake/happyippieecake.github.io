@@ -48,21 +48,23 @@
       font-weight: 600;
     }
 
-    .login-container .logo {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 1rem auto;
-      background: linear-gradient(135deg, #3b82f6, #2563eb);
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+      .login-container .logo {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1rem auto;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Tambahkan bayangan */
+     }
 
-    .login-container .logo i {
-      font-size: 2.5rem;
-      color: white;
-    }
+  .login-container .logo i {
+    font-size: 2.5rem;
+    color: white;
+    transform: rotate(0deg); /* Pastikan tidak ada rotasi */
+     }
 
     .login-container input {
       width: 100%;
@@ -122,7 +124,7 @@
 <body>
   <div class="login-container">
     <div class="logo">
-      <i>🎂</i>
+      <i> 🎂 </i>
     </div>
     <h1>Login Admin</h1>
     <div id="errorMessage" class="error"></div>
