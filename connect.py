@@ -1,13 +1,24 @@
 import mysql.connector
 
-db = mysql.connector.connect(
-    host="127.0.0.1",
-    user="root",
-    password="yourpassword",
-    database="yourdatabase"
+# Sambungkan ke database
+conn = mysql.connector.connect(
+    host="localhost",    # Alamat host database
+    user="root",         # Username database
+    password="password", # Password database
+    database="database_name" # Nama database
 )
 
-cursor = db.cursor()
-cursor.execute("CREATE DATABASE dbhappycake")
-print("database berhasil dibuat")
- 
+# Buat cursor untuk eksekusi query
+cursor = conn.cursor()
+
+# Eksekusi query
+cursor.execute("SELECT * FROM table_name")
+
+# Ambil hasil query
+results = cursor.fetchall()
+for row in results:
+    print(row)
+
+# Tutup koneksi
+cursor.close()
+conn.close()
