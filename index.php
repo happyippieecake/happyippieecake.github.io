@@ -1,5 +1,5 @@
 <?php
-$servername = "localhost";
+$servername = "127.0.0.1";
 $username = "root";  // Gantilah dengan nama pengguna MySQL yang benar
 $password = "";  // Gantilah dengan kata sandi yang sesuai
 $dbname = "db_menu";  // Gantilah dengan nama database yang sesuai
@@ -8,7 +8,6 @@ $dbname = "db_menu";  // Gantilah dengan nama database yang sesuai
 $conn = new mysqli($servername, $username, $password, $dbname);
 // Ambil data menu
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
