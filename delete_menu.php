@@ -16,12 +16,11 @@ if ($conn->connect_error) {
 // Ambil ID menu dari URL
 $id = $_GET['id'];
 
-// Query untuk menghapus data menu berdasarkan ID
-$delete_sql = "DELETE FROM menu WHERE id = $id";
-
+// Query untuk menghapus menu
+$delete_sql = "DELETE FROM menu WHERE id=$id";
 if ($conn->query($delete_sql) === TRUE) {
     echo "Menu berhasil dihapus!";
-    header("Location: admin.php"); // Arahkan kembali ke halaman admin setelah menghapus
+    header("Location: admin.php"); // Kembali ke halaman admin setelah menghapus menu
 } else {
     echo "Error: " . $conn->error;
 }
