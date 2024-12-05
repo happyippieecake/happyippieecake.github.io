@@ -7,8 +7,6 @@ $dbname = "db_menu";  // Gantilah dengan nama database yang sesuai
 // Membuat koneksi
 $conn = new mysqli($servername, $username, $password, $dbname);
 // Ambil data menu
-
-$result = $conn->query("SELECT * FROM menu WHERE status = 1");
 ?>
 
 
