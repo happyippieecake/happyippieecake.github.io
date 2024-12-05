@@ -1,19 +1,19 @@
 <?php
-// Konfigurasi database
+// Database Configuration
 $servername = "127.0.0.1";
-$username = "root";  // Default username untuk MySQL di XAMPP
-$password = "";      // Default password MySQL (kosong)
+$username = "root";  // Default username for MySQL in XAMPP
+$password = "";      // Default MySQL password (empty)
 $dbname = "db_menu";
 
-// Membuat koneksi
+// Create Connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Periksa koneksi
+// Check Connection
 if ($conn->connect_error) {
-    die("Koneksi gagal: " . $conn->connect_error);
+    die("Connection failed: " . $conn->connect_error);
 }
 
-// Query untuk mendapatkan data menu
+// Query to fetch menu data
 $sql = "SELECT * FROM menu";
 $result = $conn->query($sql);
 ?>
@@ -24,120 +24,62 @@ $result = $conn->query($sql);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Manage Menu</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-        }
-        h1 {
-            text-align: center;
-            padding: 20px;
-            background-color: #6c757d;
-            color: white;
-            margin: 0;
-        }
-        table {
-            width: 90%;
-            margin: 30px auto;
-            border-collapse: collapse;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: #ffffff;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            font-size: 14px;
-        }
-        th {
-            background-color: #f8f9fa;
-            color: #333;
-        }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        tr:hover {
-            background-color: #e9ecef;
-        }
-        img {
-            width: 50px;
-            height: auto;
-            border-radius: 5px;
-        }
-        .action-buttons button {
-            padding: 6px 12px;
-            margin: 3px;
-            border: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .action-buttons button:hover {
-            background-color: #0056b3;
-        }
-        .action-buttons button:active {
-            background-color: #003366;
-        }
-        .no-data {
-            text-align: center;
-            font-style: italic;
-            color: #6c757d;
-        }
-        @media screen and (max-width: 768px) {
-            table {
-                width: 100%;
-                font-size: 12px;
-            }
-            h1 {
-                font-size: 18px;
-                padding: 10px;
-            }
-        }
-    </style>
+    <!-- Link to Tailwind CSS (via CDN for simplicity) -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Halaman Admin - Manage Menu</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nama</th>
-                <th>Harga</th>
-                <th>Deskripsi</th>
-                <th>Kategori</th>
-                <th>Gambar</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    echo "<tr>";
-                    echo "<td>" . $row["id"] . "</td>";
-                    echo "<td>" . $row["name"] . "</td>";
-                    echo "<td>" . $row["price"] . "</td>";
-                    echo "<td>" . $row["description"] . "</td>";
-                    echo "<td>" . $row["category"] . "</td>";
-                    echo "<td><img src='images/" . $row["image"] . "' alt='" . $row["name"] . "'></td>";
-                    echo "<td class='action-buttons'>";
-                    echo "<button onclick='editMenu(" . $row["id"] . ")'>Edit</button>";
-                    echo "<button onclick='deleteMenu(" . $row["id"] . ")'>Hapus</button>";
-                    echo "</td>";
-                    echo "</tr>";
+<body class="bg-gray-100 font-sans antialiased">
+
+    <!-- Header -->
+    <header class="bg-gray-700 text-white py-4 text-center">
+        <h1 class="text-2xl font-semibold">Admin - Manage Menu</h1>
+    </header>
+
+    <!-- Back and Add Menu Links -->
+    <div class="max-w-7xl mx-auto px-4 py-6">
+        <div class="flex justify-between items-center">
+            <a href="index.html" class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-500">Back to Index</a>
+            <a href="tambah_menu.php" class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500">Add New Menu</a>
+        </div>
+    </div>
+
+    <!-- Menu Table -->
+    <div class="max-w-7xl mx-auto px-4 py-6">
+        <table class="min-w-full bg-white shadow-lg rounded-lg overflow-hidden">
+            <thead>
+                <tr class="bg-gray-200 text-gray-800">
+                    <th class="px-4 py-2 text-left">ID</th>
+                    <th class="px-4 py-2 text-left">Name</th>
+                    <th class="px-4 py-2 text-left">Price</th>
+                    <th class="px-4 py-2 text-left">Description</th>
+                    <th class="px-4 py-2 text-left">Category</th>
+                    <th class="px-4 py-2 text-left">Image</th>
+                    <th class="px-4 py-2 text-left">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr class='hover:bg-gray-50'>";
+                        echo "<td class='px-4 py-2'>" . $row["id"] . "</td>";
+                        echo "<td class='px-4 py-2'>" . $row["name"] . "</td>";
+                        echo "<td class='px-4 py-2'>" . $row["price"] . "</td>";
+                        echo "<td class='px-4 py-2'>" . $row["description"] . "</td>";
+                        echo "<td class='px-4 py-2'>" . $row["category"] . "</td>";
+                        echo "<td class='px-4 py-2'><img src='images/" . $row["image"] . "' alt='" . $row["name"] . "' class='w-16 h-16 object-cover rounded-md'></td>";
+                        echo "<td class='px-4 py-2 text-center'>";
+                        echo "<button onclick='editMenu(" . $row["id"] . ")' class='bg-yellow-500 text-white py-1 px-3 rounded-md hover:bg-yellow-400'>Edit</button>";
+                        echo "<button onclick='deleteMenu(" . $row["id"] . ")' class='bg-red-600 text-white py-1 px-3 rounded-md hover:bg-red-500 ml-2'>Delete</button>";
+                        echo "</td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='7' class='px-4 py-2 text-center italic text-gray-600'>No menu items available.</td></tr>";
                 }
-            } else {
-                echo "<tr><td colspan='7' class='no-data'>Tidak ada data menu.</td></tr>";
-            }
-            ?>
-        </tbody>
-    </table>
+                ?>
+            </tbody>
+        </table>
+    </div>
 
     <script>
         function editMenu(id) {
@@ -145,11 +87,12 @@ $result = $conn->query($sql);
         }
 
         function deleteMenu(id) {
-            if (confirm("Apakah Anda yakin ingin menghapus menu ini?")) {
+            if (confirm("Are you sure you want to delete this menu item?")) {
                 window.location.href = "delete_menu.php?id=" + id;
             }
         }
     </script>
+
 </body>
 </html>
 
