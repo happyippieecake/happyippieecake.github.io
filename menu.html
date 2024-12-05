@@ -4,481 +4,150 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Manajemen Menu - Cake Order</title>
-  <link rel="stylesheet" href="css/style.css">
   <script src="js/menu.js" defer></script>
+  <!-- Link Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="sidebar">
-      <h2 class="logo">CakeAdmin</h2>
-      <ul>
-        <li><a href="admin.html">Dashboard</a></li>
-        <li><a href="menu.html" class="active">Menu</a></li>
-        <li><a href="orders.html">Pesanan</a></li>
-        <li><a href="users.html">Pengguna</a></li>
-        <li><a href="#" onclick="logout()">Logout</a></li>
+<body class="bg-gray-100 flex min-h-screen">
+    <!-- Sidebar -->
+    <div class="w-64 bg-gray-800 text-white p-6 flex flex-col">
+      <h2 class="text-2xl font-bold text-center mb-8">CakeAdmin</h2>
+      <ul class="space-y-4">
+        <li><a href="admin.html" class="text-gray-400 hover:bg-blue-600 hover:text-white px-4 py-2 rounded block">Dashboard</a></li>
+        <li><a href="menu.html" class="text-gray-400 hover:bg-blue-600 hover:text-white px-4 py-2 rounded block bg-blue-600">Menu</a></li>
+        <li><a href="orders.html" class="text-gray-400 hover:bg-blue-600 hover:text-white px-4 py-2 rounded block">Pesanan</a></li>
+        <li><a href="users.html" class="text-gray-400 hover:bg-blue-600 hover:text-white px-4 py-2 rounded block">Pengguna</a></li>
+        <li><a href="#" onclick="logout()" class="text-gray-400 hover:bg-blue-600 hover:text-white px-4 py-2 rounded block">Logout</a></li>
       </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-8">
+      <header class="mb-8">
+        <h1 class="text-3xl font-semibold text-gray-800">Manajemen Menu</h1>
+        <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4" onclick="openAddModal()">Tambah Menu</button>
+      </header>
+
+      <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+        <thead>
+          <tr class="bg-blue-600 text-white uppercase text-sm">
+            <th class="p-4">Nama Kue</th>
+            <th class="p-4">Harga</th>
+            <th class="p-4">Gambar</th>
+            <th class="p-4">Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="menuTable" class="text-sm">
+          <!-- Data menu akan diisi melalui JavaScript -->
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Modal Tambah/Edit Menu -->
+    <div id="menuModal" class="modal hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-60">
+      <div class="bg-gradient-to-br from-white to-gray-100 p-8 rounded-lg shadow-xl w-96 transform scale-90 transition-all duration-300">
+        <h2 id="modalTitle" class="text-xl font-bold text-gray-700 text-center mb-6">Tambah Menu</h2>
+        <form id="menuForm">
+          <label for="namaKue" class="block text-gray-600 font-semibold mb-2">Nama Kue</label>
+          <input type="text" id="namaKue" required class="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 mb-4">
+
+          <label for="hargaKue" class="block text-gray-600 font-semibold mb-2">Harga</label>
+          <input type="number" id="hargaKue" required class="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 mb-4">
+
+          <label for="gambarKue" class="block text-gray-600 font-semibold mb-2">Gambar Kue</label>
+          <input type="file" id="gambarKue" accept="image/*" class="file-input w-full p-3 border-2 border-gray-300 rounded-lg mb-4" required>
+
+          <div class="flex justify-between">
+            <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">Simpan</button>
+            <button type="button" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700" onclick="closeModal()">Batal</button>
+          </div>
+        </form>
       </div>
-      <div class="main-content">
-        <header>
-          <h1>Manajemen Menu</h1>
-          <button class="btn btn-primary" onclick="openAddModal()">Tambah Menu</button>
-        </header>
-        <table class="table">
-            <thead>
-                <tr>
-                  <th>Nama Kue</th>
-                  <th>Harga</th>
-                  <th>Gambar</th>
-                  <th>Aksi</th>
-                </tr>
-              </thead>
-          </thead>
-          <tbody id="menuTable">
-            <!-- Data menu akan diisi melalui JavaScript -->
-          </tbody>
-        </table>
-      </div>
-    
-      <!-- Modal Tambah/Edit Menu -->
-      <div id="menuModal" class="modal hidden">
-        <div class="modal-content">
-          <h2 id="modalTitle">Tambah Menu</h2>
-          <form id="menuForm">
-            <label for="namaKue">Nama Kue</label>
-            <input type="text" id="namaKue" required>
-            
-            <label for="hargaKue">Harga</label>
-            <input type="number" id="hargaKue" required>
+    </div>
 
-            <label for="gambarKue">Gambar Kue</label>
-            <input type="file" id="gambarKue" accept="image/*" class="file-input" required>
-      
-      
-            
-            <div class="modal-actions">
-              <button type="submit" class="btn btn-success">Simpan</button>
-              <button type="button" class="btn btn-danger" onclick="closeModal()">Batal</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    
-      <script>
-      let menuData = [
-  {
-    id: 1,
-    nama: "Half Cake",
-    harga: 175000,
-    gambar: "../static/gambar/cake 1.jpg", // Gambar Kue Coklat
-  },
-  {
-    id: 2,
-    nama: "Whole Cake",
-    harga: 250000,
-    gambar: "../static/gambar/cake 2.jpg", // Gambar Kue Keju
-  },
-];
-
-
-let editId = null;
-
-// Render Menu Table
-function renderTable() {
-  const menuTable = document.getElementById("menuTable");
-  menuTable.innerHTML = menuData
-    .map(
-      (menu) => `
-      <tr>
-        <td>${menu.nama}</td>
-        <td>Rp ${menu.harga.toLocaleString()}</td>
-        <td>
-          ${
-            menu.gambar
-              ? `<img src="${menu.gambar}" alt="${menu.nama}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;">`
-              : "Tidak ada gambar"
-          }
-        </td>
-        <td>
-          <button class="btn btn-success" onclick="editMenu(${menu.id})">Edit</button>
-          <button class="btn btn-danger" onclick="deleteMenu(${menu.id})">Hapus</button>
-        </td>
-      </tr>
-    `
-    )
-    .join("");
-}
-
-
-// Open Add Menu Modal
-function openAddModal() {
-  editId = null;
-  document.getElementById("modalTitle").innerText = "Tambah Menu";
-  document.getElementById("namaKue").value = "";
-  document.getElementById("hargaKue").value = "";
-  document.getElementById("gambarKue").value = "";
-  document.getElementById("menuModal").classList.remove("hidden");
-}
-
-// Open Edit Menu Modal
-function editMenu(id) {
-  const menu = menuData.find((item) => item.id === id);
-  editId = id;
-  document.getElementById("modalTitle").innerText = "Edit Menu";
-  document.getElementById("namaKue").value = menu.nama;
-  document.getElementById("hargaKue").value = menu.harga;
-  document.getElementById("gambarKue").value = "";
-  document.getElementById("menuModal").classList.remove("hidden");
-}
-
-// Save Menu (Add or Edit)
-document.getElementById("menuForm").addEventListener("submit", (e) => {
-  e.preventDefault();
-  const namaKue = document.getElementById("namaKue").value;
-  const hargaKue = parseInt(document.getElementById("hargaKue").value, 10);
-  const gambarKue = document.getElementById("gambarKue").files[0];
-
-  let gambarUrl = "";
-  if (gambarKue) {
-    gambarUrl = URL.createObjectURL(gambarKue); // Generate preview URL untuk file
-  }
-
-  if (editId) {
-    // Edit existing menu
-    const menu = menuData.find((item) => item.id === editId);
-    menu.nama = namaKue;
-    menu.harga = hargaKue;
-    menu.gambar = gambarUrl;
-  } else {
-    // Add new menu
-    menuData.push({ id: Date.now(), nama: namaKue, harga: hargaKue, gambar: gambarUrl });
-  }
-
-  closeModal();
-  renderTable();
-});
-
-// Delete Menu
-function deleteMenu(id) {
-  menuData = menuData.filter((item) => item.id !== id);
-  renderTable();
-}
-
-// Close Modal
-function closeModal() {
-  document.getElementById("menuModal").classList.add("hidden");
-}
-
-// Initialize Table
-document.addEventListener("DOMContentLoaded", renderTable);
-
-      </script>
-    
-    </body>
-    </html>
-
-    <style>
-      /* Styling Table */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1.5rem;
-  background-color: #ffffff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-table th, table td {
-  padding: 1rem;
-  text-align: left;
-}
-
-table th {
-  background-color: #3b82f6;
-  color: #ffffff;
-  font-weight: 600;
-  text-transform: uppercase;
-  font-size: 0.9rem;
-}
-
-table td {
-  border-bottom: 1px solid #e5e7eb;
-}
-
-table tr:last-child td {
-  border-bottom: none;
-}
-
-table tr:hover {
-  background-color: #f3f4f6;
-  transition: background-color 0.2s ease;
-}
-
-table img {
-  width: 50px;
-  height: 50px;
-  object-fit: cover;
-  border-radius: 4px;
-  display: block;
-}
-
-.table-actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.table-actions .btn {
-  font-size: 0.9rem;
-  padding: 0.5rem 0.8rem;
-}
-
-
-      </style>
-    
-    <style>
-  table img {
-    max-width: 100%;
-    height: auto;
-    object-fit: cover;
-    border-radius: 8px;
-  }
-
-        /* Modal Styling */
-        .modal {
-          position: fixed;
-          inset: 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: rgba(0, 0, 0, 0.6); /* Lebih gelap untuk fokus */
-          z-index: 1000;
-          animation: fadeIn 0.3s ease-in-out;
-        }
-        
-        .modal.hidden {
-          display: none;
-        }
-        
-        .modal-content {
-          background: linear-gradient(135deg, #ffffff, #f3f4f6); /* Gradasi lembut */
-          padding: 2rem;
-          border-radius: 12px; /* Lebih melengkung */
-          width: 420px;
-          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Shadow lebih nyata */
-          transform: scale(0.9); /* Animasi masuk */
-          animation: scaleUp 0.3s ease-in-out forwards;
-        }
-        
-        /* Modal Title */
-        .modal-content h2 {
-          margin-bottom: 1.5rem;
-          font-size: 1.5rem;
-          font-weight: 700;
-          color: #1f2937; /* Warna teks lebih gelap */
-          text-align: center;
-          border-bottom: 2px solid #e5e7eb;
-          padding-bottom: 0.5rem;
-        }
-        
-        /* Label Styling */
-        .modal-content label {
-          display: block;
-          margin-bottom: 0.5rem;
-          font-weight: 600;
-          color: #4b5563; /* Warna abu lembut */
-        }
-        
-        /* Input Styling */
-        .modal-content input {
-          width: 100%;
-          padding: 0.8rem;
-          margin-bottom: 1.5rem;
-          border: 2px solid #d1d5db;
-          border-radius: 8px;
-          outline: none;
-          transition: border-color 0.2s;
-        }
-        
-        .modal-content input:focus {
-          border-color: #2563eb; /* Fokus dengan warna biru */
-          box-shadow: 0 0 5px rgba(37, 99, 235, 0.5);
-        }
-        
-        /* Button Styling */
-        .btn {
-          display: inline-block;
-          padding: 0.8rem 1.2rem;
-          font-size: 1rem;
-          font-weight: 600;
-          text-align: center;
-          border-radius: 8px;
-          cursor: pointer;
-          transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .btn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        
-        .btn-primary {
-          background-color: #3b82f6;
-          color: #fff;
-        }
-        
-        .btn-primary:hover {
-          background-color: #2563eb;
-        }
-        
-        .btn-success {
-          background-color: #10b981;
-          color: #fff;
-        }
-        
-        .btn-success:hover {
-          background-color: #059669;
-        }
-        
-        .btn-danger {
-          background-color: #ef4444;
-          color: #fff;
-        }
-        
-        .btn-danger:hover {
-          background-color: #dc2626;
-        }
-        
-        /* Animation */
-        @keyframes fadeIn {
-          from {
-            background: rgba(0, 0, 0, 0);
-          }
-          to {
-            background: rgba(0, 0, 0, 0.6);
-          }
-        }
-        
-        @keyframes scaleUp {
-          from {
-            transform: scale(0.9);
-          }
-          to {
-            transform: scale(1);
-          }
-        }
-        </style>
-        
-  
     <script>
-      // Logout Function
-  function logout() {
-    alert("Anda berhasil logout!");
-    window.location.href = "login.html"; // Redirect ke halaman login
-  }
+      let menuData = [
+        { id: 1, nama: "Half Cake", harga: 175000, gambar: "../static/gambar/cake 1.jpg" },
+        { id: 2, nama: "Whole Cake", harga: 250000, gambar: "../static/gambar/cake 2.jpg" }
+      ];
+
+      let editId = null;
+
+      function renderTable() {
+        const menuTable = document.getElementById("menuTable");
+        menuTable.innerHTML = menuData.map(menu => `
+          <tr class="border-b hover:bg-gray-100">
+            <td class="p-4">${menu.nama}</td>
+            <td class="p-4">Rp ${menu.harga.toLocaleString()}</td>
+            <td class="p-4">
+              ${menu.gambar ? `<img src="${menu.gambar}" alt="${menu.nama}" class="w-12 h-12 object-cover rounded-lg">` : "Tidak ada gambar"}
+            </td>
+            <td class="p-4">
+              <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" onclick="editMenu(${menu.id})">Edit</button>
+              <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600" onclick="deleteMenu(${menu.id})">Hapus</button>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      function openAddModal() {
+        editId = null;
+        document.getElementById("modalTitle").innerText = "Tambah Menu";
+        document.getElementById("namaKue").value = "";
+        document.getElementById("hargaKue").value = "";
+        document.getElementById("gambarKue").value = "";
+        document.getElementById("menuModal").classList.remove("hidden");
+      }
+
+      function editMenu(id) {
+        const menu = menuData.find(item => item.id === id);
+        editId = id;
+        document.getElementById("modalTitle").innerText = "Edit Menu";
+        document.getElementById("namaKue").value = menu.nama;
+        document.getElementById("hargaKue").value = menu.harga;
+        document.getElementById("gambarKue").value = "";
+        document.getElementById("menuModal").classList.remove("hidden");
+      }
+
+      document.getElementById("menuForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const namaKue = document.getElementById("namaKue").value;
+        const hargaKue = parseInt(document.getElementById("hargaKue").value, 10);
+        const gambarKue = document.getElementById("gambarKue").files[0];
+
+        let gambarUrl = "";
+        if (gambarKue) {
+          gambarUrl = URL.createObjectURL(gambarKue);
+        }
+
+        if (editId) {
+          const menu = menuData.find(item => item.id === editId);
+          menu.nama = namaKue;
+          menu.harga = hargaKue;
+          menu.gambar = gambarUrl;
+        } else {
+          menuData.push({ id: Date.now(), nama: namaKue, harga: hargaKue, gambar: gambarUrl });
+        }
+
+        closeModal();
+        renderTable();
+      });
+
+      function deleteMenu(id) {
+        menuData = menuData.filter(item => item.id !== id);
+        renderTable();
+      }
+
+      function closeModal() {
+        document.getElementById("menuModal").classList.add("hidden");
+      }
+
+      document.addEventListener("DOMContentLoaded", renderTable);
+
+      function logout() {
+        alert("Anda berhasil logout!");
+        window.location.href = "login.html";
+      }
     </script>
-  </body>
-  </html>
-  
-  <style>
-      /* General Reset */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
-  }
-  
-  /* Body Styling */
-  body {
-    display: flex;
-    min-height: 100vh;
-    background-color: #f9fafb;
-  }
-  
-  /* Sidebar Styling */
-  .sidebar {
-    width: 250px;
-    background-color: #1f2937;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
-  }
-  
-  .sidebar .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 2rem;
-  }
-  
-  .sidebar ul {
-    list-style: none;
-  }
-  
-  .sidebar ul li {
-    margin-bottom: 1rem;
-  }
-  
-  .sidebar ul li a {
-    text-decoration: none;
-    color: #d1d5db;
-    padding: 0.75rem;
-    display: block;
-    border-radius: 0.5rem;
-    transition: background-color 0.3s ease;
-  }
-  
-  .sidebar ul li a:hover,
-  .sidebar ul li a.active {
-    background-color: #3b82f6;
-    color: #fff;
-  }
-  
-  /* Main Content Styling */
-  .main-content {
-    flex: 1;
-    padding: 2rem;
-  }
-  
-  .main-content header {
-    margin-bottom: 2rem;
-  }
-  
-  .main-content .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
-  }
-  
-  .main-content .card {
-    background-color: #fff;
-    padding: 1.5rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
-  }
-  
-  .main-content .card h2 {
-    color: #374151;
-    margin-bottom: 0.5rem;
-  }
-  
-  .main-content .card p {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #3b82f6;
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .sidebar {
-      width: 200px;
-    }
-  
-    .main-content {
-      padding: 1rem;
-    }
-  }
-  </style>
-  
+</body>
+</html>

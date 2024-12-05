@@ -55,27 +55,55 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Menu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Edit Menu</h1>
-    <form method="POST">
-        <label for="name">Nama:</label>
-        <input type="text" name="name" value="<?= $row['name'] ?>" required><br><br>
-        
-        <label for="price">Harga:</label>
-        <input type="text" name="price" value="<?= $row['price'] ?>" required><br><br>
-        
-        <label for="description">Deskripsi:</label>
-        <textarea name="description" required><?= $row['description'] ?></textarea><br><br>
-        
-        <label for="category">Kategori:</label>
-        <input type="text" name="category" value="<?= $row['category'] ?>" required><br><br>
-        
-        <label for="image">Gambar:</label>
-        <input type="text" name="image" value="<?= $row['image'] ?>" required><br><br>
-        
-        <button type="submit">Update Menu</button>
-    </form>
+<body class="bg-gray-100 font-sans antialiased">
+
+    <!-- Container -->
+    <div class="flex justify-center items-center min-h-screen">
+        <div class="w-full max-w-lg bg-white shadow-lg rounded-lg p-8">
+            <h1 class="text-3xl font-semibold text-center text-gray-800 mb-6">Edit Menu</h1>
+            <form method="POST" class="space-y-4">
+                <!-- Name Field -->
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-600">Nama:</label>
+                    <input type="text" name="name" value="<?= $row['name'] ?>" required class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <!-- Price Field -->
+                <div>
+                    <label for="price" class="block text-sm font-medium text-gray-600">Harga:</label>
+                    <input type="text" name="price" value="<?= $row['price'] ?>" required class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <!-- Description Field -->
+                <div>
+                    <label for="description" class="block text-sm font-medium text-gray-600">Deskripsi:</label>
+                    <textarea name="description" required class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"><?= $row['description'] ?></textarea>
+                </div>
+
+                <!-- Category Field -->
+                <div>
+                    <label for="category" class="block text-sm font-medium text-gray-600">Kategori:</label>
+                    <input type="text" name="category" value="<?= $row['category'] ?>" required class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <!-- Image Field -->
+                <div>
+                    <label for="image" class="block text-sm font-medium text-gray-600">Gambar (URL):</label>
+                    <input type="text" name="image" value="<?= $row['image'] ?>" required class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <!-- Submit Button -->
+                <div>
+                    <button type="submit" class="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        Update Menu
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </body>
 </html>
 
