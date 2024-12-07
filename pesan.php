@@ -1,3 +1,19 @@
+<?php
+include 'db_connect.php';
+
+$id = $_GET['id']; // Mendapatkan ID menu dari URL
+$sql = "SELECT * FROM menu WHERE id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$result = $stmt->get_result();
+$menu = $result->fetch_assoc();
+
+if (!$menu) {
+    die("Menu tidak ditemukan.");
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -56,11 +72,11 @@
         <a class="block px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100" href="maps.html">Location</a>
         <a class="block px-4 py-2 text-red-600 hover:text-red-800" href="#">For Business</a>
     </div>
-    
+
     <script>
         const menuToggle = document.getElementById("menu-toggle");
         const mobileMenu = document.getElementById("mobile-menu");
-    
+
         menuToggle.addEventListener("click", () => {
             if (mobileMenu.classList.contains("hidden")) {
                 mobileMenu.classList.remove("hidden");
@@ -71,35 +87,29 @@
             }
         });
     </script>
-    
 
+    <?php if ($menu): ?>
+        <main class="container mx-auto p-4 lg:p-8">
+            <div class="flex flex-col lg:flex-row items-center space-y-6 lg:space-y-0 lg:space-x-8">
+                <!-- Image Section -->
+                <img src="gambar/<?php echo htmlspecialchars($menu['image']); ?>" alt="<?php echo htmlspecialchars($menu['name']); ?>"
+                    class="w-full max-w-md object-cover rounded-lg shadow-lg">
+
+                <!-- Product Details -->
+                <div class="text-center lg:text-left">
+                    <h2 class="text-2xl font-bold"><?php echo htmlspecialchars($menu['name']); ?></h2>
+                    <p class="text-xl text-red-600 font-semibold mt-2">Rp <?php echo number_format($menu['price'], 0, ',', '.'); ?></p>
+                    <ul class="list-disc list-inside text-left space-y-2 mt-4">
+                        <li><?php echo htmlspecialchars($menu['description']); ?></li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    <?php else: ?>
+        <p>Menu tidak ditemukan. <a href="index.php">Kembali ke halaman utama</a></p>
+    <?php endif; ?>
   <!-- Main Content -->
-  <main class="container mx-auto p-4 lg:p-8">
-    <div class="flex flex-col lg:flex-row items-center space-y-6 lg:space-y-0 lg:space-x-8">
-      <!-- Image Section -->
-      <img src="gambar/cake 1.jpg" 
-           alt="Chocolate cake" 
-           class="w-full max-w-md object-cover rounded-lg shadow-lg">
 
-      <!-- Product Details -->
-      <div class="text-center lg:text-left">
-        <h2 class="text-2xl font-bold">Half Cake</h2>
-        <p class="text-xl text-red-600 font-semibold mt-2">Rp 175.000</p>
-        <ul class="list-disc list-inside text-left space-y-2 mt-4">
-          <li>Chocolate Cake / Redvelvet Cake / Matcha Cake</li>
-          <li>Diameter 16cm</li>
-          <li>Dominasi warna coklat yang elegan</li>
-          <li>filling strawberry jam or creamcheese</li>
-        </ul>
-        <h3 class="font-semibold mt-6">Include</h3>
-        <li>Spiral Candle</li>
-        <li>Number Candle</li>
-        <li>Spiral Candle</li>
-      </div>
-    </div>
-
-    
-  </main>
   <title>Formulir Pesanan</title>
   <style>
        body {
@@ -199,11 +209,11 @@ button:hover {
                             `Jumlah: ${quantity}\n` +
                             `Alamat: ${address} \n` +
                             `ucapan: ${ucapan}`;
-            
+
             // Nomor WhatsApp tujuan (gunakan format internasional tanpa tanda +)
             const phoneNumber = "6285722341788"; // Ganti dengan nomor Anda
             const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-            
+
             // Membuka WhatsApp
             window.open(url, '_blank');
         } else {

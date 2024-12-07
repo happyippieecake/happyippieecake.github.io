@@ -59,39 +59,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body class="bg-gray-100 font-sans antialiased">
 
-    <header class="bg-gray-700 text-white py-4 text-center">
-        <h1 class="text-2xl font-semibold">Edit Menu</h1>
-    </header>
+    <!-- Container -->
+    <div class="flex justify-center items-center min-h-screen">
+        <div class="w-full max-w-lg bg-white shadow-lg rounded-lg p-8">
+            <h1 class="text-3xl font-semibold text-center text-gray-800 mb-6">Edit Menu</h1>
+            <form method="POST" class="space-y-4">
+                <!-- Name Field -->
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-600">Nama:</label>
+                    <input type="text" name="name" value="<?= $row['name'] ?>" required class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
 
-    <div class="max-w-7xl mx-auto px-4 py-6">
-        <form method="POST" class="bg-white p-6 rounded-lg shadow-lg">
-            <div class="mb-4">
-                <label for="name" class="block text-gray-700">Name:</label>
-                <input type="text" name="name" id="name" value="<?= $row['name'] ?>" class="w-full p-2 border border-gray-300 rounded-md" required>
-            </div>
+                <!-- Price Field -->
+                <div>
+                    <label for="price" class="block text-sm font-medium text-gray-600">Harga:</label>
+                    <input type="text" name="price" value="<?= $row['price'] ?>" required class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
 
-            <div class="mb-4">
-                <label for="price" class="block text-gray-700">Price:</label>
-                <input type="text" name="price" id="price" value="<?= $row['price'] ?>" class="w-full p-2 border border-gray-300 rounded-md" required>
-            </div>
+                <!-- Description Field -->
+                <div>
+                    <label for="description" class="block text-sm font-medium text-gray-600">Deskripsi:</label>
+                    <textarea name="description" required class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"><?= $row['description'] ?></textarea>
+                </div>
 
-            <div class="mb-4">
-                <label for="description" class="block text-gray-700">Description:</label>
-                <textarea name="description" id="description" class="w-full p-2 border border-gray-300 rounded-md" required><?= $row['description'] ?></textarea>
-            </div>
+                <!-- Category Field -->
+                <div>
+                    <label for="category" class="block text-sm font-medium text-gray-600">Kategori:</label>
+                    <input type="text" name="category" value="<?= $row['category'] ?>" required class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
 
-            <div class="mb-4">
-                <label for="category" class="block text-gray-700">Category:</label>
-                <input type="text" name="category" id="category" value="<?= $row['category'] ?>" class="w-full p-2 border border-gray-300 rounded-md" required>
-            </div>
+                <!-- Image Field -->
+                            <div class="mb-4">
+                    <label for="image" class="block text-gray-700 font-semibold">Upload Image:</label>
+                    <input type="file" name="image" id="image" class="w-full p-2 border border-gray-300 rounded-md" required>
+                </div>
 
-            <div class="mb-4">
-                <label for="image" class="block text-gray-700">Image:</label>
-                <input type="text" name="image" id="image" value="<?= $row['image'] ?>" class="w-full p-2 border border-gray-300 rounded-md" required>
-            </div>
-
-            <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500">Update Menu</button>
-        </form>
+                <!-- Submit Button -->
+                <div>
+                    <button type="submit" class="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        Update Menu
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 
 </body>
