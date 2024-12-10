@@ -78,10 +78,11 @@
   <main class="bg-pink-50 py-12">
     <div class="container mx-auto px-4 lg:px-6 flex flex-col items-center">
       <div class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-6">
-        <img alt="Two cakes" class="w-full md:w-1/3 lg:w-1/4 rounded-lg shadow-lg animate__animated animate__zoomIn" src="gambar/utama.jpg" />
+        <img alt="Two cakes" class="w-full md:w-1/3 lg:w-1/4 rounded-lg shadow-lg shadow-lg animate__animated animate__zoomIn transform transition duration-500 hover:scale-105 mt-12" src="gambar/utama.jpg" />
         <div class="text-center md:text-left">
-          <h1 class="text-3xl md:text-4xl font-bold text-gray-800 animate__animated animate__fadeInUp">Kue Ulang Tahun, Wedding Cake, & More
-            <p class="text-gray-600 mt-4" style="font-size: 14px;">Pesan cake, pudding, wedding cake, dan lainnya dengan custom design serta same day delivery.</p>
+          <h1 class="text-3xl md:text-4xl font-bold text-gray-800 animate__animated animate__fadeInUp">
+            Kue Ulang Tahun, Wedding Cake, & More
+          <p class="text-gray-600 mt-4">Pesan cake, pudding, wedding cake, dan lainnya dengan custom design serta same day delivery.</p>
         </div>
       </div>
     </div> 
@@ -193,32 +194,51 @@
 </head>
 <body>
 
-  <div id="about-container" class="about-container"><h1>About Us</h1>
-  <p>
-    At <strong>Happyippieecake</strong>, we believe in making your celebrations sweeter and more memorable. 
-    With our artisan cakes crafted with love and precision, we strive to deliver happiness in every bite.
-  </p>
-  <img src="gambar/cake utama.jpg" alt="About Us Image" class="about-image">
-
-  <div class="values">
-    <div class="value-card">
-      <i class="fas fa-heart"></i>
-      <h3>Passion</h3>
-      <p>We pour our hearts into every cake, ensuring you taste the love and dedication in every bite.</p>
-    </div>
-    <div class="value-card">
-      <i class="fas fa-seedling"></i>
-      <h3>Fresh Ingredients</h3>
-      <p>Only the finest and freshest ingredients are used in our recipes for unparalleled quality.</p>
-    </div>
-    <div class="value-card">
-      <i class="fas fa-smile"></i>
-      <h3>Customer Happiness</h3>
-      <p>Your satisfaction is our priority. We're here to make your special days unforgettable.</p>
+  <div id="about-container" class="about-container">
+    <h1>About Us</h1>
+    <p>
+      At <strong>Happyippieecake</strong>, we believe in making your celebrations sweeter and more memorable. 
+      With our artisan cakes crafted with love and precision, we strive to deliver happiness in every bite.
+    </p>
+    <img src="gambar/cake utama.jpg" alt="About Us Image" class="about-image animate__animated animate__fadeInLeft">
+    
+    <div class="values animate__animated animate__fadeInLeft">
+      <div class="value-card animate__animated">
+        <i class="fas fa-heart"></i>
+        <h3>Passion</h3>
+        <p>We pour our hearts into every cake, ensuring you taste the love and dedication in every bite.</p>
+      </div>
+      <div class="value-card animate__animated">
+        <i class="fas fa-seedling"></i>
+        <h3>Fresh Ingredients</h3>
+        <p>Only the finest and freshest ingredients are used in our recipes for unparalleled quality.</p>
+      </div>
+      <div class="value-card animate__animated">
+        <i class="fas fa-smile"></i>
+        <h3>Customer Happiness</h3>
+        <p>Your satisfaction is our priority. We're here to make your special days unforgettable.</p>
+      </div>
     </div>
   </div>
-</div>
-
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const animatedElements = document.querySelectorAll(".animate__animated");
+  
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("animate__fadeIn");
+            // Hapus observasi untuk meningkatkan kinerja setelah animasi selesai
+            observer.unobserve(entry.target);
+          }
+        });
+      });
+  
+      animatedElements.forEach(element => observer.observe(element));
+    });
+  </script>
+  
   <!-- Product Section -->
 <div class="container mx-auto px-4 lg:px-6">
   <div class="flex justify-between items-center mb-6">
