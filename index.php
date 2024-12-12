@@ -89,17 +89,21 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
   </header>
 
   <!-- Main Content -->
-  <main class="bg-pink-50 py-12">
+  < class="bg-pink-50 w-full py-28">
     <div class="container mx-auto px-4 lg:px-6 flex flex-col items-center">
-      <div class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-6">
-        <img alt="Two cakes" class="w-full md:w-1/3 lg:w-1/4 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 mt-12" src="gambar/utama.jpg" />
-        <div class="text-center md:text-left">
-          <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Kue Ulang Tahun, Wedding Cake, & More</h1>
-          <p class="text-gray-600 mt-4">Pesan cake, pudding, wedding cake, dan lainnya dengan custom design serta same day delivery.</p>
+        <div class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-6">
+            <img alt="Two cakes"
+                class="w-full md:w-1/3 lg:w-1/4 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 mt-12"
+                src="gambar/utama.jpg">
+            <div class="text-center md:text-left">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Kue Ulang Tahun, Wedding Cake, &amp;
+                    More</h1>
+                <p class="text-gray-600 mt-4">Pesan cake, pudding, wedding cake, dan lainnya dengan custom
+                    design serta same day delivery.</p>
+            </div>
         </div>
-      </div>
-    </div> 
-  </main>
+    </div>
+
 
   <style>
     /* Styling Global */
@@ -309,8 +313,8 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </ul>
       </div>
 
-      <!-- Contact Information -->
-      <div>
+     <!-- Contact Information -->
+     <div>
         <h3 class="text-lg font-bold mb-4">Contact</h3>
         <ul class="space-y-3">
           <li><i class="fas fa-phone-alt"></i>
@@ -326,7 +330,7 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </div>
     </div>
     <div class="mt-8 border-t border-gray-700 pt-4 text-center text-sm">
-      <p>&copy; 2024 HappyippieCake. All rights reserved.</p>
+      &copy; 2024 HappyippieCake. All rights reserved.
     </div>
   </div>
 </footer>

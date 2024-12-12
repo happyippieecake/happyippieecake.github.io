@@ -224,24 +224,6 @@
     </div>
   </div>
   
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const animatedElements = document.querySelectorAll(".animate__animated");
-  
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("animate__fadeIn");
-            // Hapus observasi untuk meningkatkan kinerja setelah animasi selesai
-            observer.unobserve(entry.target);
-          }
-        });
-      });
-  
-      animatedElements.forEach(element => observer.observe(element));
-    });
-  </script>
-  
   <!-- Product Section -->
 <div class="container mx-auto px-4 lg:px-6">
   <div class="flex justify-between items-center mb-6">
