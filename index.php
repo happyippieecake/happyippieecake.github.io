@@ -20,11 +20,21 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HappyippieCake</title>
+  <link rel="stylesheet" href="croot.css">
+
+    <!-- Meta Tags untuk Twitter (opsional) -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="CrootSS: CSS Mobile Friendly Responsive Component and Template" />
+    <meta name="twitter:description" content="CSS Mobile Friendly Responsive Component and Template" />
+    <meta name="twitter:image" content="https://www.do.my.id/crootss.jpeg" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
   <meta name="google-site-verification" content="FxJ_CP9CXLmS6uC-vBopCr_7V31N4wjJiNTdR8mYDPU" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+ 
 </head>
+
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XHQ9K68JXX"></script>
 <script>
@@ -88,22 +98,27 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
   </header>
 
-  <!-- Main Content -->
-  < class="bg-pink-50 w-full py-28">
-    <div class="container mx-auto px-4 lg:px-6 flex flex-col items-center">
-        <div class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-6">
-            <img alt="Two cakes"
-                class="w-full md:w-1/3 lg:w-1/4 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 mt-12"
-                src="gambar/utama.jpg">
-            <div class="text-center md:text-left">
-                <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Kue Ulang Tahun, Wedding Cake, &amp;
-                    More</h1>
-                <p class="text-gray-600 mt-4">Pesan cake, pudding, wedding cake, dan lainnya dengan custom
-                    design serta same day delivery.</p>
-            </div>
-        </div>
-    </div>
+  <!-- Main Content with Parallax Background -->
+<main class="relative w-full py-28">
+  <!-- Parallax Background -->
+  <div class="absolute top-0 left-0 w-full h-full bg-fixed bg-center bg-cover"
+      style="background-image: url('gambar/cake\ utama.jpg'); z-index: -1;"></div>
 
+  <!-- Content Section -->
+  <div class="container mx-auto px-4 lg:px-6 flex flex-col items-center relative">
+      <div class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-6 bg-white bg-opacity-90 p-6 rounded-lg shadow-lg">
+          <img alt="Two cakes"
+              class="w-full md:w-1/3 lg:w-1/4 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 mt-12"
+              src="gambar/utama.jpg">
+          <div class="text-center md:text-left">
+              <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Kue Ulang Tahun, Wedding Cake, &amp;
+                  More</h1>
+              <p class="text-gray-600 mt-4">Pesan cake, pudding, wedding cake, dan lainnya dengan custom
+                  design serta same day delivery.</p>
+          </div>
+      </div>
+  </div>
+</main>
 
   <style>
     /* Styling Global */
@@ -207,35 +222,105 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
         gap: 1.5rem;
       }
     }
+
+    footer {
+    background-color: #2d2d2d; /* Warna latar belakang footer */
+}
+
+.map-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Menyelaraskan konten peta ke kiri */
+}
+
+footer iframe {
+    width: 100%;
+    height: 200px; /* Tinggi iframe peta */
+    border: none;
+    border-radius: 10px;
+    margin-top: 1rem;
+}
+
+/* Responsif */
+@media (max-width: 768px) {
+    footer {
+        grid-template-columns: 1fr; /* Mengubah menjadi satu kolom pada layar kecil */
+    }
+
+    .map-section {
+        order: 1; /* Memindahkan peta ke bagian bawah */
+    }
+
+    footer iframe {
+        height: 150px; /* Tinggi iframe peta pada layar kecil */
+    }
+}
+    
   </style>
 </head>
 <body>
 
-  <div id="about-container" class="about-container"><h1>About Us</h1>
-  <p>
-    At <strong>Happyippieecake</strong>, we believe in making your celebrations sweeter and more memorable. 
-    With our artisan cakes crafted with love and precision, we strive to deliver happiness in every bite.
-  </p>
-  <img src="gambar/cake utama.jpg" alt="About Us Image" class="about-image">
-
-  <div class="values">
-    <div class="value-card">
-      <i class="fas fa-heart"></i>
-      <h3>Passion</h3>
-      <p>We pour our hearts into every cake, ensuring you taste the love and dedication in every bite.</p>
-    </div>
-    <div class="value-card">
-      <i class="fas fa-seedling"></i>
-      <h3>Fresh Ingredients</h3>
-      <p>Only the finest and freshest ingredients are used in our recipes for unparalleled quality.</p>
-    </div>
-    <div class="value-card">
-      <i class="fas fa-smile"></i>
-      <h3>Customer Happiness</h3>
-      <p>Your satisfaction is our priority. We're here to make your special days unforgettable.</p>
-    </div>
+  <div id="about-container" class="about-container">
+    <h1>About Us</h1>
+    <section class="bg-white-100 py-20">
+      <div class="container mx-auto px-6 lg:px-20">
+        <div class="flex flex-col md:flex-row items-center md:space-x-8">
+          <!-- Left Content -->
+          <div class="w-full md:w-1/2">
+            <h3 class="text-4xl font-bold text-gray-800">HappyippieeCake</h3>
+            <p class="mt-4 text-gray-600 leading-relaxed">
+              Kami adalah tim yang berdedikasi untuk membuat momen spesial Anda lebih istimewa dengan kue dan dessert berkualitas tinggi. Dengan bahan-bahan terbaik dan desain yang kreatif, kami hadir untuk memenuhi semua kebutuhan Anda.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
+              <div class="flex items-center space-x-4">
+                <span class="text-pink-500 text-3xl">
+                  <i class="fas fa-birthday-cake"></i>
+                </span>
+                <div>
+                  <h4 class="text-lg font-semibold">Custom Cake</h4>
+                  <p class="text-gray-600 text-sm">Desain yang sesuai dengan selera Anda.</p>
+                </div>
+              </div>
+              <div class="flex items-center space-x-4">
+                <span class="text-pink-500 text-3xl">
+                  <i class="fas fa-truck"></i>
+                </span>
+                <div>
+                  <h4 class="text-lg font-semibold">Same Day Delivery</h4>
+                  <p class="text-gray-600 text-sm">Pesanan Anda sampai di hari yang sama.</p>
+                </div>
+              </div>
+              <div class="flex items-center space-x-4">
+                <span class="text-pink-500 text-3xl">
+                  <i class="fas fa-heart"></i>
+                </span>
+                <div>
+                  <h4 class="text-lg font-semibold">Bahan Berkualitas</h4>
+                  <p class="text-gray-600 text-sm">Kami menggunakan bahan terbaik.</p>
+                </div>
+              </div>
+              <div class="flex items-center space-x-4">
+                <span class="text-pink-500 text-3xl">
+                  <i class="fas fa-palette"></i>
+                </span>
+                <div class="flex flex-col">
+                  <h4 class="text-lg font-semibold text-center">Desain Kreatif</h4>
+                  <p class="text-gray-600 text-sm text-left">Setiap kue adalah karya seni.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Right Content -->
+          <div class="w-full md:w-1/2 flex items-center justify-center mt-10 md:mt-0">
+            <div class="relative">
+              <img src="gambar/cake utama.jpg" alt="About Us" class="rounded-lg shadow-lg">
+              <div class="absolute inset-0 bg-opacity-30 rounded-lg"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
-</div>
 
   <!-- Product Section -->
 <div class="container mx-auto px-4 lg:px-6">
@@ -273,7 +358,7 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
  <!-- Chat Button -->
-<div class="fixed bottom-4 right-4 animate-bounce">
+ <div class="fixed bottom-4 right-4 animate-bounce">
   <a 
     href="https://www.instagram.com/happyippieecake?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" 
     target="_blank" 
@@ -293,7 +378,7 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
     });
   </script>
 
-  <!-- Footer -->
+<!-- Footer -->
 <footer class="bg-gray-800 text-white py-6 mt-12">
   <div class="container mx-auto px-4 lg:px-6">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"> <!-- Mengubah jumlah kolom menjadi 4 -->
@@ -343,6 +428,7 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
   </div>
 </footer>
+
 
 </body>
 </html>
