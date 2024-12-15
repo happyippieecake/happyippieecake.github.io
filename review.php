@@ -35,7 +35,7 @@ $result = $conn->query("SELECT * FROM reviews ORDER BY created_at DESC");
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
-            background-color: #fce4ec; /* Light Pink Background */
+            background-color:rgb(255, 255, 255); /* Light Pink Background */
             color: #333;
         }
         .container {
