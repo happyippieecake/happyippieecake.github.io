@@ -294,42 +294,51 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
   </script>
 
   <!-- Footer -->
-<footer class="bg-gray-800 text-white py-12 mt-12">
+<footer class="bg-gray-800 text-white py-6 mt-12">
   <div class="container mx-auto px-4 lg:px-6">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"> <!-- Mengubah jumlah kolom menjadi 4 -->
       <!-- Logo -->
       <div class="flex flex-col items-center lg:items-start">
-        <img src="gambar/happycake.png" alt="Logo Happy Ippie Cake" class="object-contain mb-6" width="200" />
-        <p class="text-sm text-gray-300 text-center lg:text-left mt-2">Your special moment, our sweet touch!</p>
+        <img src="gambar/happycake.png" alt="Logo Happy Ippie Cake" class="object-contain mb-4" width="150" />
+        <p class="text-xs text-gray-300 text-center lg:text-left mt-2">Your special moment, our sweet touch!</p>
       </div>
 
-      <!-- Quick Links -->
       <div>
-        <h3 class="text-lg font-bold mb-4">Quick Links</h3>
-        <ul class="space-y-2">
+        <h3 class="text-md font-semibold mb-2">Quick Links</h3>
+        <ul class="space-y-1">
           <li><a href="#about-container" class="text-gray-300 hover:text-white transition">About</a></li>
           <li><a href="maps.html" class="text-gray-300 hover:text-white transition">Location</a></li>
-          <li><a href="contact.html" class="text-gray-300 hover:text-white transition">Contact Us</a></li>
+          <li>
+            <a href="https://wa.me/6285722341788" target="_blank" class="text-gray-300 hover:text-white transition"> Contact Us </a>
+          </li>
+          <li><a href="review.php" class="text-gray-300 hover:text-white transition">Review</a></li>
         </ul>
       </div>
-
-     <!-- Contact Information -->
-     <div>
-        <h3 class="text-lg font-bold mb-4">Contact</h3>
-        <ul class="space-y-3">
+      
+      <!-- Contact Information -->
+      <div>
+        <h3 class="text-md font-semibold mb-2">Contact</h3>
+        <ul class="space-y-2">
           <li><i class="fas fa-phone-alt"></i>
             <a href="tel:+6285722341788" class="text-gray-300 hover:text-white transition ml-2">+62 857-2234-1788</a>
           </li>
           <li><i class="fas fa-envelope"></i>
             <a href="mailto:info@happyippiecake.com" class="text-gray-300 hover:text-white transition ml-2">info@happyippiecake.com</a>
           </li>
-          <li><i class="fas fa-map-marker-alt"></i>
-            <span class="text-gray-300 ml-2">Jl. Nanjung No.25, RT.02/RW.13, Utama, Kec. Cimahi Sel., Kota Cimahi, Jawa Barat 40533</span>
-          </li>
         </ul>
       </div>
+
+      <!-- Maps Section -->
+      <div class="map-section">
+        <h3 class="text-md font-semibold mb-2">Our Location</h3>
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d495.1070132257533!2d107.53570984005971!3d-6.907804161619513!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e569a8e9d7bb%3A0x142ecf9a09a7f3e7!2shappyippieecake!5e0!3m2!1sid!2sid!4v1732411075230!5m2!1sid!2sid"
+          allowfullscreen="" 
+          loading="lazy">
+        </iframe>
+      </div>
     </div>
-    <div class="mt-8 border-t border-gray-700 pt-4 text-center text-sm">
+    <div class="mt-4 border-t border-gray-700 pt-2 text-center text-xs">
       &copy; 2024 HappyippieCake. All rights reserved.
     </div>
   </div>
