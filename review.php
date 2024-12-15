@@ -68,9 +68,9 @@ $result = $conn->query("SELECT * FROM reviews ORDER BY created_at DESC");
             background-color: #f8bbd0; /* Light Pink */
         }
         form input, form textarea, form select {
-            width: 100%;
+            width: 95%;
             margin-bottom: 15px;
-            padding: 12px;
+            padding: 10px;
             border: 1px solid #ddd;
             border-radius: 6px;
             transition: border-color 0.3s;
