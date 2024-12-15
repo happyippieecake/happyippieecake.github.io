@@ -40,43 +40,43 @@ if (!$menu) {
   gtag('config', 'G-XHQ9K68JXX');
 </script>
 <body class="bg-gray-100">
-
   <!-- Header -->
-  <header class="bg-white shadow">
+  <header class="bg-white shadow-md">
+    <header class="bg-white shadow-md fixed top-0 left-0 w-full z-50">
     <div class="container mx-auto flex justify-between items-center py-4 px-6">
-      <!-- Logo -->
-      <div class="flex items-center space-x-2 text-xl font-bold">
+      <div class="text-2xl lg:text-3xl font-bold text-gray-800 flex items-center space-x-1">
         <span>happyi</span>
         <span class="text-pink-500">ppieecake</span>
       </div>
-
       <!-- Navigation -->
       <nav class="hidden md:flex space-x-6">
-        <a class="text-gray-600 hover:text-gray-800 hover:underline" href="index.html">Produk</a>
-        <a class="text-gray-600 hover:text-gray-800 hover:underline" href="index.html">About</a>
-        <a class="text-gray-600 hover:text-gray-800 hover:underline" href="maps.html">Location</a>
-        <a class="text-red-600 hover:text-red-800 font-semibold" href="#">For Business</a>
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="index.html">Produk</a>
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="index.html">About</a>
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="maps.html">Location</a>
+        <a class="text-red-600 hover:text-red-800 font-semibold transition duration-300" href="#">For Business</a>
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="login.html">Login</a>
       </nav>
-
-      <!-- Menu Icon (Mobile) -->
-      <div class="md:hidden">
-        <button id="menu-toggle" class="text-gray-600">
-          <i class="fas fa-bars"></i>
-        </button>
-      </div>
+      
+      <!-- Mobile Menu Button -->
+      <button id="mobile-menu-button" class="md:hidden text-gray-600 hover:text-pink-500 focus:outline-none transition duration-300">
+        <i class="fas fa-bars"></i>
+      </button>
     </div>
-
-    <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg max-h-0 overflow-hidden transition-all duration-300">
-        <a class="block px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100" href="index.html">Produk</a>
-        <a class="block px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100" href="#">Momen</a>
-        <a class="block px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100" href="maps.html">Location</a>
-        <a class="block px-4 py-2 text-red-600 hover:text-red-800" href="#">For Business</a>
+    <!-- Mobile Navigation -->
+    <div id="mobile-menu" class="md:hidden hidden">
+      <nav class="flex flex-col space-y-2 px-6 py-4">
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="#">Produk</a>
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="about.html">About</a>
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="maps.html">Location</a>
+        <a class="text-red-600 hover:text-red-800 font-semibold transition duration-300" href="#">For Business</a>
+      </nav>
     </div>
-
+  </header>
+    
     <script>
         const menuToggle = document.getElementById("menu-toggle");
         const mobileMenu = document.getElementById("mobile-menu");
-
+    
         menuToggle.addEventListener("click", () => {
             if (mobileMenu.classList.contains("hidden")) {
                 mobileMenu.classList.remove("hidden");
@@ -87,6 +87,7 @@ if (!$menu) {
             }
         });
     </script>
+    
 
     <?php if ($menu): ?>
         <main class="container mx-auto p-4 lg:p-8">
@@ -112,65 +113,116 @@ if (!$menu) {
 
   <title>Formulir Pesanan</title>
   <style>
-       body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    background-color: #f4f4f4;
-    color: #333;
-}
-h1 {
-    text-align: center;
-    color: #000000;
-    margin-bottom: 20px;
-}
-form {
-    max-width: 400px;
-    margin: auto;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-input, button {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #cccccc;
-    border-radius: 5px;
-    transition: border-color 0.3s;
-}
-input:focus {
-    border-color: #e43b9b;
-    outline: none;
-}
-button {
-    background-color: #e43b9b;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    border: none;
-    transition: background-color 0.3s;
-}
-button:hover {
-    background-color: #ef3b9b;
-}
-@media (max-width: 480px) {
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
     h1 {
-        font-size: 24px;
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
     }
+
     form {
-        padding: 15px;
+        max-width: 400px;
+        margin: auto;
+        background: #ffffff; /* Warna latar belakang form */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Bayangan yang lebih halus */
+        transition: transform 0.3s; /* Efek transisi */
     }
+
+    form:hover {
+        transform: scale(1.02); /* Efek zoom saat hover */
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #555; /* Warna label */
+    }
+
     input, button {
-        padding: 8px;
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #cccccc;
+        border-radius: 5px;
+        transition: border-color 0.3s;
+    }
+
+    input:focus {
+        border-color: #e43b9b; /* Warna border saat fokus */
+        outline: none;
+    }
+
+    button {
+        background-color: #e43b9b; /* Warna tombol */
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s, transform 0.3s; /* Transisi untuk hover */
+    }
+
+    button:hover {
+        background-color: #ef3b9b; /* Warna tombol saat hover */
+        transform: translateY(-2px); /* Efek angkat saat hover */
+    }
+
+    @media (max-width: 480px) {
+        h1 {
+            font-size: 24px;
+        }
+        form {
+            padding: 15px;
+        }
+        input, button {
+            padding: 8px;
+        }
+    }
+
+    footer {
+    background-color: #2d2d2d; /* Warna latar belakang footer */
+}
+
+.map-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Menyelaraskan konten peta ke kiri */
+}
+
+footer iframe {
+    width: 100%;
+    height: 200px; /* Tinggi iframe peta */
+    border: none;
+    border-radius: 10px;
+    margin-top: 1rem;
+}
+
+/* Responsif */
+@media (max-width: 768px) {
+    footer {
+        grid-template-columns: 1fr; /* Mengubah menjadi satu kolom pada layar kecil */
+    }
+
+    .map-section {
+        order: 1; /* Memindahkan peta ke bagian bawah */
+    }
+
+    footer iframe {
+        height: 150px; /* Tinggi iframe peta pada layar kecil */
     }
 }
-  </style>
+</style>
 </head>
 <body>
   <h1>Formulir Pesanan</h1>
@@ -203,17 +255,17 @@ button:hover {
 
         if (name && product && quantity && address && ucapan) {
             // Membuat pesan
-            const message = `Halo, saya ingin memesan kue:\n\n` +
+            const message = `Halo, saya ingin memesan kue di toko Happyippiecake ini:\n\n` +
                             `Nama: ${name}\n` +
                             `Produk: ${product}\n` +
                             `Jumlah: ${quantity}\n` +
                             `Alamat: ${address} \n` +
                             `ucapan: ${ucapan}`;
-
+            
             // Nomor WhatsApp tujuan (gunakan format internasional tanpa tanda +)
             const phoneNumber = "6285722341788"; // Ganti dengan nomor Anda
             const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-
+            
             // Membuka WhatsApp
             window.open(url, '_blank');
         } else {
@@ -241,7 +293,6 @@ button:hover {
           <li>
             <a href="https://wa.me/6285722341788" target="_blank" class="text-gray-300 hover:text-white transition"> Contact Us </a>
           </li>
-          <li><a href="review.php" class="text-gray-300 hover:text-white transition">Review</a></li>
         </ul>
       </div>
       
@@ -255,6 +306,7 @@ button:hover {
           <li><i class="fas fa-envelope"></i>
             <a href="mailto:info@happyippiecake.com" class="text-gray-300 hover:text-white transition ml-2">info@happyippiecake.com</a>
           </li>
+          <li><a href="review.php" class="text-gray-300 hover:text-white transition">Review</a></li>
         </ul>
       </div>
 
@@ -273,6 +325,8 @@ button:hover {
     </div>
   </div>
 </footer>
+
+
 
 </body>
 </html>
