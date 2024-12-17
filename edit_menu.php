@@ -55,55 +55,178 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Menu</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(120deg, #1c1b29, #3a3a59);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #ffffff;
+}
+
+form {
+    background: linear-gradient(145deg, #2a2a3d, #1e1e2d);
+    border-radius: z0px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 4px 10px rgba(255, 255, 255, 0.1);
+    padding: 2.5rem;
+    max-width: 450px;
+    width: 100%;
+    animation: fade-in 0.7s ease-in-out;
+    position: relative;
+}
+
+form::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background: linear-gradient(145deg, #ff8c00, #e52e71);
+    z-index: -1;
+    filter: blur(20px);
+    border-radius: 25px;
+}
+
+h2 {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: #ff8c00;
+    position: relative;
+}
+
+h2::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, #e52e71, #ff8c00);
+    margin: 0.5rem auto 0;
+    border-radius: 10px;
+}
+
+
+
+label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: #cccccc;
+}
+
+input[type="text"], 
+input[type="file"], 
+textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: none;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    background: #1c1b29;
+    color: #ffffff;
+    font-size: 1rem;
+    box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.3), inset 0 -2px 4px rgba(255, 255, 255, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+input:focus, 
+textarea:focus {
+    outline: none;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 140, 0, 0.5), inset 0 2px 6px rgba(255, 255, 255, 0.2);
+}
+
+textarea {
+    min-height: 100px;
+    resize: none;
+}
+
+button {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #ff8c00, #e52e71);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(229, 46, 113, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+button:hover {
+    background: linear-gradient(90deg, #e52e71, #ff8c00);
+    box-shadow: 0 8px 20px rgba(229, 46, 113, 0.5);
+    transform: translateY(-3px);
+}
+
+button:active {
+    transform: translateY(1px);
+    box-shadow: 0 4px 10px rgba(229, 46, 113, 0.2);
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+</style>
 </head>
-<body class="bg-gray-100 font-sans antialiased">
+<body>
+    <div class="container">
+        <h1>Edit Menu</h1>
+        <form method="POST" enctype="multipart/form-data">
+            <!-- Name Field -->
+            <div class="mb-4">
+                <label for="name">Nama:</label>
+                <input type="text" name="name" value="<?= $row['name'] ?>" required>
+            </div>
 
-    <!-- Container -->
-    <div class="flex justify-center items-center min-h-screen">
-        <div class="w-full max-w-lg bg-white shadow-lg rounded-lg p-8">
-            <h1 class="text-3xl font-semibold text-center text-gray-800 mb-6">Edit Menu</h1>
-            <form method="POST" class="space-y-4">
-                <!-- Name Field -->
-                <div>
-                    <label for="name" class="block text-sm font-medium text-gray-600">Nama:</label>
-                    <input type="text" name="name" value="<?= $row['name'] ?>" required class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
+            <!-- Price Field -->
+            <div class="mb-4">
+                <label for="price">Harga:</label>
+                <input type="text" name="price" value="<?= $row['price'] ?>" required>
+            </div>
 
-                <!-- Price Field -->
-                <div>
-                    <label for="price" class="block text-sm font-medium text-gray-600">Harga:</label>
-                    <input type="text" name="price" value="<?= $row['price'] ?>" required class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
+            <!-- Description Field -->
+            <div class="mb-4">
+                <label for="description">Deskripsi:</label>
+                <textarea name="description" required><?= $row['description'] ?></textarea>
+            </div>
 
-                <!-- Description Field -->
-                <div>
-                    <label for="description" class="block text-sm font-medium text-gray-600">Deskripsi:</label>
-                    <textarea name="description" required class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"><?= $row['description'] ?></textarea>
-                </div>
+            <!-- Category Field -->
+            <div class="mb-4">
+                <label for="category">Kategori:</label>
+                <input type="text" name="category" value="<?= $row['category'] ?>" required>
+            </div>
 
-                <!-- Category Field -->
-                <div>
-                    <label for="category" class="block text-sm font-medium text-gray-600">Kategori:</label>
-                    <input type="text" name="category" value="<?= $row['category'] ?>" required class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
+            <!-- Image Field -->
+            <div class="mb-4 image-upload">
+                <label for="image">Upload Image:</label>
+                <input type="file" name="image" id="image" required>
+            </div>
 
-                <!-- Image Field -->
-                            <div class="mb-4">
-                    <label for="image" class="block text-gray-700 font-semibold">Upload Image:</label>
-                    <input type="file" name="image" id="image" class="w-full p-2 border border-gray-300 rounded-md" required>
-                </div>
-
-                <!-- Submit Button -->
-                <div>
-                    <button type="submit" class="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        Update Menu
-                    </button>
-                </div>
-            </form>
-        </div>
+            <!-- Submit Button -->
+            <button type="submit">Update Menu</button>
+        </form>
     </div>
-
 </body>
 </html>
 
