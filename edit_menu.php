@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
-body {
+    body {
     margin: 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;
@@ -71,13 +71,18 @@ body {
     color: #ffffff;
 }
 
+.container {
+    padding: 20px; /* Menambahkan padding pada container */
+}
+
 form {
     background: linear-gradient(145deg, #2a2a3d, #1e1e2d);
-    border-radius: z0px;
+    border-radius: 20px; /* Meningkatkan kelengkungan */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 4px 10px rgba(255, 255, 255, 0.1);
-    padding: 2.5rem;
-    max-width: 450px;
+    padding: 1.5rem; /* Mengurangi padding */
+    max-width: 350px; /* Mengurangi ukuran form */
     width: 100%;
+    margin: 0 auto; /* Memusatkan form */
     animation: fade-in 0.7s ease-in-out;
     position: relative;
 }
@@ -126,14 +131,14 @@ label {
 input[type="text"], 
 input[type="file"], 
 textarea {
-    width: 100%;
-    padding: 0.8rem 1rem;
+    width: 100%; /* Memastikan input memiliki lebar 100% */
+    padding: 0.5rem 0.8rem; /* Mengurangi padding */
     border: none;
-    border-radius: 8px;
-    margin-bottom: 1.5rem;
+    border-radius: 5px; /* Meningkatkan kelengkungan input */
+    margin-bottom: 1rem; /* Mengurangi margin */
     background: #1c1b29;
     color: #ffffff;
-    font-size: 1rem;
+    font-size: 0.9rem; /* Mengurangi ukuran font */
     box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.3), inset 0 -2px 4px rgba(255, 255, 255, 0.1);
     transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
