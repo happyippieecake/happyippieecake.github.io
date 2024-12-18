@@ -325,7 +325,7 @@ footer iframe {
 <!-- Product Section -->
 <div class="container mx-auto px-4 lg:px-6">
   <div class="flex justify-between items-center mb-6">
-    <h2 class="text-xl md:text-2xl font-bold text-gray-800">4 Pilihan Produk</h2>
+    <h2 class="text-xl md:text-2xl font-bold text-gray-800">Pilihan Produk</h2>
     <a href="#" class="text-pink-500 hover:text-pink-700 font-medium transition"></a>
   </div>
 
