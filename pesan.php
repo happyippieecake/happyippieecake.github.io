@@ -17,6 +17,7 @@ if (!$menu) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script type="module" src="https://cdn.jsdelivr.net/gh/domyid/tracker@main/index.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>happyippieecake</title>

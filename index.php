@@ -33,7 +33,6 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
   <meta name="google-site-verification" content="FxJ_CP9CXLmS6uC-vBopCr_7V31N4wjJiNTdR8mYDPU" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
- 
 </head>
 
 <!-- Google tag (gtag.js) -->
