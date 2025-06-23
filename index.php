@@ -21,6 +21,7 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HappyippieCake</title>
   <link rel="stylesheet" href="croot.css">
+    <script type="module" src="https://cdn.jsdelivr.net/gh/domyid/tracker@main/index.js"></script>
 
     <!-- Meta Tags untuk Twitter (opsional) -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -333,36 +334,31 @@ footer iframe {
     <div class="container mx-auto">
       <h2 class="text-center text-2xl font-bold mb-6">Produk Kami</h2>
 
-      <?php 
-      $menuCount = count($menus); 
-      for ($i = 0; $i < $menuCount; $i += 8): ?>
-        <!-- Wrapper untuk satu baris -->
-        <div class="overflow-x-auto mb-6">
-          <div class="flex space-x-4">
-            <?php for ($j = $i; $j < $i + 8 && $j < $menuCount; $j++): ?>
-              <!-- Card -->
-              <div class="w-64 bg-white shadow-lg rounded-lg p-4 group flex-shrink-0 transition-transform transform hover:scale-105 hover:shadow-2xl">
-                <div class="relative">
-                  <img src="gambar/<?php echo htmlspecialchars($menus[$j]['image']); ?>" alt="<?php echo htmlspecialchars($menus[$j]['name']); ?>" class="w-full h-48 object-cover rounded-lg transition-transform transform group-hover:scale-110">
-                  <span class="absolute top-2 right-2 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-2 py-1 rounded shadow animate-pulse">SALE</span>
-                </div>
-                <h3 class="text-gray-800 font-semibold mt-4 group-hover:text-pink-500 transition"><?php echo htmlspecialchars($menus[$j]['name']); ?></h3>
-                <div class="mt-2">
-                  <p class="text-red-600 line-through mb-1">Rp. <?php echo number_format($menus[$j]['price'], 0, ',', '.'); ?></p>
-                  <p class="text-gray-800 font-bold">Rp. <?php echo number_format($menus[$j]['price'], 0, ',', '.'); ?></p>
-                </div>
-                <a class="mt-4 block bg-gradient-to-r from-pink-400 to-red-500 text-white text-center py-2 rounded shadow hover:from-pink-600 hover:to-red-600 transition duration-300" href="pesan.php?id=<?= $menus[$j]['id']; ?>" target="_blank">
-                  Pesan Sekarang
-                </a>
+      <!-- Scrollable container for all products -->
+      <div class="overflow-x-auto">
+        <div class="flex space-x-4 pb-4" style="width: max-content;">
+          <?php foreach ($menus as $menu): ?>
+            <!-- Card -->
+            <div class="w-64 bg-white shadow-lg rounded-lg p-4 group flex-shrink-0 transition-transform transform hover:scale-105 hover:shadow-2xl">
+              <div class="relative">
+                <img src="gambar/<?php echo htmlspecialchars($menu['image']); ?>" alt="<?php echo htmlspecialchars($menu['name']); ?>" class="w-full h-48 object-cover rounded-lg transition-transform transform group-hover:scale-110">
+                <span class="absolute top-2 right-2 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-2 py-1 rounded shadow animate-pulse">SALE</span>
               </div>
-            <?php endfor; ?>
-          </div>
+              <h3 class="text-gray-800 font-semibold mt-4 group-hover:text-pink-500 transition"><?php echo htmlspecialchars($menu['name']); ?></h3>
+              <div class="mt-2">
+                <p class="text-red-600 line-through mb-1">Rp. <?php echo number_format($menu['price'], 0, ',', '.'); ?></p>
+                <p class="text-gray-800 font-bold">Rp. <?php echo number_format($menu['price'], 0, ',', '.'); ?></p>
+              </div>
+              <a class="mt-4 block bg-gradient-to-r from-pink-400 to-red-500 text-white text-center py-2 rounded shadow hover:from-pink-600 hover:to-red-600 transition duration-300" href="pesan.php?id=<?= $menu['id']; ?>" target="_blank">
+                Pesan Sekarang
+              </a>
+            </div>
+          <?php endforeach; ?>
         </div>
-      <?php endfor; ?>
+      </div>
     </div>
   </div>
 </div>
-
 
 
  <!-- Chat Button -->

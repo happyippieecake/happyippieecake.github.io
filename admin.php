@@ -99,21 +99,21 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;
-    background: linear-gradient(120deg, #1c1b29, #3a3a59);
-    color: #ffffff;
+    background: linear-gradient(120deg, #fff0f6, #ffdeeb, #fcc2d7);
+    color: #881337;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     flex-direction: column;
 }
 
 header {
-    background: #2e2e3b;
-    color: #ff8c00;
+    background: #fecdd3;
+    color: #9d174d;
     padding: 20px;
     width: 100%;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
@@ -143,12 +143,12 @@ a:hover {
     border-radius: 8px;
     color: #ffffff;
     font-weight: 600;
-    background: linear-gradient(90deg, #ff8c00, #e52e71);
+    background: linear-gradient(90deg, #f472b6, #ec4899);
     transition: all 0.3s ease-in-out;
 }
 
 .button:hover {
-    background: linear-gradient(90deg, #e52e71, #ff8c00);
+    background: linear-gradient(90deg, #ec4899, #db2777);
     transform: scale(1.05);
 }
 
@@ -160,25 +160,27 @@ a:hover {
 
 table {
     width: 100%;
-    background: #1c1b29;
+    background: #fff9fb;
     border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     border-collapse: collapse;
 }
 
 th, td {
     padding: 12px;
     text-align: left;
-    color: #cccccc;
+    color: #881337;
     font-weight: 500;
+    border-bottom: 1px solid #fbcfe8;
 }
 
 th {
-    background: linear-gradient(90deg, #3a3a59, #2e2e3b);
+    background: linear-gradient(90deg, #fbcfe8, #f9a8d4);
+    color: #9d174d;
 }
 
 tbody tr:hover {
-    background-color: #2e2e3b;
+    background-color: #fce7f3;
     transform: scale(1.02);
     transition: all 0.2s ease-in-out;
 }
@@ -186,7 +188,7 @@ tbody tr:hover {
 button {
     padding: 10px 20px;
     border-radius: 8px;
-    background: linear-gradient(90deg, #ff8c00, #e52e71);
+    background: linear-gradient(90deg, #f472b6, #ec4899);
     color: #ffffff;
     font-weight: bold;
     cursor: pointer;
@@ -195,13 +197,13 @@ button {
 }
 
 button:hover {
-    background: linear-gradient(90deg, #e52e71, #ff8c00);
+    background: linear-gradient(90deg, #ec4899, #db2777);
     transform: scale(1.05);
 }
 
 button:active {
     transform: translateY(1px);
-    box-shadow: 0 4px 10px rgba(229, 46, 113, 0.2);
+    box-shadow: 0 4px 10px rgba(236, 72, 153, 0.2);
 }
 
 img {
@@ -209,6 +211,7 @@ img {
     height: 60px;
     object-fit: cover;
     border-radius: 8px;
+    border: 2px solid #fbcfe8;
 }
 
 .actions a {
@@ -225,28 +228,28 @@ img {
 }
 
 .actions a:nth-child(1) {
-    background-color: #ff8c00;
+    background-color: #f472b6;
 }
 
 .actions a:nth-child(2) {
-    background-color: #e52e71;
+    background-color: #ec4899;
 }
 
 .actions a:nth-child(1):hover {
-    background-color: #e52e71;
+    background-color: #ec4899;
 }
 
 .actions a:nth-child(2):hover {
-    background-color: #ff8c00;
+    background-color: #f472b6;
 }
 
 footer {
     margin-top: 50px;
     padding: 10px;
     width: 100%;
-    background: #2e2e3b;
+    background: #fecdd3;
     text-align: center;
-    color: #ff8c00;
+    color: #9d174d;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
 }
-
 </style>

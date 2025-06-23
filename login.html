@@ -19,7 +19,7 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background: linear-gradient(135deg, #f0f9ff, #c3ddfd, #93c5fd);
+      background: linear-gradient(135deg, #fff0f6, #ffdeeb, #fcc2d7);
       animation: gradientBackground 6s ease infinite;
       overflow: hidden;
     }
@@ -32,18 +32,19 @@
 
     /* Login Container */
     .login-container {
-      background: #ffffff;
+      background: #fff9fb;
       padding: 3rem;
       border-radius: 20px;
       box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
       text-align: center;
       width: 100%;
       max-width: 400px;
+      border: 1px solid #ffdeeb;
     }
 
     .login-container h1 {
       font-size: 2rem;
-      color: #1e293b;
+      color: #881337;
       margin-bottom: 1rem;
       font-weight: 600;
     }
@@ -52,34 +53,35 @@
       width: 80px;
       height: 80px;
       margin: 0 auto 1rem auto;
-      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      background: linear-gradient(135deg, #f472b6, #ec4899);
       border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Tambahkan bayangan */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     .login-container .logo i {
       font-size: 2.5rem;
       color: white;
-      transform: rotate(0deg); /* Pastikan tidak ada rotasi */
+      transform: rotate(0deg);
     }
 
     .login-container input {
       width: 100%;
       padding: 1rem;
       margin-bottom: 1rem;
-      border: 1px solid #d1d5db;
+      border: 1px solid #fbcfe8;
       border-radius: 12px;
       outline: none;
       font-size: 1rem;
       transition: all 0.3s ease;
+      background-color: #fff9fb;
     }
 
     .login-container input:focus {
-      border-color: #3b82f6;
-      box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+      border-color: #f472b6;
+      box-shadow: 0 0 10px rgba(244, 114, 182, 0.3);
     }
 
     .login-container button {
@@ -88,7 +90,7 @@
       font-size: 1.1rem;
       font-weight: 600;
       color: #fff;
-      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      background: linear-gradient(135deg, #f472b6, #ec4899);
       border: none;
       border-radius: 12px;
       cursor: pointer;
@@ -96,13 +98,13 @@
     }
 
     .login-container button:hover {
-      background: linear-gradient(135deg, #2563eb, #1e40af);
-      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+      background: linear-gradient(135deg, #ec4899, #db2777);
+      box-shadow: 0 8px 20px rgba(236, 72, 153, 0.3);
       transform: translateY(-2px);
     }
 
     .login-container .error {
-      color: #ef4444;
+      color: #e11d48;
       font-size: 0.9rem;
       margin-bottom: 1rem;
     }
@@ -110,7 +112,7 @@
     .login-container .note {
       margin-top: 1.5rem;
       font-size: 0.85rem;
-      color: #6b7280;
+      color: #9d174d;
     }
 
     /* Responsive Design */
@@ -147,7 +149,7 @@
       user: {
         username: "user",
         password: "user123",
-        redirect: "index.html" // Update this to redirect to index.html
+        redirect: "index.html"
       }
     };
 
@@ -167,10 +169,10 @@
       ) {
         if (username === CREDENTIALS.admin.username) {
           alert("Login sebagai Admin berhasil!");
-          window.location.href = CREDENTIALS.admin.redirect; // Redirect to admin page
+          window.location.href = CREDENTIALS.admin.redirect;
         } else {
           alert("Login sebagai User berhasil!");
-          window.location.href = CREDENTIALS.user.redirect; // Redirect to index.html for user
+          window.location.href = CREDENTIALS.user.redirect;
         }
       } else {
         errorMessage.textContent = "Username atau password salah!";
