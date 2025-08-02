@@ -47,15 +47,13 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </script>
 <body class="bg-gray-100">
   <!-- Header -->
-  <header class="bg-white shadow-md">
-    <header class="bg-white shadow-md fixed top-0 left-0 w-full z-50">
+  <header class="bg-white shadow-md fixed top-0 left-0 w-full z-50">
     <div class="container mx-auto flex justify-between items-center py-4 px-6">
       <div class="text-2xl lg:text-3xl font-bold text-gray-800 flex items-center space-x-1">
         <span>happyi</span>
         <span class="text-pink-500">ppieecake</span>
       </div>
-      
-       <!-- Desktop Navigation -->
+      <!-- Desktop Navigation -->
       <nav class="hidden md:flex space-x-6">
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="#produk">Produk</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="#about-container">About</a>
@@ -63,13 +61,11 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <a class="text-red-600 hover:text-red-800 font-semibold transition duration-300" href="#">For Business</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="login.html">Login</a>
       </nav>
-
       <!-- Mobile Menu Button (Right-aligned) -->
       <button id="mobile-menu-button" class="md:hidden text-gray-600 hover:text-pink-500 focus:outline-none transition duration-300 ml-auto">
         <i class="fas fa-bars text-xl"></i>
       </button>
     </div>
-
     <!-- Mobile Navigation (Dropdown) -->
     <div id="mobile-menu" class="md:hidden hidden bg-white w-full absolute left-0 top-16 shadow-lg">
       <nav class="flex flex-col space-y-3 px-6 py-4">
@@ -390,13 +386,24 @@ footer iframe {
       const mobileMenu = document.getElementById('mobile-menu');
 
       if (mobileMenuButton && mobileMenu) {
-        mobileMenuButton.addEventListener('click', function() {
+        mobileMenuButton.addEventListener('click', function(e) {
+          e.stopPropagation();
           mobileMenu.classList.toggle('hidden');
           const icon = this.querySelector('i');
           if (mobileMenu.classList.contains('hidden')) {
             icon.classList.replace('fa-times', 'fa-bars');
           } else {
             icon.classList.replace('fa-bars', 'fa-times');
+          }
+        });
+
+        // Tutup menu jika klik di luar menu
+        document.addEventListener('click', function(e) {
+          if (!mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
+            if (!mobileMenu.classList.contains('hidden')) {
+              mobileMenu.classList.add('hidden');
+              mobileMenuButton.querySelector('i').classList.replace('fa-times', 'fa-bars');
+            }
           }
         });
 
