@@ -70,6 +70,8 @@ if (!$menu) {
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="about.html">About</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="maps.html">Location</a>
         <a class="text-red-600 hover:text-red-800 font-semibold transition duration-300" href="#">For Business</a>
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="login.html">Login</a>
+
       </nav>
     </div>
   </header>
