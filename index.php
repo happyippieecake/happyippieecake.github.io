@@ -54,76 +54,69 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <span>happyi</span>
         <span class="text-pink-500">ppieecake</span>
       </div>
+      
+      <!-- Desktop Navigation -->
       <nav class="hidden md:flex space-x-6">
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="container mx-auto px-4 lg:px-6">Produk</a>
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="about.html">About</a>
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="#produk">Produk</a>
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="#about-container">About</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="maps.html">Location</a>
         <a class="text-red-600 hover:text-red-800 font-semibold transition duration-300" href="#">For Business</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="login.html">Login</a>
-      <script>
-        // Tombol About
-        const aboutButton = document.getElementById('about-btn');
-        
-        // Fungsi untuk scroll ke About
-        aboutButton.addEventListener('click', (e) => {
-          e.preventDefault(); // Mencegah tindakan default anchor
-          
-          // Elemen target
-          const aboutSection = document.getElementById('about-container');
-          
-          // Gulir ke elemen target dengan animasi halus
-          aboutSection.scrollIntoView({
-            behavior: 'smooth', // Gulir halus
-            block: 'start',     // Posisi elemen setelah scroll
-          });
-        });
-      </script>
-      
+      </nav>
 
-      <!-- Mobile Menu Button -->
-      <button id="mobile-menu-button" class="md:hidden text-gray-600 hover:text-pink-500 focus:outline-none transition duration-300">
-        <i class="fas fa-bars"></i>
+      <!-- Mobile Menu Button (Right-aligned) -->
+      <button id="mobile-menu-button" class="md:hidden text-gray-600 hover:text-pink-500 focus:outline-none transition duration-300 ml-auto">
+        <i class="fas fa-bars text-xl"></i>
       </button>
     </div>
-    <!-- Mobile Menu Button -->
-<button id="mobile-menu-button" class="md:hidden text-gray-600 hover:text-pink-500 focus:outline-none transition duration-300">
-  <i class="fas fa-bars"></i>
-</button>
 
-<!-- Mobile Navigation -->
-<div id="mobile-menu" class="md:hidden hidden bg-white w-full absolute left-0 top-16 shadow-lg">
-  <nav class="flex flex-col space-y-3 px-6 py-4">
-    <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="#produk">Produk</a>
-    <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="#about-container">About</a>
-    <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="maps.html">Location</a>
-    <a class="text-red-600 hover:text-red-800 font-semibold transition duration-300 py-2 border-b border-gray-100" href="#">For Business</a>
-    <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2" href="login.html">Login</a>
-  </nav>
-</div>
+    <!-- Mobile Navigation (Dropdown) -->
+    <div id="mobile-menu" class="md:hidden hidden bg-white w-full absolute left-0 top-16 shadow-lg">
+      <nav class="flex flex-col space-y-3 px-6 py-4">
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="#produk">Produk</a>
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="#about-container">About</a>
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="maps.html">Location</a>
+        <a class="text-red-600 hover:text-red-800 font-semibold transition duration-300 py-2 border-b border-gray-100" href="#">For Business</a>
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2" href="login.html">Login</a>
+      </nav>
+    </div>
+  </header>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const mobileMenuButton = document.getElementById('mobile-menu-button');
-    const mobileMenu = document.getElementById('mobile-menu');
+  <!-- Main content would go here -->
+  <main class="pt-20">
+    <!-- Your content here -->
+  </main>
 
-    if (mobileMenuButton && mobileMenu) {
-      mobileMenuButton.addEventListener('click', function() {
-        // Toggle mobile menu visibility
-        mobileMenu.classList.toggle('hidden');
-        
-        // Toggle between hamburger and close icon
-        const icon = this.querySelector('i');
-        if (mobileMenu.classList.contains('hidden')) {
-          icon.classList.replace('fa-times', 'fa-bars');
-        } else {
-          icon.classList.replace('fa-bars', 'fa-times');
-        }
-      });
-    } else {
-      console.error('Mobile menu elements not found');
-    }
-  });
-</script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const mobileMenuButton = document.getElementById('mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
+
+      if (mobileMenuButton && mobileMenu) {
+        mobileMenuButton.addEventListener('click', function() {
+          // Toggle mobile menu visibility
+          mobileMenu.classList.toggle('hidden');
+          
+          // Toggle between hamburger and close icon
+          const icon = this.querySelector('i');
+          if (mobileMenu.classList.contains('hidden')) {
+            icon.classList.replace('fa-times', 'fa-bars');
+          } else {
+            icon.classList.replace('fa-bars', 'fa-times');
+          }
+        });
+
+        // Close menu when clicking on a link
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+          link.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            mobileMenuButton.querySelector('i').classList.replace('fa-times', 'fa-bars');
+          });
+        });
+      }
+    });
+  </script>
   </header>
   <!-- Main Content with Parallax Background -->
 <main class="relative w-full py-28">
