@@ -55,7 +55,25 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <span class="text-pink-500">ppieecake</span>
       </div>
       
-       <!-- Desktop Navigation -->
+       <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XHQ9K68JXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XHQ9K68JXX');
+</script>
+
+<body class="bg-gray-100">
+  <!-- Header -->
+  <header class="bg-white shadow-md fixed top-0 left-0 w-full z-50">
+    <div class="container mx-auto flex justify-between items-center py-4 px-6">
+      <div class="text-2xl lg:text-3xl font-bold text-gray-800 flex items-center space-x-1">
+        <span>happyi</span>
+        <span class="text-pink-500">ppieecake</span>
+      </div>
+      
+      <!-- Desktop Navigation -->
       <nav class="hidden md:flex space-x-6">
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="#produk">Produk</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="#about-container">About</a>
@@ -84,11 +102,11 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
   <!-- Hero Section -->
   <main class="pt-20">
-    <section class="hero-background w-full py-28">
-      <div class="hero-overlay">
-        <div class="container mx-auto px-4 lg:px-6 flex flex-col items-center hero-content">
-          <div class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-6 p-6 rounded-lg">
-            <img alt="Two cakes" class="w-full md:w-1/3 lg:w-1/4 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 mt-12" src="gambar/utama.jpg">
+    <section class="parallax-background w-full py-28">
+      <div class="content-overlay">
+        <div class="container mx-auto px-4 lg:px-6 flex flex-col items-center">
+          <div class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-6 bg-white bg-opacity-90 p-6 rounded-lg shadow-lg">
+            <img alt="Two cakes" class="w-full md:w-1/3 lg:w-1/4 rounded-lg shadow-lg transform transition duration-500 hover:scale-105" src="gambar/utama.jpg">
             <div class="text-center md:text-left">
               <h1 class="text-3xl md:text-4xl font-bold text-gray-800">KUE ULANG TAHUN, WEDDING CAKE, &amp; MORE</h1>
               <p class="text-gray-600 mt-4">Pesan cake, pudding, wedding cake, dan lainnya dengan custom design serta same day delivery.</p>
@@ -98,6 +116,8 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </div>
     </section>
   </main>
+
+  <!-- Rest of your content... -->
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -129,7 +149,7 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
       }
     });
   </script>
-  
+
   </header>
   <!-- Main Content with Parallax Background -->
 <main class="relative w-full py-28">
@@ -156,22 +176,35 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <style>
 
    /* Custom background style */
-    .hero-background {
-      background-image: url('gambar/cake-utama.jpg');
+  /* Custom background style */
+    .parallax-background {
+      background-image: url('gambar/cake\ utama.jpg');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
-    }
-    
-    /* Ensure content is above the background */
-    .hero-content {
-      position: relative;
-      z-index: 1;
+      min-height: 100vh;
     }
     
     /* Overlay to make text more readable */
-    .hero-overlay {
+    .content-overlay {
       background-color: rgba(255, 255, 255, 0.85);
+    }
+
+    /* Styling Global */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .about-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      text-align: center;
     }
 
     /* Styling Global */
