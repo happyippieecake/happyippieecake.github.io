@@ -53,16 +53,13 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <div class="text-2xl lg:text-3xl font-bold text-gray-800 flex items-center space-x-1">
         <span>happyi</span>
         <span class="text-pink-500">ppieecake</span>
-        <!-- Navigation -->
+      </div>
       <nav class="hidden md:flex space-x-6">
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="index.php">Produk</a>
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="index.php">About</a>
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="container mx-auto px-4 lg:px-6">Produk</a>
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="about.html">About</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="maps.html">Location</a>
         <a class="text-red-600 hover:text-red-800 font-semibold transition duration-300" href="#">For Business</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="login.html">Login</a>
-      </nav>
-      </div>
-
       <script>
         // Tombol About
         const aboutButton = document.getElementById('about-btn');
