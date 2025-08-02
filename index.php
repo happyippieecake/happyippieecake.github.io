@@ -96,12 +96,13 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
   </main>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    // Pastikan script dijalankan setelah elemen header tersedia
+    window.addEventListener('load', function() {
       const mobileMenuButton = document.getElementById('mobile-menu-button');
       const mobileMenu = document.getElementById('mobile-menu');
 
       if (mobileMenuButton && mobileMenu) {
-        mobileMenuButton.addEventListener('click', function(e) {
+        mobileMenuButton.onclick = function(e) {
           e.stopPropagation();
           mobileMenu.classList.toggle('hidden');
           const icon = this.querySelector('i');
@@ -110,9 +111,8 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
           } else {
             icon.classList.replace('fa-bars', 'fa-times');
           }
-        });
+        };
 
-        // Tutup menu jika klik di luar menu
         document.addEventListener('click', function(e) {
           if (!mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
             if (!mobileMenu.classList.contains('hidden')) {
@@ -123,11 +123,11 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
         });
 
         const mobileLinks = mobileMenu.querySelectorAll('a');
-        mobileLinks.forEach(link => {
-          link.addEventListener('click', () => {
+        mobileLinks.forEach(function(link) {
+          link.onclick = function() {
             mobileMenu.classList.add('hidden');
             mobileMenuButton.querySelector('i').classList.replace('fa-times', 'fa-bars');
-          });
+          };
         });
       }
     });
