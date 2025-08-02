@@ -96,7 +96,6 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </nav>
     </div>
   </header>
-
   <!-- Main Content with Parallax Background -->
 <main class="relative w-full py-28">
   <!-- Parallax Background -->
