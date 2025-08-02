@@ -128,28 +128,20 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
   </script>
 
   </header>
-  <!-- Main Content with Parallax Background -->
-<main class="relative w-full py-28">
-  <!-- Parallax Background -->
-<div class="absolute top-0 left-0 w-full h-full bg-fixed bg-center bg-cover"
-style="background-image: url('gambar/cake utama.jpg'); z-index: -1;"></div>
-
-
-  <!-- Content Section -->
-  <div class="container mx-auto px-4 lg:px-6 flex flex-col items-center relative">
+  <!-- Main Content tanpa Parallax Background -->
+  <main class="w-full py-28">
+    <div class="container mx-auto px-4 lg:px-6 flex flex-col items-center">
       <div class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-6 bg-white bg-opacity-90 p-6 rounded-lg shadow-lg">
-          <img alt="Two cakes"
-              class="w-full md:w-1/3 lg:w-1/4 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 mt-12"
-              src="gambar/utama.jpg">
-          <div class="text-center md:text-left">
-              <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Kue Ulang Tahun, Wedding Cake, &amp;
-                  More</h1>
-              <p class="text-gray-600 mt-4">Pesan cake, pudding, wedding cake, dan lainnya dengan custom
-                  design serta same day delivery.</p>
-          </div>
+        <img alt="Two cakes"
+          class="w-full md:w-1/3 lg:w-1/4 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 mt-12"
+          src="gambar/utama.jpg">
+        <div class="text-center md:text-left">
+          <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Kue Ulang Tahun, Wedding Cake, &amp; More</h1>
+          <p class="text-gray-600 mt-4">Pesan cake, pudding, wedding cake, dan lainnya dengan custom design serta same day delivery.</p>
+        </div>
       </div>
-  </div>
-</main>
+    </div>
+  </main>
 
   <style>
 
@@ -408,11 +400,29 @@ footer iframe {
 
 
   <script>
-    const mobileMenuButton = document.getElementById('mobile-menu-button');
-    const mobileMenu = document.getElementById('mobile-menu');
+    document.addEventListener('DOMContentLoaded', function() {
+      const mobileMenuButton = document.getElementById('mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
 
-    mobileMenuButton.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
+      if (mobileMenuButton && mobileMenu) {
+        mobileMenuButton.addEventListener('click', function() {
+          mobileMenu.classList.toggle('hidden');
+          const icon = this.querySelector('i');
+          if (mobileMenu.classList.contains('hidden')) {
+            icon.classList.replace('fa-times', 'fa-bars');
+          } else {
+            icon.classList.replace('fa-bars', 'fa-times');
+          }
+        });
+
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+          link.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            mobileMenuButton.querySelector('i').classList.replace('fa-times', 'fa-bars');
+          });
+        });
+      }
     });
   </script>
 
