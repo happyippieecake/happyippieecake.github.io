@@ -1,9 +1,9 @@
 <?php
 // Konfigurasi database
-$servername = "127.0.0.1";
-$username = "root";
-$password = "";
-$dbname = "db_menu";
+$servername = "localhost"; // Server database
+$username = "happyipp_fauzi"; // Username MySQL (default XAMPP)
+$password = "Fauzi2801*"; // Password MySQL (default kosong di XAMPP)
+$dbname = "happyipp_db_menu"; // Nama database
 
 // Membuat koneksi
 $conn = new mysqli($servername, $username, $password, $dbname);

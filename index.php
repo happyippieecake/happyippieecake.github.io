@@ -1,11 +1,12 @@
 <?php
 // Koneksi ke database
 try {
-    $pdo = new PDO('mysql:host=localhost;dbname=db_menu', 'root', '');
+    $pdo = new PDO('mysql:host=localhost;dbname=happyipp_db_menu', 'happyipp_fauzi', 'Fauzi2801*');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     die('Koneksi gagal: ' . $e->getMessage());
 }
+
 
 // Query untuk mengambil data menu
 $sql = "SELECT * FROM menu";
@@ -55,7 +56,7 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </div>
       <!-- Navigation -->
       <nav class="hidden md:flex space-x-6">
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="#">Produk</a>
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="produk-btn">Produk</a>
         <a href="#about-container" class="hover:text-pink-500 font-medium transition cursor-pointer" id="about-btn">About</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="maps.html">Location</a>
         <a class="text-red-600 hover:text-red-800 font-semibold transition duration-300" href="#">For Business</a>
@@ -90,7 +91,7 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <!-- Mobile Navigation -->
     <div id="mobile-menu" class="md:hidden hidden">
       <nav class="flex flex-col space-y-2 px-6 py-4">
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="#">Produk</a>
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="container mx-auto px-4 lg:px-6">Produk</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="about.html">About</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="maps.html">Location</a>
         <a class="text-red-600 hover:text-red-800 font-semibold transition duration-300" href="#">For Business</a>

@@ -1,9 +1,9 @@
 <?php
 // Konfigurasi database
-$servername = "127.0.0.1";
-$username = "root";
-$password = "";
-$dbname = "db_menu";
+$servername = "localhost"; // Server database
+$username = "happyipp_fauzi"; // Username MySQL (default XAMPP)
+$password = "Fauzi2801*"; // Password MySQL (default kosong di XAMPP)
+$dbname = "happyipp_db_menu"; // Nama database
 
 // Membuat koneksi
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -37,7 +37,7 @@ $result = $conn->query($sql);
     <!-- Back and Add Menu Links -->
     <div class="container">
         <div style="display: flex; justify-content: space-between;">
-            <a href="index.html" class="button">Back to Index</a>
+            <a href="index.php" class="button">Back to Index</a>
             <a href="tambah_menu.php" class="button">Add New Menu</a>
         </div>
     </div>
