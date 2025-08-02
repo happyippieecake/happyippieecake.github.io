@@ -49,81 +49,44 @@ jobs:
           user ${{ secrets.USERNAME }} ${{ secrets.PASSWORD }};
           lcd ./;
 
-          echo 'Starting Happieecake clean deployment...';
-          echo 'Current timestamp:' \$(date);
+          echo '🚀 Starting Happieecake deployment...';
+          echo '🕒 Timestamp:' \$(date);
 
-          # Step 1: Check current files on server
-          echo 'Current files on server BEFORE cleanup:';
-          ls -la || echo 'Cannot list files';
-          echo 'Current PHP files on server:';
-          ls -la *.php || echo 'No PHP files found';
+          # Backup db_connect.php
+          echo '📦 Backing up db_connect.php (if exists)...';
+          get db_connect.php db_connect_backup.php || echo '⚠️ db_connect.php not found on server';
 
-          # Step 2: Check and preserve db_config.php
-          echo 'Checking for existing db_config.php...';
-          ls -la db_config.php || echo 'No db_config.php found on server';
-
-          # Step 2: Remove ALL files EXCEPT db_config.php
-          echo 'Cleaning server (removing all files EXCEPT db_config.php)...';
-
-          rm -f *.html || echo 'No HTML files to remove';
-          rm -f *.css || echo 'No CSS files to remove';
-          rm -f *.js || echo 'No JS files to remove';
-
-          echo 'Backing up db_config.php...';
-          get db_config.php db_config_backup.php || echo 'No db_config.php to backup';
-
-          echo 'Removing ALL PHP files...';
-          ls -la *.php || echo 'No PHP files found';
+          # Remove old files except db_connect.php
+          echo '🧹 Cleaning up old files (except db_connect.php)...';
           mrm *.php || echo 'No PHP files to remove';
+          mrm *.html || echo 'No HTML files to remove';
+          mrm *.css || echo 'No CSS files to remove';
+          mrm *.js || echo 'No JS files to remove';
+          mrm *.ico *.png *.jpg *.jpeg *.gif || echo 'No image files to remove';
+          mrm .htaccess || echo 'No .htaccess to remove';
+          mrm database.sql || echo 'No database.sql to remove';
+          rm -rf Gambar || echo 'No Gambar folder to remove';
 
-          echo 'Restoring db_config.php from backup...';
-          put db_config_backup.php db_config.php || echo 'No backup to restore';
-          rm -f db_config_backup.php || echo 'No backup file to clean';
+          # Restore db_connect.php
+          echo '♻️ Restoring db_connect.php...';
+          put db_connect_backup.php db_connect.php || echo '⚠️ Could not restore db_connect.php';
+          rm -f db_connect_backup.php || echo 'Cleanup of backup failed';
 
-          rm -f *.sql || echo 'No SQL files to remove';
-          rm -f *.ico || echo 'No ICO files to remove';
-          rm -f *.png *.jpg *.jpeg *.gif || echo 'No image files to remove';
-          rm -f *.md LICENSE README.md || echo 'No documentation files to remove';
-          rm -f .htaccess || echo 'No .htaccess to remove';
-          rm -rf Gambar || echo 'Gambar folder may not exist';
+          # Upload files (individual mput)
+          echo '⬆️ Uploading files...';
+          mput *.php || echo 'No PHP files';
+          mput *.html || echo 'No HTML files';
+          mput *.css || echo 'No CSS files';
+          mput *.js || echo 'No JS files';
+          mput *.ico || echo 'No favicon';
+          mput database.sql || echo 'No database.sql';
+          put .htaccess || echo 'No .htaccess';
 
-          echo 'Verifying db_config.php preservation...';
-          ls -la db_config.php || echo 'db_config.php not found (this is OK if it was never created)';
-
-          # Step 3: Upload ALL files from GitHub (fresh deployment)
-          echo 'Uploading ALL files from GitHub...';
-
-          echo 'Uploading HTML files...';
-          mput *.html || echo 'No HTML files to upload';
-
-          echo 'Uploading CSS and JS files...';
-          mput *.css || echo 'No CSS files to upload';
-          mput *.js || echo 'No JS files to upload';
-
-          echo 'Uploading favicon...';
-          mput *.ico || echo 'No ICO files to upload';
-
-          echo 'Uploading PHP files from GitHub...';
-          mput *.php || echo 'No PHP files to upload';
-
-          echo 'Uploading database file...';
-          put database.sql || echo 'No database.sql to upload';
-
-          echo 'Uploading .htaccess...';
-          put .htaccess || echo 'No .htaccess to upload';
-
-          echo 'Uploading Gambar folder...';
+          # Upload folder Gambar
+          echo '🖼 Uploading Gambar folder...';
           mirror --reverse --verbose --parallel=2 Gambar/ Gambar/ || echo 'No Gambar folder to upload';
 
-          echo 'Final verification - checking all files after deployment:';
-          echo 'All files on server AFTER deployment:';
-          ls -la || echo 'Cannot list files';
-          echo 'PHP files on server AFTER deployment:';
-          ls -la *.php || echo 'No PHP files found';
-          echo 'Checking db_config.php specifically...';
-          ls -la db_config.php || echo 'db_config.php not found (create manually in cPanel)';
-          echo 'Deployment completed at:' \$(date);
-
+          echo '✅ Happieecake deployment complete.';
           quit
           "
 
@@ -131,5 +94,4 @@ jobs:
       if: success()
       run: |
         echo "✅ Happieecake website sync completed!"
-        echo "✅ Happieecake sync completed!"
         echo "🧹 Website files updated on server"
