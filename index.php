@@ -100,42 +100,40 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
   </main>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const mobileMenuButton = document.getElementById('mobile-menu-button');
-      const mobileMenu = document.getElementById('mobile-menu');
+  document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
 
-      if (mobileMenuButton && mobileMenu) {
-        mobileMenuButton.addEventListener('click', function() {
-          // Toggle mobile menu visibility
-          mobileMenu.classList.toggle('hidden');
-          
-          // Toggle between hamburger and close icon
-          const icon = this.querySelector('i');
-          if (mobileMenu.classList.contains('hidden')) {
-            icon.classList.replace('fa-times', 'fa-bars');
-          } else {
-            icon.classList.replace('fa-bars', 'fa-times');
-          }
-        });
+    if (mobileMenuButton && mobileMenu) {
+      mobileMenuButton.addEventListener('click', function() {
+        mobileMenu.classList.toggle('hidden');
 
-        // Close menu when clicking on a link
-        const mobileLinks = mobileMenu.querySelectorAll('a');
-        mobileLinks.forEach(link => {
-          link.addEventListener('click', () => {
-            mobileMenu.classList.add('hidden');
-            mobileMenuButton.querySelector('i').classList.replace('fa-times', 'fa-bars');
-          });
+        const icon = this.querySelector('i');
+        if (mobileMenu.classList.contains('hidden')) {
+          icon.classList.replace('fa-times', 'fa-bars');
+        } else {
+          icon.classList.replace('fa-bars', 'fa-times');
+        }
+      });
+
+      const mobileLinks = mobileMenu.querySelectorAll('a');
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.add('hidden');
+          mobileMenuButton.querySelector('i').classList.replace('fa-times', 'fa-bars');
         });
-      }
-    });
+      });
+    }
+  });
   </script>
 
   </header>
   <!-- Main Content with Parallax Background -->
 <main class="relative w-full py-28">
   <!-- Parallax Background -->
-  <div class="absolute top-0 left-0 w-full h-full bg-fixed bg-center bg-cover"
-      style="background-image: url('gambar/cake\ utama.jpg'); z-index: -1;"></div>
+<div class="absolute top-0 left-0 w-full h-full bg-fixed bg-center bg-cover"
+style="background-image: url('gambar/cake utama.jpg'); z-index: -1;"></div>
+
 
   <!-- Content Section -->
   <div class="container mx-auto px-4 lg:px-6 flex flex-col items-center relative">
