@@ -79,15 +79,15 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
   </header>
 
   <!-- Hero Section -->
-  <main class="pt-20">
-    <section class="hero-background w-full py-28">
+  <main class="pt-8">
+    <section class="hero-background w-full py-12">
       <div class="hero-overlay">
         <div class="container mx-auto px-4 lg:px-6 flex flex-col items-center hero-content">
-          <div class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-6 p-6 rounded-lg">
-            <img alt="Two cakes" class="w-full md:w-1/3 lg:w-1/4 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 mt-12" src="gambar/utama.jpg">
+          <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6 p-4 rounded-lg">
+            <img alt="Two cakes" class="w-full md:w-1/3 lg:w-1/4 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 mt-6" src="gambar/utama.jpg">
             <div class="text-center md:text-left">
               <h1 class="text-3xl md:text-4xl font-bold text-gray-800">KUE ULANG TAHUN, WEDDING CAKE, &amp; MORE</h1>
-              <p class="text-gray-600 mt-4">Pesan cake, pudding, wedding cake, dan lainnya dengan custom design serta same day delivery.</p>
+              <p class="text-gray-600 mt-2">Pesan cake, pudding, wedding cake, dan lainnya dengan custom design serta same day delivery.</p>
             </div>
           </div>
         </div>
@@ -96,31 +96,41 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
   </main>
 
   <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const mobileMenuButton = document.getElementById('mobile-menu-button');
-    const mobileMenu = document.getElementById('mobile-menu');
+    document.addEventListener('DOMContentLoaded', function() {
+      const mobileMenuButton = document.getElementById('mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
 
-    if (mobileMenuButton && mobileMenu) {
-      mobileMenuButton.addEventListener('click', function() {
-        mobileMenu.classList.toggle('hidden');
-
-        const icon = this.querySelector('i');
-        if (mobileMenu.classList.contains('hidden')) {
-          icon.classList.replace('fa-times', 'fa-bars');
-        } else {
-          icon.classList.replace('fa-bars', 'fa-times');
-        }
-      });
-
-      const mobileLinks = mobileMenu.querySelectorAll('a');
-      mobileLinks.forEach(link => {
-        link.addEventListener('click', () => {
-          mobileMenu.classList.add('hidden');
-          mobileMenuButton.querySelector('i').classList.replace('fa-times', 'fa-bars');
+      if (mobileMenuButton && mobileMenu) {
+        mobileMenuButton.addEventListener('click', function(e) {
+          e.stopPropagation();
+          mobileMenu.classList.toggle('hidden');
+          const icon = this.querySelector('i');
+          if (mobileMenu.classList.contains('hidden')) {
+            icon.classList.replace('fa-times', 'fa-bars');
+          } else {
+            icon.classList.replace('fa-bars', 'fa-times');
+          }
         });
-      });
-    }
-  });
+
+        // Tutup menu jika klik di luar menu
+        document.addEventListener('click', function(e) {
+          if (!mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
+            if (!mobileMenu.classList.contains('hidden')) {
+              mobileMenu.classList.add('hidden');
+              mobileMenuButton.querySelector('i').classList.replace('fa-times', 'fa-bars');
+            }
+          }
+        });
+
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+          link.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            mobileMenuButton.querySelector('i').classList.replace('fa-times', 'fa-bars');
+          });
+        });
+      }
+    });
   </script>
 
   </header>
