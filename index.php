@@ -55,7 +55,7 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <span class="text-pink-500">ppieecake</span>
       </div>
       
-      <!-- Desktop Navigation -->
+       <!-- Desktop Navigation -->
       <nav class="hidden md:flex space-x-6">
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="#produk">Produk</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="#about-container">About</a>
@@ -82,9 +82,21 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
   </header>
 
-  <!-- Main content would go here -->
+  <!-- Hero Section -->
   <main class="pt-20">
-    <!-- Your content here -->
+    <section class="hero-background w-full py-28">
+      <div class="hero-overlay">
+        <div class="container mx-auto px-4 lg:px-6 flex flex-col items-center hero-content">
+          <div class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-6 p-6 rounded-lg">
+            <img alt="Two cakes" class="w-full md:w-1/3 lg:w-1/4 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 mt-12" src="gambar/utama.jpg">
+            <div class="text-center md:text-left">
+              <h1 class="text-3xl md:text-4xl font-bold text-gray-800">KUE ULANG TAHUN, WEDDING CAKE, &amp; MORE</h1>
+              <p class="text-gray-600 mt-4">Pesan cake, pudding, wedding cake, dan lainnya dengan custom design serta same day delivery.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <script>
@@ -117,6 +129,7 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
       }
     });
   </script>
+  
   </header>
   <!-- Main Content with Parallax Background -->
 <main class="relative w-full py-28">
@@ -141,6 +154,26 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </main>
 
   <style>
+
+   /* Custom background style */
+    .hero-background {
+      background-image: url('gambar/cake-utama.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+    
+    /* Ensure content is above the background */
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Overlay to make text more readable */
+    .hero-overlay {
+      background-color: rgba(255, 255, 255, 0.85);
+    }
+
     /* Styling Global */
     body {
       margin: 0;
