@@ -54,14 +54,6 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <span>happyi</span>
         <span class="text-pink-500">ppieecake</span>
       </div>
-      <!-- Navigation -->
-      <nav class="hidden md:flex space-x-6">
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="produk-btn">Produk</a>
-        <a href="#about-container" class="hover:text-pink-500 font-medium transition cursor-pointer" id="about-btn">About</a>
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="maps.html">Location</a>
-        <a class="text-red-600 hover:text-red-800 font-semibold transition duration-300" href="#">For Business</a>
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="login.html">Login</a>
-      </nav>
 
       <script>
         // Tombol About
@@ -88,15 +80,7 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <i class="fas fa-bars"></i>
       </button>
     </div>
-    <!-- Mobile Navigation -->
-    <div id="mobile-menu" class="md:hidden hidden">
-      <nav class="flex flex-col space-y-2 px-6 py-4">
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="container mx-auto px-4 lg:px-6">Produk</a>
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="about.html">About</a>
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="maps.html">Location</a>
-        <a class="text-red-600 hover:text-red-800 font-semibold transition duration-300" href="#">For Business</a>
-      </nav>
-    </div>
+   
   </header>
 
   <!-- Main Content with Parallax Background -->
