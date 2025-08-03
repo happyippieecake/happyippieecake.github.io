@@ -35,7 +35,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $price = $_POST['price'];
     $description = $_POST['description'];
     $category = $_POST['category'];
-    $image = $_POST['image'];
+
+    // Handle image upload
+    $image = $row['image']; // Default: existing image
+    if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
+        $target_dir = "gambar/";
+        $target_file = $target_dir . basename($_FILES['image']['name']);
+        if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
+            $image = basename($_FILES['image']['name']);
+        }
+    }
 
     // Query untuk mengupdate data menu
     $update_sql = "UPDATE menu SET name='$name', price='$price', description='$description', category='$category', image='$image' WHERE id=$id";
@@ -43,6 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($conn->query($update_sql) === TRUE) {
         echo "Menu berhasil diupdate!";
         header("Location: admin.php"); // Arahkan kembali ke halaman admin setelah update
+        exit;
     } else {
         echo "Error: " . $conn->error;
     }
@@ -222,7 +232,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <!-- Image Field -->
             <div class="mb-4">
                 <label for="image">Upload Image:</label>
-                <input type="file" name="image" id="image" required>
+                <input type="file" name="image" id="image">
+                <?php if (!empty($row['image'])): ?>
+                  <div style="margin-top:10px; text-align:center;">
+                    <img src="gambar/<?= htmlspecialchars($row['image']) ?>" alt="Current Image" style="max-width:120px; border-radius:10px; box-shadow:0 2px 8px #ffb6c1;">
+                  </div>
+                <?php endif; ?>
             </div>
 
             <!-- Submit Button -->
