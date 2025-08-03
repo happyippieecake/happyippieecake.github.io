@@ -56,20 +56,19 @@ if (!$menu) {
         <a class="text-red-600 hover:text-red-800 font-semibold transition duration-300" href="#">For Business</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="login.html">Login</a>
       </nav>
-      
-      <!-- Mobile Menu Button (Right-aligned, style sama index.php) -->
-      <button id="mobile-menu-button" class="md:hidden text-gray-600 hover:text-gray-800 focus:outline-none transition duration-300 ml-auto">
+      <!-- Mobile Menu Button -->
+      <button id="mobile-menu-button" class="md:hidden text-pink-500 focus:outline-none transition duration-300 ml-auto">
         <i class="fas fa-bars text-xl"></i>
       </button>
     </div>
-    <!-- Mobile Navigation (Dropdown, style sama index.php) -->
-    <div id="mobile-menu" class="md:hidden hidden bg-white w-64 absolute right-4 top-16 shadow-lg rounded-lg border border-gray-200">
+    <!-- Mobile Navigation -->
+    <div id="mobile-menu" class="md:hidden hidden bg-pink-100 w-64 absolute right-4 top-16 shadow-lg rounded-lg border border-pink-200">
       <nav class="flex flex-col space-y-3 px-6 py-4">
-        <a class="text-gray-600 hover:text-gray-800 transition duration-300 py-2 border-b border-gray-100" href="index.php">Produk</a>
-        <a class="text-gray-600 hover:text-gray-800 transition duration-300 py-2 border-b border-gray-100" href="index.php">About</a>
-        <a class="text-gray-600 hover:text-gray-800 transition duration-300 py-2 border-b border-gray-100" href="maps.html">Location</a>
-        <a class="text-red-600 hover:text-red-800 font-semibold transition duration-300 py-2 border-b border-gray-100" href="#">For Business</a>
-        <a class="text-gray-600 hover:text-gray-800 transition duration-300 py-2" href="login.html">Login</a>
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-pink-100" href="index.php">Produk</a>
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-pink-100" href="index.php">About</a>
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-pink-100" href="maps.html">Location</a>
+        <a class="text-red-600 hover:text-red-800 font-semibold transition duration-300 py-2 border-b border-pink-100" href="#">For Business</a>
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2" href="login.html">Login</a>
       </nav>
     </div>
   </header>
