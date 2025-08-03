@@ -42,8 +42,7 @@ if (!$menu) {
 </script>
 <body class="bg-gray-100">
   <!-- Header -->
-  <header class="bg-white shadow-md">
-    <header class="bg-white shadow-md fixed top-0 left-0 w-full z-50">
+  <header class="bg-white shadow-md fixed top-0 left-0 w-full z-50">
     <div class="container mx-auto flex justify-between items-center py-4 px-6">
       <div class="text-2xl lg:text-3xl font-bold text-gray-800 flex items-center space-x-1">
         <span>happyi</span>
@@ -63,15 +62,14 @@ if (!$menu) {
         <i class="fas fa-bars"></i>
       </button>
     </div>
-    <!-- Mobile Navigation -->
-    <div id="mobile-menu" class="md:hidden hidden">
-      <nav class="flex flex-col space-y-2 px-6 py-4">
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="#">Produk</a>
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="about.html">About</a>
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="maps.html">Location</a>
-        <a class="text-red-600 hover:text-red-800 font-semibold transition duration-300" href="#">For Business</a>
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="login.html">Login</a>
-
+    <!-- Mobile Navigation (Dropdown) -->
+    <div id="mobile-menu" class="md:hidden hidden bg-white w-full absolute left-0 top-16 shadow-lg">
+      <nav class="flex flex-col space-y-3 px-6 py-4">
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="index.php">Produk</a>
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="index.php">About</a>
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="maps.html">Location</a>
+        <a class="text-red-600 hover:text-red-800 font-semibold transition duration-300 py-2 border-b border-gray-100" href="#">For Business</a>
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2" href="login.html">Login</a>
       </nav>
     </div>
   </header>
