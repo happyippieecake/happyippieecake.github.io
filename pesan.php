@@ -58,7 +58,7 @@ if (!$menu) {
       </nav>
       <!-- Mobile Menu Button -->
       <button id="mobile-menu-button" class="md:hidden text-pink-500 focus:outline-none transition duration-300 ml-auto">
-        <i class="fas fa-bars text-xl"></i>
+        <i class="fas fa-bars text-base"></i>
       </button>
     </div>
     <!-- Mobile Navigation -->
