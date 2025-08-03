@@ -62,13 +62,13 @@ if (!$menu) {
       </button>
     </div>
     <!-- Mobile Navigation -->
-    <div id="mobile-menu" class="md:hidden hidden bg-pink-100 w-64 absolute right-4 top-16 shadow-lg rounded-lg border border-pink-200">
-      <nav class="flex flex-col space-y-3 px-6 py-4">
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-pink-100" href="index.php">Produk</a>
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-pink-100" href="index.php">About</a>
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-pink-100" href="maps.html">Location</a>
-        <a class="text-red-600 hover:text-red-800 font-semibold transition duration-300 py-2 border-b border-pink-100" href="#">For Business</a>
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2" href="login.html">Login</a>
+    <div id="mobile-menu" class="md:hidden hidden bg-pink-100 w-48 absolute right-4 top-16 shadow-lg rounded-lg border border-pink-200">
+      <nav class="flex flex-col space-y-2 px-4 py-3">
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300 text-base py-1 border-b border-pink-100" href="index.php">Produk</a>
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300 text-base py-1 border-b border-pink-100" href="index.php">About</a>
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300 text-base py-1 border-b border-pink-100" href="maps.html">Location</a>
+        <a class="text-red-600 hover:text-red-800 font-semibold transition duration-300 text-base py-1 border-b border-pink-100" href="#">For Business</a>
+        <a class="text-gray-600 hover:text-pink-500 transition duration-300 text-base py-1" href="login.html">Login</a>
       </nav>
     </div>
   </header>
