@@ -45,6 +45,28 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
   gtag('config', 'G-XHQ9K68JXX');
 </script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Smooth scroll for Produk link (desktop & mobile)
+    function scrollToProduk(e) {
+      e.preventDefault();
+      var produkSection = document.getElementById('produk');
+      if (produkSection) {
+        produkSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    // Desktop nav
+    var produkNavDesktop = document.querySelector('nav.md\:flex a[href="#produk"]');
+    if (produkNavDesktop) {
+      produkNavDesktop.addEventListener('click', scrollToProduk);
+    }
+    // Mobile nav
+    var produkNavMobile = document.querySelector('#mobile-menu a[href="#produk"]');
+    if (produkNavMobile) {
+      produkNavMobile.addEventListener('click', scrollToProduk);
+    }
+  });
+</script>
 <body class="bg-gray-100">
   <!-- Header -->
   <header class="bg-white shadow-md fixed top-0 left-0 w-full z-50">
@@ -341,41 +363,41 @@ footer iframe {
   </div>
 
 <!-- Product Section -->
-<div class="container mx-auto px-4 lg:px-6">
-  <div class="flex justify-between items-center mb-6">
-    <h2 class="text-xl md:text-2xl font-bold text-gray-800">Pilihan Produk</h2>
-    <a href="#" class="text-pink-500 hover:text-pink-700 font-medium transition"></a>
-  </div>
+  <div id="produk" class="container mx-auto px-4 lg:px-6">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl md:text-2xl font-bold text-gray-800">Pilihan Produk</h2>
+      <a href="#" class="text-pink-500 hover:text-pink-700 font-medium transition"></a>
+    </div>
 
-  <div class="bg-gray-100 py-8">
-    <div class="container mx-auto">
-      <h2 class="text-center text-2xl font-bold mb-6">Produk Kami</h2>
+    <div class="bg-gray-100 py-8">
+      <div class="container mx-auto">
+        <h2 class="text-center text-2xl font-bold mb-6">Produk Kami</h2>
 
-      <!-- Scrollable container for all products -->
-      <div class="overflow-x-auto">
-        <div class="flex space-x-4 pb-4" style="width: max-content;">
-          <?php foreach ($menus as $menu): ?>
-            <!-- Card -->
-            <div class="w-64 bg-white shadow-lg rounded-lg p-4 group flex-shrink-0 transition-transform transform hover:scale-105 hover:shadow-2xl">
-              <div class="relative">
-                <img src="gambar/<?php echo htmlspecialchars($menu['image']); ?>" alt="<?php echo htmlspecialchars($menu['name']); ?>" class="w-full h-48 object-cover rounded-lg transition-transform transform group-hover:scale-110">
-                <span class="absolute top-2 right-2 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-2 py-1 rounded shadow animate-pulse">SALE</span>
+        <!-- Scrollable container for all products -->
+        <div class="overflow-x-auto">
+          <div class="flex space-x-4 pb-4" style="width: max-content;">
+            <?php foreach ($menus as $menu): ?>
+              <!-- Card -->
+              <div class="w-64 bg-white shadow-lg rounded-lg p-4 group flex-shrink-0 transition-transform transform hover:scale-105 hover:shadow-2xl">
+                <div class="relative">
+                  <img src="gambar/<?php echo htmlspecialchars($menu['image']); ?>" alt="<?php echo htmlspecialchars($menu['name']); ?>" class="w-full h-48 object-cover rounded-lg transition-transform transform group-hover:scale-110">
+                  <span class="absolute top-2 right-2 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-2 py-1 rounded shadow animate-pulse">SALE</span>
+                </div>
+                <h3 class="text-gray-800 font-semibold mt-4 group-hover:text-pink-500 transition"><?php echo htmlspecialchars($menu['name']); ?></h3>
+                <div class="mt-2">
+                  <p class="text-red-600 line-through mb-1">Rp. <?php echo number_format($menu['price'], 0, ',', '.'); ?></p>
+                  <p class="text-gray-800 font-bold">Rp. <?php echo number_format($menu['price'], 0, ',', '.'); ?></p>
+                </div>
+                <a class="mt-4 block bg-gradient-to-r from-pink-400 to-red-500 text-white text-center py-2 rounded shadow hover:from-pink-600 hover:to-red-600 transition duration-300" href="pesan.php?id=<?= $menu['id']; ?>" target="_blank">
+                  Pesan Sekarang
+                </a>
               </div>
-              <h3 class="text-gray-800 font-semibold mt-4 group-hover:text-pink-500 transition"><?php echo htmlspecialchars($menu['name']); ?></h3>
-              <div class="mt-2">
-                <p class="text-red-600 line-through mb-1">Rp. <?php echo number_format($menu['price'], 0, ',', '.'); ?></p>
-                <p class="text-gray-800 font-bold">Rp. <?php echo number_format($menu['price'], 0, ',', '.'); ?></p>
-              </div>
-              <a class="mt-4 block bg-gradient-to-r from-pink-400 to-red-500 text-white text-center py-2 rounded shadow hover:from-pink-600 hover:to-red-600 transition duration-300" href="pesan.php?id=<?= $menu['id']; ?>" target="_blank">
-                Pesan Sekarang
-              </a>
-            </div>
-          <?php endforeach; ?>
+            <?php endforeach; ?>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
 
  <!-- Chat Button -->
