@@ -363,8 +363,18 @@ footer iframe {
               </div>
               <h3 class="text-gray-800 font-semibold mt-4 group-hover:text-pink-500 transition"><?php echo htmlspecialchars($menu['name']); ?></h3>
               <div class="mt-2">
-                <p class="text-red-600 line-through mb-1">Rp. <?php echo number_format($menu['price'], 0, ',', '.'); ?></p>
-                <p class="text-gray-800 font-bold">Rp. <?php echo number_format($menu['price'], 0, ',', '.'); ?></p>
+               <?php
+$original_price = $menu['price'];
+$discount_price = $original_price * 0.7;
+?>
+
+<p class="text-red-600 line-through mb-1">
+    Rp. <?php echo number_format($original_price, 0, ',', '.'); ?>
+</p>
+<p class="text-gray-800 font-bold">
+    Rp. <?php echo number_format($discount_price, 0, ',', '.'); ?>
+</p>
+
               </div>
               <a class="mt-4 block bg-gradient-to-r from-pink-400 to-red-500 text-white text-center py-2 rounded shadow hover:from-pink-600 hover:to-red-600 transition duration-300" href="pesan.php?id=<?= $menu['id']; ?>" target="_blank">
                 Pesan Sekarang
