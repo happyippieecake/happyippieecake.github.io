@@ -59,24 +59,7 @@ $result = $conn->query($sql);
             <tbody>
                 <?php
                 if ($result->num_rows > 0) {
-                    $menus = array();
                     while ($row = $result->fetch_assoc()) {
-                        $menus[] = $row;
-                    }
-                    // Handle move to top (GET param)
-                    if (isset($_GET['move_top'])) {
-                        $moveId = intval($_GET['move_top']);
-                        foreach ($menus as $i => $menu) {
-                            if ($menu['id'] == $moveId) {
-                                // Pindahkan ke atas
-                                $moveMenu = $menus[$i];
-                                unset($menus[$i]);
-                                array_unshift($menus, $moveMenu);
-                                break;
-                            }
-                        }
-                    }
-                    foreach ($menus as $row) {
                         echo "<tr>";
                         echo "<td>" . $row["id"] . "</td>";
                         echo "<td>" . $row["name"] . "</td>";
@@ -87,7 +70,6 @@ $result = $conn->query($sql);
                         echo "<td class='actions'>";
                         echo "<a href='edit_menu.php?id=" . $row["id"] . "'>Edit</a>";
                         echo "<a href='delete_menu.php?id=" . $row["id"] . "'>Delete</a>";
-                        echo "<a href='admin.php?move_top=" . $row["id"] . "' style='background:#fbbf24;color:#fff;margin-left:5px;'>top</a>";
                         echo "</td>";
                         echo "</tr>";
                     }
@@ -120,74 +102,73 @@ body {
     font-family: 'Roboto', sans-serif;
     background: linear-gradient(120deg, #fff0f6, #ffdeeb, #fcc2d7);
     color: #881337;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     min-height: 100vh;
+    flex-direction: column;
 }
 
 header {
-    background: #fff0f6;
+    background: #fecdd3;
     color: #9d174d;
-    padding: 32px 0 24px 0;
+    padding: 20px;
     width: 100%;
-    box-shadow: 0 8px 32px rgba(236, 72, 153, 0.08);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     text-align: center;
-    border-bottom-left-radius: 32px;
-    border-bottom-right-radius: 32px;
 }
 
 header h1 {
-    font-size: 2.3rem;
-    font-weight: 700;
+    font-size: 2rem;
+    font-weight: bold;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 0;
-    background: linear-gradient(90deg, #f472b6, #ec4899);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    letter-spacing: 1px;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
 }
 
 .container {
-    width: 95%;
+    width: 90%;
     max-width: 1200px;
-    margin: 32px auto 0 auto;
+    margin-top: 20px;
 }
 
 .button {
-    padding: 12px 28px;
-    border-radius: 12px;
-    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    color: #ffffff;
     font-weight: 600;
     background: linear-gradient(90deg, #f472b6, #ec4899);
-    box-shadow: 0 2px 8px rgba(236, 72, 153, 0.12);
-    border: none;
-    font-size: 1rem;
-    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-    cursor: pointer;
-    margin-bottom: 0;
+    transition: all 0.3s ease-in-out;
 }
+
 .button:hover {
     background: linear-gradient(90deg, #ec4899, #db2777);
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 6px 18px rgba(236, 72, 153, 0.18);
+    transform: scale(1.05);
 }
 
 .table-wrapper {
-    margin-top: 32px;
+    margin-top: 30px;
     width: 100%;
     overflow-x: auto;
 }
 
 table {
     width: 100%;
-    background: #fff;
-    border-radius: 18px;
-    box-shadow: 0 8px 32px rgba(236, 72, 153, 0.10);
+    background: #fff9fb;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     border-collapse: collapse;
-    overflow: hidden;
 }
 
 th, td {
-    padding: 16px 14px;
+    padding: 12px;
     text-align: left;
     color: #881337;
     font-weight: 500;
@@ -197,66 +178,79 @@ th, td {
 th {
     background: linear-gradient(90deg, #fbcfe8, #f9a8d4);
     color: #9d174d;
-    font-size: 1.1rem;
-    font-weight: 700;
-    border-bottom: 2px solid #fbcfe8;
 }
 
-tbody tr {
-    transition: box-shadow 0.2s, transform 0.2s;
-}
 tbody tr:hover {
-    background-color: #fff0f6;
-    box-shadow: 0 4px 16px rgba(236, 72, 153, 0.10);
-    transform: scale(1.01);
+    background-color: #fce7f3;
+    transform: scale(1.02);
+    transition: all 0.2s ease-in-out;
+}
+
+button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #f472b6, #ec4899);
+    color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: linear-gradient(90deg, #ec4899, #db2777);
+    transform: scale(1.05);
+}
+
+button:active {
+    transform: translateY(1px);
+    box-shadow: 0 4px 10px rgba(236, 72, 153, 0.2);
 }
 
 img {
     width: 60px;
     height: 60px;
     object-fit: cover;
-    border-radius: 12px;
+    border-radius: 8px;
     border: 2px solid #fbcfe8;
-    box-shadow: 0 2px 8px rgba(236, 72, 153, 0.10);
 }
 
 .actions a {
-    display: inline-block;
-    padding: 8px 16px;
-    margin-right: 8px;
-    border-radius: 8px;
-    color: #fff;
-    font-weight: 600;
-    font-size: 0.95rem;
-    background: linear-gradient(90deg, #f472b6, #ec4899);
-    box-shadow: 0 2px 8px rgba(236, 72, 153, 0.10);
-    text-decoration: none;
-    transition: all 0.2s cubic-bezier(.25,.8,.25,1);
+    padding: 6px 12px;
+    margin-right: 10px;
+    border-radius: 6px;
+    color: white;
+    font-weight: bold;
+    transition: all 0.2s ease;
 }
+
 .actions a:hover {
-    background: linear-gradient(90deg, #ec4899, #db2777);
-    transform: translateY(-2px) scale(1.07);
-    box-shadow: 0 6px 18px rgba(236, 72, 153, 0.18);
+    transform: scale(1.05);
 }
-.actions a:last-child {
-    background: linear-gradient(90deg, #fbbf24, #f59e42);
-    color: #fff;
+
+.actions a:nth-child(1) {
+    background-color: #f472b6;
 }
-.actions a:last-child:hover {
-    background: linear-gradient(90deg, #f59e42, #fbbf24);
-    color: #fff;
+
+.actions a:nth-child(2) {
+    background-color: #ec4899;
+}
+
+.actions a:nth-child(1):hover {
+    background-color: #ec4899;
+}
+
+.actions a:nth-child(2):hover {
+    background-color: #f472b6;
 }
 
 footer {
-    margin-top: 48px;
-    padding: 16px 0;
+    margin-top: 50px;
+    padding: 10px;
     width: 100%;
-    background: #fff0f6;
+    background: #fecdd3;
     text-align: center;
     color: #9d174d;
-    font-size: 1rem;
-    border-top-left-radius: 32px;
-    border-top-right-radius: 32px;
-    box-shadow: 0 -8px 32px rgba(236, 72, 153, 0.08);
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
 }
 </style>
