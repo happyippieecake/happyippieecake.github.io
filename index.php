@@ -1,33 +1,17 @@
-
 <?php
-// Data produk statis, urutkan sesuai keinginan (produk pertama = best seller)
-$menus = [
-  [
-    'id' => 1,
-    'name' => 'Best Seller Cake',
-    'image' => 'cake utama.jpg',
-    'price' => 250000
-  ],
-  [
-    'id' => 2,
-    'name' => 'Chocolate Pudding',
-    'image' => 'cake 2.jpg',
-    'price' => 120000
-  ],
-  [
-    'id' => 3,
-    'name' => 'Wedding Cake',
-    'image' => 'cake 3.jpg',
-    'price' => 500000
-  ],
-  [
-    'id' => 4,
-    'name' => 'Fruit Tart',
-    'image' => 'cake 4.jpg',
-    'price' => 180000
-  ],
-  // Tambahkan produk lain sesuai kebutuhan
-];
+// Koneksi ke database
+try {
+    $pdo = new PDO('mysql:host=localhost;dbname=happyipp_db_menu', 'happyipp_fauzi', 'Fauzi2801*');
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die('Koneksi gagal: ' . $e->getMessage());
+}
+
+
+// Query untuk mengambil data menu
+$sql = "SELECT * FROM menu";
+$stmt = $pdo->query($sql);
+$menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 
@@ -375,15 +359,11 @@ footer iframe {
             <div class="w-64 bg-white shadow-lg rounded-lg p-4 group flex-shrink-0 transition-transform transform hover:scale-105 hover:shadow-2xl">
               <div class="relative">
                 <img src="gambar/<?php echo htmlspecialchars($menu['image']); ?>" alt="<?php echo htmlspecialchars($menu['name']); ?>" class="w-full h-48 object-cover rounded-lg transition-transform transform group-hover:scale-110">
-                <?php if ($menu['id'] === 1): ?>
-                  <span class="absolute top-2 right-2 bg-gradient-to-r from-yellow-400 to-pink-500 text-white text-xs font-bold px-2 py-1 rounded shadow animate-pulse">BEST SELLER</span>
-                <?php else: ?>
-                  <span class="absolute top-2 right-2 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-2 py-1 rounded shadow animate-pulse">SALE</span>
-                <?php endif; ?>
+                <span class="absolute top-2 right-2 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-2 py-1 rounded shadow animate-pulse">SALE</span>
               </div>
               <h3 class="text-gray-800 font-semibold mt-4 group-hover:text-pink-500 transition"><?php echo htmlspecialchars($menu['name']); ?></h3>
               <div class="mt-2">
-                <p class="text-red-600 line-through mb-1">Rp. <?php echo number_format($menu['price'] + 50000, 0, ',', '.'); ?></p>
+                <p class="text-red-600 line-through mb-1">Rp. <?php echo number_format($menu['price'], 0, ',', '.'); ?></p>
                 <p class="text-gray-800 font-bold">Rp. <?php echo number_format($menu['price'], 0, ',', '.'); ?></p>
               </div>
               <a class="mt-4 block bg-gradient-to-r from-pink-400 to-red-500 text-white text-center py-2 rounded shadow hover:from-pink-600 hover:to-red-600 transition duration-300" href="pesan.php?id=<?= $menu['id']; ?>" target="_blank">
