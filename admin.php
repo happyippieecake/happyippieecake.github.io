@@ -59,7 +59,24 @@ $result = $conn->query($sql);
             <tbody>
                 <?php
                 if ($result->num_rows > 0) {
+                    $menus = array();
                     while ($row = $result->fetch_assoc()) {
+                        $menus[] = $row;
+                    }
+                    // Handle move to top (GET param)
+                    if (isset($_GET['move_top'])) {
+                        $moveId = intval($_GET['move_top']);
+                        foreach ($menus as $i => $menu) {
+                            if ($menu['id'] == $moveId) {
+                                // Pindahkan ke atas
+                                $moveMenu = $menus[$i];
+                                unset($menus[$i]);
+                                array_unshift($menus, $moveMenu);
+                                break;
+                            }
+                        }
+                    }
+                    foreach ($menus as $row) {
                         echo "<tr>";
                         echo "<td>" . $row["id"] . "</td>";
                         echo "<td>" . $row["name"] . "</td>";
@@ -70,6 +87,7 @@ $result = $conn->query($sql);
                         echo "<td class='actions'>";
                         echo "<a href='edit_menu.php?id=" . $row["id"] . "'>Edit</a>";
                         echo "<a href='delete_menu.php?id=" . $row["id"] . "'>Delete</a>";
+                        echo "<a href='admin.php?move_top=" . $row["id"] . "' style='background:#fbbf24;color:#fff;margin-left:5px;'>Pindah ke Atas</a>";
                         echo "</td>";
                         echo "</tr>";
                     }
