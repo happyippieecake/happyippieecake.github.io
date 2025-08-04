@@ -66,7 +66,7 @@ $result = $conn->query($sql);
                         echo "<td>" . $row["price"] . "</td>";
                         echo "<td>" . $row["description"] . "</td>";
                         echo "<td>" . $row["category"] . "</td>";
-                        echo "<td><img src='images/" . $row["image"] . "' alt='" . $row["name"] . "'></td>";
+                        echo "<td><img src='gambar/" . $row["image"] . "' alt='" . $row["name"] . "'></td>";
                         echo "<td class='actions'>";
                         echo "<a href='edit_menu.php?id=" . $row["id"] . "'>Edit</a>";
                         echo "<a href='delete_menu.php?id=" . $row["id"] . "'>Delete</a>";
