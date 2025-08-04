@@ -14,7 +14,21 @@ if ($conn->connect_error) {
 }
 
 // Query untuk mengambil semua data menu
-$sql = "SELECT * FROM menu";
+// Handle set/unset best seller
+if (isset($_GET['set_best_seller'])) {
+    $id = intval($_GET['set_best_seller']);
+    $conn->query("UPDATE menu SET best_seller=1 WHERE id=$id");
+    header('Location: admin.php');
+    exit;
+}
+if (isset($_GET['unset_best_seller'])) {
+    $id = intval($_GET['unset_best_seller']);
+    $conn->query("UPDATE menu SET best_seller=0 WHERE id=$id");
+    header('Location: admin.php');
+    exit;
+}
+
+$sql = "SELECT * FROM menu ORDER BY best_seller DESC, id ASC";
 $result = $conn->query($sql);
 ?>
 
@@ -53,6 +67,7 @@ $result = $conn->query($sql);
                     <th>Description</th>
                     <th>Category</th>
                     <th>Image</th>
+                    <th>Best Seller</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -66,10 +81,22 @@ $result = $conn->query($sql);
                         echo "<td>" . $row["price"] . "</td>";
                         echo "<td>" . $row["description"] . "</td>";
                         echo "<td>" . $row["category"] . "</td>";
-                        echo "<td><img src='images/" . $row["image"] . "' alt='" . $row["name"] . "'></td>";
+                        echo "<td><img src='gambar/" . $row["image"] . "' alt='" . $row["name"] . "'></td>";
+                        echo "<td>";
+                        if (isset($row['best_seller']) && $row['best_seller']) {
+                            echo "<span style='color:#ec4899;font-weight:bold;'>Best Seller</span>";
+                        } else {
+                            echo "-";
+                        }
+                        echo "</td>";
                         echo "<td class='actions'>";
                         echo "<a href='edit_menu.php?id=" . $row["id"] . "'>Edit</a>";
                         echo "<a href='delete_menu.php?id=" . $row["id"] . "'>Delete</a>";
+                        if (isset($row['best_seller']) && $row['best_seller']) {
+                            echo "<a href='admin.php?unset_best_seller=" . $row['id'] . "' style='background:#fbbf24;color:#fff;'>Unset Best Seller</a>";
+                        } else {
+                            echo "<a href='admin.php?set_best_seller=" . $row['id'] . "' style='background:#fbbf24;color:#fff;'>Set Best Seller</a>";
+                        }
                         echo "</td>";
                         echo "</tr>";
                     }
