@@ -8,8 +8,8 @@ try {
 }
 
 
-// Query untuk mengambil data menu
-$sql = "SELECT * FROM menu";
+// Query untuk mengambil data menu, urutkan berdasarkan priority tertinggi (paling atas di admin) ke kiri
+$sql = "SELECT * FROM menu ORDER BY priority DESC, id ASC";
 $stmt = $pdo->query($sql);
 $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -353,7 +353,7 @@ footer iframe {
 
       <!-- Scrollable container for all products -->
       <div class="overflow-x-auto">
-        <div class="flex space-x-4 pb-4" style="width: max-content;">
+        <div class="flex flex-row-reverse space-x-reverse space-x-4 pb-4" style="width: max-content;">
           <?php foreach ($menus as $menu): ?>
             <!-- Card -->
             <div class="w-64 bg-white shadow-lg rounded-lg p-4 group flex-shrink-0 transition-transform transform hover:scale-105 hover:shadow-2xl">
