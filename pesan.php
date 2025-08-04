@@ -285,7 +285,7 @@ footer iframe {
                             `ucapan: ${ucapan}`;
             
             // Nomor WhatsApp tujuan (gunakan format internasional tanpa tanda +)
-            const phoneNumber = "6285722341788"; // Ganti dengan nomor Anda
+            const phoneNumber = "6285722341788"; 
             const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
             
             // Membuka WhatsApp
@@ -315,7 +315,6 @@ footer iframe {
           <li>
             <a href="https://wa.me/6285722341788" target="_blank" class="text-gray-300 hover:text-white transition"> Contact Us </a>
           </li>
-          <li><a href="review.php" class="text-gray-300 hover:text-white transition">Review</a></li>
         </ul>
       </div>
       
