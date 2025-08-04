@@ -8,8 +8,8 @@ try {
 }
 
 
-// Query untuk mengambil data menu
-$sql = "SELECT * FROM menu";
+// Query untuk mengambil data menu, urutkan berdasarkan priority
+$sql = "SELECT * FROM menu ORDER BY priority DESC, id ASC";
 $stmt = $pdo->query($sql);
 $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
