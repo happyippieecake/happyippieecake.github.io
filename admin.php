@@ -87,7 +87,7 @@ $result = $conn->query($sql);
                         echo "<td class='actions'>";
                         echo "<a href='edit_menu.php?id=" . $row["id"] . "'>Edit</a>";
                         echo "<a href='delete_menu.php?id=" . $row["id"] . "'>Delete</a>";
-                        echo "<a href='admin.php?move_top=" . $row["id"] . "' style='background:#fbbf24;color:#fff;margin-left:5px;'>Pindah ke Atas</a>";
+                        echo "<a href='admin.php?move_top=" . $row["id"] . "' style='background:#fbbf24;color:#fff;margin-left:5px;'>top</a>";
                         echo "</td>";
                         echo "</tr>";
                     }
