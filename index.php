@@ -55,7 +55,7 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </div>
       <!-- Desktop Navigation -->
       <nav class="hidden md:flex space-x-6">
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="#produk">Produk</a>
+        <a id="produk-link" class="text-gray-600 hover:text-pink-500 transition duration-300" href="#produk">Produk</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="#about-container">About</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="maps.html">Location</a>
         <a class="text-red-600 hover:text-red-800 font-semibold transition duration-300" href="#">For Business</a>
@@ -69,7 +69,7 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <!-- Mobile Navigation (Dropdown) -->
     <div id="mobile-menu" class="md:hidden hidden bg-white w-full absolute left-0 top-16 shadow-lg">
       <nav class="flex flex-col space-y-3 px-6 py-4">
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="#produk">Produk</a>
+        <a id="produk-link-mobile" class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="#produk">Produk</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="#about-container">About</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="maps.html">Location</a>
         <a class="text-red-600 hover:text-red-800 font-semibold transition duration-300 py-2 border-b border-gray-100" href="#">For Business</a>
@@ -341,7 +341,7 @@ footer iframe {
   </div>
 
 <!-- Product Section -->
-<div class="container mx-auto px-4 lg:px-6">
+<div id="produk" class="container mx-auto px-4 lg:px-6">
   <div class="flex justify-between items-center mb-6">
     <h2 class="text-xl md:text-2xl font-bold text-gray-800">Pilihan Produk</h2>
     <a href="#" class="text-pink-500 hover:text-pink-700 font-medium transition"></a>
@@ -423,6 +423,30 @@ footer iframe {
             mobileMenu.classList.add('hidden');
             mobileMenuButton.querySelector('i').classList.replace('fa-times', 'fa-bars');
           };
+        });
+      }
+
+      // Smooth scroll for Produk link (desktop)
+      const produkLink = document.getElementById('produk-link');
+      if (produkLink) {
+        produkLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          const produkSection = document.getElementById('produk');
+          if (produkSection) {
+            produkSection.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      }
+
+      // Smooth scroll for Produk link (mobile)
+      const produkLinkMobile = document.getElementById('produk-link-mobile');
+      if (produkLinkMobile) {
+        produkLinkMobile.addEventListener('click', function(e) {
+          e.preventDefault();
+          const produkSection = document.getElementById('produk');
+          if (produkSection) {
+            produkSection.scrollIntoView({ behavior: 'smooth' });
+          }
         });
       }
     });
