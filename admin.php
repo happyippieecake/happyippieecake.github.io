@@ -6,8 +6,6 @@ $password = "Fauzi2801*"; // Password MySQL (default kosong di XAMPP)
 $dbname = "happyipp_db_menu"; // Nama database
 
 // Membuat koneksi
-// Pastikan kolom 'priority' ada di tabel menu
-$conn->query("ALTER TABLE menu ADD COLUMN priority INT NOT NULL DEFAULT 0");
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Periksa koneksi
@@ -16,21 +14,6 @@ if ($conn->connect_error) {
 }
 
 // Query untuk mengambil semua data menu
-// Handle move to top
-if (isset($_GET['move_top'])) {
-    $id = intval($_GET['move_top']);
-    // Cari priority tertinggi
-    $result_priority = $conn->query("SELECT MAX(priority) AS max_priority FROM menu");
-    $max_priority = 1;
-    if ($result_priority && $row_priority = $result_priority->fetch_assoc()) {
-        $max_priority = intval($row_priority['max_priority']) + 1;
-    }
-    $conn->query("UPDATE menu SET priority=$max_priority WHERE id=$id");
-    header('Location: admin.php');
-    exit;
-}
-$sql = "SELECT * FROM menu ORDER BY priority DESC, id ASC";
-$result = $conn->query($sql);
 $sql = "SELECT * FROM menu";
 $result = $conn->query($sql);
 ?>
@@ -87,7 +70,6 @@ $result = $conn->query($sql);
                         echo "<td class='actions'>";
                         echo "<a href='edit_menu.php?id=" . $row["id"] . "'>Edit</a>";
                         echo "<a href='delete_menu.php?id=" . $row["id"] . "'>Delete</a>";
-                        echo "<a href='admin.php?move_top=" . $row["id"] . "' style='background:#fbbf24;color:#fff;margin-left:5px;'>Pindah ke Atas</a>";
                         echo "</td>";
                         echo "</tr>";
                     }
