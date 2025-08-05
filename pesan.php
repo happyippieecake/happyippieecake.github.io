@@ -264,6 +264,10 @@ footer iframe {
       <label for="ucapan">Ucapan:</label>
       <input type="text" id="ucapan" name="ucapan" placeholder="Masukkan ucapan Anda" required>
 
+      <label for="notelfon">no telfon:</label>
+      <input type="text" id="notelfon" name="notelfon" placeholder="Masukkan notelfon anda" required>
+
+
       <button type="button" onclick="sendToWhatsApp()">Kirim Pesanan</button>
   </form>
 
@@ -274,8 +278,9 @@ footer iframe {
         const quantity = document.getElementById('quantity').value;
         const address = document.getElementById('address').value;
         const ucapan = document.getElementById('ucapan').value;
+        const notelfon = document.getElementById('notelfon').value;
 
-        if (name && product && quantity && address && ucapan) {
+        if (name && product && quantity && address && ucapan && no_telfon) {
             // Membuat pesan
             const message = `Halo, saya ingin memesan kue di toko Happyippiecake ini:\n\n` +
                             `Nama: ${name}\n` +
@@ -283,6 +288,7 @@ footer iframe {
                             `Jumlah: ${quantity}\n` +
                             `Alamat: ${address} \n` +
                             `ucapan: ${ucapan}`;
+                            `No Hp: ${notelfon}`;
             
             // Nomor WhatsApp tujuan (gunakan format internasional tanpa tanda +)
             const phoneNumber = "6285722341788"; 
