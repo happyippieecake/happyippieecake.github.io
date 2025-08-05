@@ -43,7 +43,7 @@ if (!$menu) {
 <body class="bg-gray-100">
   <!-- Header -->
   <header class="bg-white shadow-md fixed top-0 left-0 w-full z-50">
-    <div class="container mx-auto flex justify-between items-center py-4 px-6">
+<div class="w-full flex justify-between items-center py-4 px-6">
       <div class="text-2xl lg:text-3xl font-bold text-gray-800 flex items-center space-x-1">
         <span>happyi</span>
         <span class="text-pink-500">ppieecake</span>
@@ -57,10 +57,13 @@ if (!$menu) {
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="login.html">Login</a>
       </nav>
       <!-- Mobile Menu Button -->
-      <div class="flex-1 flex justify-end md:hidden">
-        <button id="mobile-menu-button" class="text-gray-600 hover:text-pink-500 focus:outline-none transition duration-300">
-          <i class="fas fa-bars text-xl"></i>
-        </button>
+<div class="flex justify-end md:hidden">
+  <button id="mobile-menu-button" class="text-gray-600 hover:text-pink-500 focus:outline-none bg-transparent p-0 transition duration-300">
+    <i class="fas fa-bars text-xl"></i>
+  </button>
+</div>
+
+
       </div>
     </div>
     <!-- Mobile Navigation -->
