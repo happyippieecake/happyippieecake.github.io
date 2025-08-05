@@ -270,7 +270,7 @@ footer iframe {
       <label for="ucapan">Ucapan:</label>
       <input type="text" id="ucapan" name="ucapan" placeholder="Masukkan ucapan Anda" required>
 
-      <label for="notelfon">no telfon:</label>
+      <label for="notelfon">No Hp:</label>
       <input type="text" id="notelfon" name="notelfon" placeholder="Masukkan notelfon anda" required>
 
       <button type="button" onclick="sendToWhatsApp()">Kirim Pesanan</button>
