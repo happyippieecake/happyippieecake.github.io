@@ -186,12 +186,6 @@ if (!$menu) {
         outline: none;
     }
 
-   
-
-    button:hover {
-        background-color: #ef3b9b; /* Warna tombol saat hover */
-        transform: translateY(-2px); /* Efek angkat saat hover */
-    }
 
     @media (max-width: 480px) {
         h1 {
