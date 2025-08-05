@@ -186,14 +186,7 @@ if (!$menu) {
         outline: none;
     }
 
-    button {
-        background-color: #e43b9b; /* Warna tombol */
-        color: white;
-        font-size: 16px;
-        cursor: pointer;
-        border: none;
-        transition: background-color 0.3s, transform 0.3s; /* Transisi untuk hover */
-    }
+   
 
     button:hover {
         background-color: #ef3b9b; /* Warna tombol saat hover */
