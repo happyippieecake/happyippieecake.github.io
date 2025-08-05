@@ -63,7 +63,6 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <a id="produk-link" class="text-gray-600 hover:text-pink-500 transition duration-300" href="#produk">Produk</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="#about-container">About</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="maps.html">Location</a>
-        <a class="text-red-600 hover:text-red-800 font-semibold transition duration-300" href="#">For Business</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="login.html">Login</a>
       </nav>
       <!-- Mobile Menu Button (Right-aligned) -->
@@ -77,7 +76,6 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <a id="produk-link-mobile" class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="#produk">Produk</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="#about-container">About</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="maps.html">Location</a>
-        <a class="text-red-600 hover:text-red-800 font-semibold transition duration-300 py-2 border-b border-gray-100" href="#">For Business</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2" href="login.html">Login</a>
       </nav>
     </div>

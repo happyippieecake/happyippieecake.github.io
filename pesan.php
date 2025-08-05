@@ -53,7 +53,6 @@ if (!$menu) {
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="index.php">Produk</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="index.php">About</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="maps.html">Location</a>
-        <a class="text-red-600 hover:text-red-800 font-semibold transition duration-300" href="#">For Business</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="login.html">Login</a>
       </nav>
       <!-- Mobile Menu Button -->
@@ -72,7 +71,6 @@ if (!$menu) {
         <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="index.php">Produk</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="index.php">About</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="maps.html">Location</a>
-        <a class="text-red-600 hover:text-red-800 font-semibold transition duration-300 py-2 border-b border-gray-100" href="#">For Business</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2" href="login.html">Login</a>
       </nav>
     </div>
