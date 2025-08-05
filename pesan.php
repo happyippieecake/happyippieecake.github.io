@@ -151,8 +151,9 @@ if (!$menu) {
         margin-bottom: 20px;
     }
 
+
     form {
-        max-width: 400px;
+        max-width: 500px;
         margin: auto;
         background: #ffffff; /* Warna latar belakang form */
         padding: 20px;
@@ -249,14 +250,22 @@ footer iframe {
 <body>
   <h1>Formulir Pesanan</h1>
   <form id="orderForm">
-      <label for="name">Nama:</label>
-      <input type="text" id="name" name="name" placeholder="Masukkan nama Anda" required>
+      <div id="buyers-container">
+        <div class="buyer-group">
+          <label for="name0">Nama:</label>
+          <input type="text" id="name0" name="name0" placeholder="Masukkan nama Anda" required>
 
-      <label for="product">Produk:</label>
-      <input type="text" id="product" name="product" placeholder="Masukkan nama produk" required>
+          <label for="product0">Produk:</label>
+          <input type="text" id="product0" name="product0" placeholder="Masukkan nama produk" required>
 
-      <label for="quantity">Jumlah:</label>
-      <input type="number" id="quantity" name="quantity" placeholder="Masukkan jumlah produk" required>
+          <label for="quantity0">Jumlah:</label>
+          <input type="number" id="quantity0" name="quantity0" placeholder="Masukkan jumlah produk" required>
+
+          <label for="price0">Harga Satuan:</label>
+          <input type="number" id="price0" name="price0" placeholder="Harga satuan" required>
+        </div>
+      </div>
+      <button type="button" onclick="addBuyer()" style="background:#e43b9b;color:white;margin-bottom:10px;">Tambah Pembeli</button>
 
       <label for="address">Alamat:</label>
       <input type="text" id="address" name="address" placeholder="Masukkan alamat Anda" required>
@@ -267,38 +276,64 @@ footer iframe {
       <label for="notelfon">no telfon:</label>
       <input type="text" id="notelfon" name="notelfon" placeholder="Masukkan notelfon anda" required>
 
-
       <button type="button" onclick="sendToWhatsApp()">Kirim Pesanan</button>
   </form>
 
 <script>
-    function sendToWhatsApp() {
-        const name = document.getElementById('name').value;
-        const product = document.getElementById('product').value;
-        const quantity = document.getElementById('quantity').value;
-        const address = document.getElementById('address').value;
-        const ucapan = document.getElementById('ucapan').value;
-        const notelfon = document.getElementById('notelfon').value;
+    let buyerCount = 1;
+    function addBuyer() {
+      const container = document.getElementById('buyers-container');
+      const group = document.createElement('div');
+      group.className = 'buyer-group';
+      group.innerHTML = `
+        <hr style="margin:15px 0;">
+        <label for="name${buyerCount}">Nama:</label>
+        <input type="text" id="name${buyerCount}" name="name${buyerCount}" placeholder="Masukkan nama Anda" required>
+        <label for="product${buyerCount}">Produk:</label>
+        <input type="text" id="product${buyerCount}" name="product${buyerCount}" placeholder="Masukkan nama produk" required>
+        <label for="quantity${buyerCount}">Jumlah:</label>
+        <input type="number" id="quantity${buyerCount}" name="quantity${buyerCount}" placeholder="Masukkan jumlah produk" required>
+        <label for="price${buyerCount}">Harga Satuan:</label>
+        <input type="number" id="price${buyerCount}" name="price${buyerCount}" placeholder="Harga satuan" required>
+      `;
+      container.appendChild(group);
+      buyerCount++;
+    }
 
-        if (name && product && quantity && address && ucapan && no_telfon) {
-            // Membuat pesan
-            const message = `Halo, saya ingin memesan kue di toko Happyippiecake ini:\n\n` +
-                            `Nama: ${name}\n` +
-                            `Produk: ${product}\n` +
-                            `Jumlah: ${quantity}\n` +
-                            `Alamat: ${address} \n` +
-                            `ucapan: ${ucapan}`;
-                            `No Hp: ${notelfon}`;
-            
-            // Nomor WhatsApp tujuan (gunakan format internasional tanpa tanda +)
-            const phoneNumber = "6285722341788"; 
-            const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-            
-            // Membuka WhatsApp
-            window.open(url, '_blank');
-        } else {
-            alert('Harap isi semua data pada formulir.');
+    function sendToWhatsApp() {
+      const address = document.getElementById('address').value;
+      const ucapan = document.getElementById('ucapan').value;
+      const notelfon = document.getElementById('notelfon').value;
+      let buyers = [];
+      let totalHarga = 0;
+      for (let i = 0; i < buyerCount; i++) {
+        const name = document.getElementById('name'+i);
+        const product = document.getElementById('product'+i);
+        const quantity = document.getElementById('quantity'+i);
+        const price = document.getElementById('price'+i);
+        if (name && product && quantity && price) {
+          buyers.push({
+            name: name.value,
+            product: product.value,
+            quantity: quantity.value,
+            price: price.value
+          });
+          totalHarga += (parseInt(quantity.value) * parseInt(price.value));
         }
+      }
+      if (buyers.length === 0 || !address || !ucapan || !notelfon) {
+        alert('Harap isi semua data pada formulir.');
+        return;
+      }
+      let message = `Halo, saya ingin memesan kue di toko Happyippiecake:\n\n`;
+      buyers.forEach((b, idx) => {
+        message += `Pembeli ${idx+1}:\n`;
+        message += `Nama: ${b.name}\nProduk: ${b.product}\nJumlah: ${b.quantity}\nHarga Satuan: Rp ${parseInt(b.price).toLocaleString('id-ID')}\nSubtotal: Rp ${(parseInt(b.quantity)*parseInt(b.price)).toLocaleString('id-ID')}\n\n`;
+      });
+      message += `Alamat: ${address}\nUcapan: ${ucapan}\nNo Hp: ${notelfon}\n\nTotal Harga: Rp ${totalHarga.toLocaleString('id-ID')}`;
+      const phoneNumber = "6285722341788";
+      const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+      window.open(url, '_blank');
     }
 </script>
 
