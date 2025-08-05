@@ -57,13 +57,15 @@ if (!$menu) {
         <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="login.html">Login</a>
       </nav>
       <!-- Mobile Menu Button -->
-      <button id="mobile-menu-button" class="md:hidden text-gray-600 hover:text-pink-500 focus:outline-none transition duration-300 ml-auto">
-        <i class="fas fa-bars text-xl"></i>
-      </button>
+      <div class="flex-1 flex justify-end md:hidden">
+        <button id="mobile-menu-button" class="text-gray-600 hover:text-pink-500 focus:outline-none transition duration-300">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+      </div>
     </div>
     <!-- Mobile Navigation -->
-    <div id="mobile-menu" class="md:hidden hidden bg-white w-full absolute left-0 top-16 shadow-lg rounded-b-xl border-t border-gray-200 z-50">
-      <nav class="flex flex-col space-y-3 px-6 py-4">
+    <div id="mobile-menu" class="md:hidden hidden w-full absolute left-0 top-16 z-50">
+      <nav class="flex flex-col space-y-3 px-6 py-4 bg-white">
         <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="index.php">Produk</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="index.php">About</a>
         <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="maps.html">Location</a>
