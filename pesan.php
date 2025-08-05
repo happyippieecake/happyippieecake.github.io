@@ -253,10 +253,16 @@ footer iframe {
       <input type="text" id="name" name="name" placeholder="Masukkan nama Anda" required>
 
       <label for="product">Produk:</label>
-      <input type="text" id="product" name="product" placeholder="Masukkan nama produk" required>
+      <input type="text" id="product" name="product" value="<?php echo htmlspecialchars($menu['name']); ?>" readonly required>
+
+      <label for="price">Harga Satuan:</label>
+      <input type="number" id="price" name="price" value="<?php echo htmlspecialchars($menu['price']); ?>" readonly required>
 
       <label for="quantity">Jumlah:</label>
-      <input type="number" id="quantity" name="quantity" placeholder="Masukkan jumlah produk" required>
+      <input type="number" id="quantity" name="quantity" placeholder="Masukkan jumlah produk" min="1" value="1" required oninput="updateTotal()">
+
+      <label for="total">Total Harga:</label>
+      <input type="text" id="total" name="total" value="<?php echo htmlspecialchars($menu['price']); ?>" readonly>
 
       <label for="address">Alamat:</label>
       <input type="text" id="address" name="address" placeholder="Masukkan alamat Anda" required>
@@ -267,34 +273,40 @@ footer iframe {
       <label for="notelfon">no telfon:</label>
       <input type="text" id="notelfon" name="notelfon" placeholder="Masukkan notelfon anda" required>
 
-
       <button type="button" onclick="sendToWhatsApp()">Kirim Pesanan</button>
   </form>
 
 <script>
+    function updateTotal() {
+        var price = parseInt(document.getElementById('price').value) || 0;
+        var quantity = parseInt(document.getElementById('quantity').value) || 1;
+        var total = price * quantity;
+        document.getElementById('total').value = total.toLocaleString('id-ID');
+    }
+
     function sendToWhatsApp() {
         const name = document.getElementById('name').value;
         const product = document.getElementById('product').value;
+        const price = document.getElementById('price').value;
         const quantity = document.getElementById('quantity').value;
+        const total = document.getElementById('total').value;
         const address = document.getElementById('address').value;
         const ucapan = document.getElementById('ucapan').value;
         const notelfon = document.getElementById('notelfon').value;
 
-        if (name && product && quantity && address && ucapan && no_telfon) {
+        if (name && product && quantity && address && ucapan && notelfon) {
             // Membuat pesan
-            const message = `Halo, saya ingin memesan kue di toko Happyippiecake ini:\n\n` +
+            const message = `Halo, saya ingin memesan kue di toko Happyippiecake:\n\n` +
                             `Nama: ${name}\n` +
                             `Produk: ${product}\n` +
+                            `Harga Satuan: Rp ${parseInt(price).toLocaleString('id-ID')}\n` +
                             `Jumlah: ${quantity}\n` +
-                            `Alamat: ${address} \n` +
-                            `ucapan: ${ucapan}`;
+                            `Total Harga: Rp ${total}\n` +
+                            `Alamat: ${address}\n` +
+                            `Ucapan: ${ucapan}\n` +
                             `No Hp: ${notelfon}`;
-            
-            // Nomor WhatsApp tujuan (gunakan format internasional tanpa tanda +)
-            const phoneNumber = "6285722341788"; 
+            const phoneNumber = "6285722341788";
             const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-            
-            // Membuka WhatsApp
             window.open(url, '_blank');
         } else {
             alert('Harap isi semua data pada formulir.');
