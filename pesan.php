@@ -242,36 +242,32 @@ footer iframe {
       <label for="name">Nama:</label>
       <input type="text" id="name" name="name" placeholder="Masukkan nama Anda" required>
 
-      <label for="product">Produk 1:</label>
-      <select id="product" name="product" class="mb-2" onchange="updateTotal()" required>
-        <option value="<?php echo htmlspecialchars($menu['name']); ?>" data-price="<?php echo htmlspecialchars($menu['price']); ?>" selected><?php echo htmlspecialchars($menu['name']); ?> (Rp <?php echo number_format($menu['price'], 0, ',', '.'); ?>)</option>
-        <?php
-        $sql2 = "SELECT * FROM menu WHERE id != ?";
-        $stmt2 = $conn->prepare($sql2);
-        $stmt2->bind_param("i", $id);
-        $stmt2->execute();
-        $result2 = $stmt2->get_result();
-        while ($row = $result2->fetch_assoc()): ?>
-          <option value="<?php echo htmlspecialchars($row['name']); ?>" data-price="<?php echo htmlspecialchars($row['price']); ?>"><?php echo htmlspecialchars($row['name']); ?> (Rp <?php echo number_format($row['price'], 0, ',', '.'); ?>)</option>
-        <?php endwhile; ?>
-      </select>
-
-      <label for="quantity">Jumlah Produk 1:</label>
-      <input type="number" id="quantity" name="quantity" placeholder="Masukkan jumlah produk" min="1" value="1" required oninput="updateTotal()">
-
-      <label for="product2">Produk 2 (opsional):</label>
-      <select id="product2" name="product2" class="mb-2" onchange="updateTotal()">
-        <option value="" data-price="0">-- Pilih Produk Kedua --</option>
-        <?php
-        $sql3 = "SELECT * FROM menu";
-        $result3 = $conn->query($sql3);
-        while ($row = $result3->fetch_assoc()): ?>
-          <option value="<?php echo htmlspecialchars($row['name']); ?>" data-price="<?php echo htmlspecialchars($row['price']); ?>"><?php echo htmlspecialchars($row['name']); ?> (Rp <?php echo number_format($row['price'], 0, ',', '.'); ?>)</option>
-        <?php endwhile; ?>
-      </select>
-
-      <label for="quantity2">Jumlah Produk 2:</label>
-      <input type="number" id="quantity2" name="quantity2" placeholder="Masukkan jumlah produk kedua" min="1" value="1" oninput="updateTotal()">
+      <div id="menus-container">
+        <!-- Menu item pertama -->
+        <div class="menu-item mb-4 flex flex-col md:flex-row md:items-center gap-2">
+          <div class="flex-1">
+            <label>Produk:</label>
+            <select class="product-select mb-2" onchange="updateTotal()" required>
+              <option value="<?php echo htmlspecialchars($menu['name']); ?>" data-price="<?php echo htmlspecialchars($menu['price']); ?>" selected><?php echo htmlspecialchars($menu['name']); ?> (Rp <?php echo number_format($menu['price'], 0, ',', '.'); ?>)</option>
+              <?php
+              $sql2 = "SELECT * FROM menu WHERE id != ?";
+              $stmt2 = $conn->prepare($sql2);
+              $stmt2->bind_param("i", $id);
+              $stmt2->execute();
+              $result2 = $stmt2->get_result();
+              while ($row = $result2->fetch_assoc()): ?>
+                <option value="<?php echo htmlspecialchars($row['name']); ?>" data-price="<?php echo htmlspecialchars($row['price']); ?>"><?php echo htmlspecialchars($row['name']); ?> (Rp <?php echo number_format($row['price'], 0, ',', '.'); ?>)</option>
+              <?php endwhile; ?>
+            </select>
+          </div>
+          <div>
+            <label>Jumlah:</label>
+            <input type="number" class="quantity-input" min="1" value="1" required oninput="updateTotal()">
+          </div>
+          <button type="button" class="remove-menu-btn hidden text-red-500 hover:text-red-700 ml-2" onclick="removeMenu(this)"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+      <button type="button" class="mb-4 bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded transition" onclick="addMenu()"><i class="fas fa-plus"></i> Tambah Menu</button>
 
       <label for="total">Total Harga:</label>
       <input type="text" id="total" name="total" value="<?php echo htmlspecialchars($menu['price']); ?>" readonly>
@@ -289,43 +285,80 @@ footer iframe {
   </form>
 
 <script>
+    // Data produk untuk cloning
+    const produkOptions = `<?php
+      $sql4 = "SELECT * FROM menu";
+      $result4 = $conn->query($sql4);
+      while ($row = $result4->fetch_assoc()): ?>
+        <option value=\"<?php echo htmlspecialchars($row['name']); ?>\" data-price=\"<?php echo htmlspecialchars($row['price']); ?>\"><?php echo htmlspecialchars($row['name']); ?> (Rp <?php echo number_format($row['price'], 0, ',', '.'); ?>)</option>
+      <?php endwhile; ?>`;
+
     function updateTotal() {
-        // Produk 1
-        var productSelect = document.getElementById('product');
-        var price1 = parseInt(productSelect.options[productSelect.selectedIndex].getAttribute('data-price')) || 0;
-        var quantity1 = parseInt(document.getElementById('quantity').value) || 1;
-        // Produk 2
-        var product2Select = document.getElementById('product2');
-        var price2 = 0;
-        var quantity2 = 0;
-        if (product2Select.value !== "") {
-            price2 = parseInt(product2Select.options[product2Select.selectedIndex].getAttribute('data-price')) || 0;
-            quantity2 = parseInt(document.getElementById('quantity2').value) || 1;
-        }
-        var total = (price1 * quantity1) + (price2 * quantity2);
+        var total = 0;
+        document.querySelectorAll('.menu-item').forEach(function(item) {
+            var select = item.querySelector('.product-select');
+            var price = parseInt(select.options[select.selectedIndex].getAttribute('data-price')) || 0;
+            var qty = parseInt(item.querySelector('.quantity-input').value) || 1;
+            total += price * qty;
+        });
         document.getElementById('total').value = total.toLocaleString('id-ID');
+    }
+
+    function addMenu() {
+        var container = document.getElementById('menus-container');
+        var menuCount = container.querySelectorAll('.menu-item').length + 1;
+        var div = document.createElement('div');
+        div.className = 'menu-item mb-4 flex flex-col md:flex-row md:items-center gap-2';
+        div.innerHTML = `
+          <div class="flex-1">
+            <label>Produk:</label>
+            <select class="product-select mb-2" onchange="updateTotal()" required>
+              ${produkOptions}
+            </select>
+          </div>
+          <div>
+            <label>Jumlah:</label>
+            <input type="number" class="quantity-input" min="1" value="1" required oninput="updateTotal()">
+          </div>
+          <button type="button" class="remove-menu-btn text-red-500 hover:text-red-700 ml-2" onclick="removeMenu(this)"><i class="fas fa-trash"></i></button>
+        `;
+        container.appendChild(div);
+        // Tampilkan tombol hapus jika lebih dari 1 menu
+        updateRemoveButtons();
+        updateTotal();
+    }
+
+    function removeMenu(btn) {
+        var item = btn.closest('.menu-item');
+        item.remove();
+        updateRemoveButtons();
+        updateTotal();
+    }
+
+    function updateRemoveButtons() {
+        var items = document.querySelectorAll('.menu-item');
+        items.forEach(function(item, idx) {
+            var btn = item.querySelector('.remove-menu-btn');
+            if (btn) btn.classList.toggle('hidden', items.length === 1);
+        });
     }
 
     function sendToWhatsApp() {
         const name = document.getElementById('name').value;
-        const product = document.getElementById('product').value;
-        const quantity = document.getElementById('quantity').value;
-        const product2 = document.getElementById('product2').value;
-        const quantity2 = document.getElementById('quantity2').value;
-        const total = document.getElementById('total').value;
         const address = document.getElementById('address').value;
         const ucapan = document.getElementById('ucapan').value;
         const notelfon = document.getElementById('notelfon').value;
-
-        if (name && product && quantity && address && ucapan && notelfon) {
-            let pesanProduk = `Produk 1: ${product} (Jumlah: ${quantity})`;
-            if (product2) {
-                pesanProduk += `\nProduk 2: ${product2} (Jumlah: ${quantity2})`;
-            }
-            // Membuat pesan
+        const total = document.getElementById('total').value;
+        let pesanProduk = '';
+        document.querySelectorAll('.menu-item').forEach(function(item, idx) {
+            var select = item.querySelector('.product-select');
+            var qty = item.querySelector('.quantity-input').value;
+            pesanProduk += `Produk ${idx+1}: ${select.value} (Jumlah: ${qty})\n`;
+        });
+        if (name && address && ucapan && notelfon && pesanProduk) {
             const message = `Halo, saya ingin memesan kue di toko Happyippiecake:\n\n` +
                             `Nama: ${name}\n` +
-                            `${pesanProduk}\n` +
+                            `${pesanProduk}` +
                             `Total Harga: Rp ${total}\n` +
                             `Alamat: ${address}\n` +
                             `Ucapan: ${ucapan}\n` +
@@ -337,6 +370,11 @@ footer iframe {
             alert('Harap isi semua data pada formulir.');
         }
     }
+
+    // Inisialisasi tombol hapus menu pertama
+    document.addEventListener('DOMContentLoaded', function() {
+      updateRemoveButtons();
+    });
 </script>
 
 
