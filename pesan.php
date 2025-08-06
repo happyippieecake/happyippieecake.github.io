@@ -242,14 +242,36 @@ footer iframe {
       <label for="name">Nama:</label>
       <input type="text" id="name" name="name" placeholder="Masukkan nama Anda" required>
 
-      <label for="product">Produk:</label>
-      <input type="text" id="product" name="product" value="<?php echo htmlspecialchars($menu['name']); ?>" readonly required>
+      <label for="product">Produk 1:</label>
+      <select id="product" name="product" class="mb-2" onchange="updateTotal()" required>
+        <option value="<?php echo htmlspecialchars($menu['name']); ?>" data-price="<?php echo htmlspecialchars($menu['price']); ?>" selected><?php echo htmlspecialchars($menu['name']); ?> (Rp <?php echo number_format($menu['price'], 0, ',', '.'); ?>)</option>
+        <?php
+        $sql2 = "SELECT * FROM menu WHERE id != ?";
+        $stmt2 = $conn->prepare($sql2);
+        $stmt2->bind_param("i", $id);
+        $stmt2->execute();
+        $result2 = $stmt2->get_result();
+        while ($row = $result2->fetch_assoc()): ?>
+          <option value="<?php echo htmlspecialchars($row['name']); ?>" data-price="<?php echo htmlspecialchars($row['price']); ?>"><?php echo htmlspecialchars($row['name']); ?> (Rp <?php echo number_format($row['price'], 0, ',', '.'); ?>)</option>
+        <?php endwhile; ?>
+      </select>
 
-      <label for="price">Harga Satuan:</label>
-      <input type="number" id="price" name="price" value="<?php echo htmlspecialchars($menu['price']); ?>" readonly required>
-
-      <label for="quantity">Jumlah:</label>
+      <label for="quantity">Jumlah Produk 1:</label>
       <input type="number" id="quantity" name="quantity" placeholder="Masukkan jumlah produk" min="1" value="1" required oninput="updateTotal()">
+
+      <label for="product2">Produk 2 (opsional):</label>
+      <select id="product2" name="product2" class="mb-2" onchange="updateTotal()">
+        <option value="" data-price="0">-- Pilih Produk Kedua --</option>
+        <?php
+        $sql3 = "SELECT * FROM menu";
+        $result3 = $conn->query($sql3);
+        while ($row = $result3->fetch_assoc()): ?>
+          <option value="<?php echo htmlspecialchars($row['name']); ?>" data-price="<?php echo htmlspecialchars($row['price']); ?>"><?php echo htmlspecialchars($row['name']); ?> (Rp <?php echo number_format($row['price'], 0, ',', '.'); ?>)</option>
+        <?php endwhile; ?>
+      </select>
+
+      <label for="quantity2">Jumlah Produk 2:</label>
+      <input type="number" id="quantity2" name="quantity2" placeholder="Masukkan jumlah produk kedua" min="1" value="1" oninput="updateTotal()">
 
       <label for="total">Total Harga:</label>
       <input type="text" id="total" name="total" value="<?php echo htmlspecialchars($menu['price']); ?>" readonly>
@@ -268,29 +290,42 @@ footer iframe {
 
 <script>
     function updateTotal() {
-        var price = parseInt(document.getElementById('price').value) || 0;
-        var quantity = parseInt(document.getElementById('quantity').value) || 1;
-        var total = price * quantity;
+        // Produk 1
+        var productSelect = document.getElementById('product');
+        var price1 = parseInt(productSelect.options[productSelect.selectedIndex].getAttribute('data-price')) || 0;
+        var quantity1 = parseInt(document.getElementById('quantity').value) || 1;
+        // Produk 2
+        var product2Select = document.getElementById('product2');
+        var price2 = 0;
+        var quantity2 = 0;
+        if (product2Select.value !== "") {
+            price2 = parseInt(product2Select.options[product2Select.selectedIndex].getAttribute('data-price')) || 0;
+            quantity2 = parseInt(document.getElementById('quantity2').value) || 1;
+        }
+        var total = (price1 * quantity1) + (price2 * quantity2);
         document.getElementById('total').value = total.toLocaleString('id-ID');
     }
 
     function sendToWhatsApp() {
         const name = document.getElementById('name').value;
         const product = document.getElementById('product').value;
-        const price = document.getElementById('price').value;
         const quantity = document.getElementById('quantity').value;
+        const product2 = document.getElementById('product2').value;
+        const quantity2 = document.getElementById('quantity2').value;
         const total = document.getElementById('total').value;
         const address = document.getElementById('address').value;
         const ucapan = document.getElementById('ucapan').value;
         const notelfon = document.getElementById('notelfon').value;
 
         if (name && product && quantity && address && ucapan && notelfon) {
+            let pesanProduk = `Produk 1: ${product} (Jumlah: ${quantity})`;
+            if (product2) {
+                pesanProduk += `\nProduk 2: ${product2} (Jumlah: ${quantity2})`;
+            }
             // Membuat pesan
             const message = `Halo, saya ingin memesan kue di toko Happyippiecake:\n\n` +
                             `Nama: ${name}\n` +
-                            `Produk: ${product}\n` +
-                            `Harga Satuan: Rp ${parseInt(price).toLocaleString('id-ID')}\n` +
-                            `Jumlah: ${quantity}\n` +
+                            `${pesanProduk}\n` +
                             `Total Harga: Rp ${total}\n` +
                             `Alamat: ${address}\n` +
                             `Ucapan: ${ucapan}\n` +
