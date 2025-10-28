@@ -238,50 +238,60 @@ footer iframe {
 </head>
 <body>
   <h1>Formulir Pesanan</h1>
-  <form id="orderForm">
-      <label for="name">Nama:</label>
-      <input type="text" id="name" name="name" placeholder="Masukkan nama Anda" required>
+  <form id="orderForm" class="bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto mt-6">
+    <div class="mb-4">
+      <label for="name" class="block font-semibold mb-1">Nama:</label>
+      <input type="text" id="name" name="name" placeholder="Masukkan nama Anda" required class="w-full border border-gray-300 rounded px-3 py-2 focus:border-pink-400 focus:outline-none">
+    </div>
 
-      <div id="menus-container">
-        <!-- Menu item pertama -->
-        <div class="menu-item mb-4 flex flex-col md:flex-row md:items-center gap-2">
-          <div class="flex-1">
-            <label>Produk:</label>
-            <select class="product-select mb-2" onchange="updateTotal()" required>
-              <option value="<?php echo htmlspecialchars($menu['name']); ?>" data-price="<?php echo htmlspecialchars($menu['price']); ?>" selected><?php echo htmlspecialchars($menu['name']); ?> (Rp <?php echo number_format($menu['price'], 0, ',', '.'); ?>)</option>
-              <?php
-              $sql2 = "SELECT * FROM menu WHERE id != ?";
-              $stmt2 = $conn->prepare($sql2);
-              $stmt2->bind_param("i", $id);
-              $stmt2->execute();
-              $result2 = $stmt2->get_result();
-              while ($row = $result2->fetch_assoc()): ?>
-                <option value="<?php echo htmlspecialchars($row['name']); ?>" data-price="<?php echo htmlspecialchars($row['price']); ?>"><?php echo htmlspecialchars($row['name']); ?> (Rp <?php echo number_format($row['price'], 0, ',', '.'); ?>)</option>
-              <?php endwhile; ?>
-            </select>
-          </div>
-          <div>
-            <label>Jumlah:</label>
-            <input type="number" class="quantity-input" min="1" value="1" required oninput="updateTotal()">
-          </div>
-          <button type="button" class="remove-menu-btn hidden text-red-500 hover:text-red-700 ml-2" onclick="removeMenu(this)"><i class="fas fa-trash"></i></button>
+    <div id="menus-container" class="space-y-4">
+      <!-- Menu item pertama -->
+      <div class="menu-item flex flex-col md:flex-row md:items-end gap-2 bg-gray-50 p-3 rounded-md border border-gray-200 relative">
+        <div class="flex-1">
+          <label class="block font-semibold mb-1">Produk:</label>
+          <select class="product-select w-full border border-gray-300 rounded px-3 py-2 focus:border-pink-400 focus:outline-none" onchange="updateTotal()" required>
+            <option value="<?php echo htmlspecialchars($menu['name']); ?>" data-price="<?php echo htmlspecialchars($menu['price']); ?>" selected><?php echo htmlspecialchars($menu['name']); ?> (Rp <?php echo number_format($menu['price'], 0, ',', '.'); ?>)</option>
+            <?php
+            $sql2 = "SELECT * FROM menu WHERE id != ?";
+            $stmt2 = $conn->prepare($sql2);
+            $stmt2->bind_param("i", $id);
+            $stmt2->execute();
+            $result2 = $stmt2->get_result();
+            while ($row = $result2->fetch_assoc()): ?>
+              <option value="<?php echo htmlspecialchars($row['name']); ?>" data-price="<?php echo htmlspecialchars($row['price']); ?>"><?php echo htmlspecialchars($row['name']); ?> (Rp <?php echo number_format($row['price'], 0, ',', '.'); ?>)</option>
+            <?php endwhile; ?>
+          </select>
         </div>
+        <div class="w-32">
+          <label class="block font-semibold mb-1">Jumlah:</label>
+          <input type="number" class="quantity-input w-full border border-gray-300 rounded px-3 py-2 focus:border-pink-400 focus:outline-none" min="1" value="1" required oninput="updateTotal()">
+        </div>
+        <button type="button" class="remove-menu-btn hidden absolute top-2 right-2 text-red-500 hover:text-red-700" onclick="removeMenu(this)" title="Hapus menu"><i class="fas fa-trash"></i></button>
       </div>
-      <button type="button" class="mb-4 bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded transition" onclick="addMenu()"><i class="fas fa-plus"></i> Tambah Menu</button>
+    </div>
+    <button type="button" class="mb-4 mt-2 bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded transition w-full font-semibold flex items-center justify-center gap-2" onclick="addMenu()"><i class="fas fa-plus"></i> Tambah Menu</button>
 
-      <label for="total">Total Harga:</label>
-      <input type="text" id="total" name="total" value="<?php echo htmlspecialchars($menu['price']); ?>" readonly>
+    <div class="mb-4">
+      <label for="total" class="block font-semibold mb-1">Total Harga:</label>
+      <input type="text" id="total" name="total" value="<?php echo htmlspecialchars($menu['price']); ?>" readonly class="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100 font-bold text-pink-600">
+    </div>
 
-      <label for="address">Alamat:</label>
-      <input type="text" id="address" name="address" placeholder="Masukkan alamat Anda" required>
+    <div class="mb-4">
+      <label for="address" class="block font-semibold mb-1">Alamat:</label>
+      <input type="text" id="address" name="address" placeholder="Masukkan alamat Anda" required class="w-full border border-gray-300 rounded px-3 py-2 focus:border-pink-400 focus:outline-none">
+    </div>
 
-      <label for="ucapan">Ucapan:</label>
-      <input type="text" id="ucapan" name="ucapan" placeholder="Masukkan ucapan Anda" required>
+    <div class="mb-4">
+      <label for="ucapan" class="block font-semibold mb-1">Ucapan:</label>
+      <input type="text" id="ucapan" name="ucapan" placeholder="Masukkan ucapan Anda" required class="w-full border border-gray-300 rounded px-3 py-2 focus:border-pink-400 focus:outline-none">
+    </div>
 
-      <label for="notelfon">No Hp:</label>
-      <input type="text" id="notelfon" name="notelfon" placeholder="Masukkan notelfon anda" required>
+    <div class="mb-4">
+      <label for="notelfon" class="block font-semibold mb-1">No Hp:</label>
+      <input type="text" id="notelfon" name="notelfon" placeholder="Masukkan notelfon anda" required class="w-full border border-gray-300 rounded px-3 py-2 focus:border-pink-400 focus:outline-none">
+    </div>
 
-      <button type="button" onclick="sendToWhatsApp()">Kirim Pesanan</button>
+    <button type="button" onclick="sendToWhatsApp()" class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded font-bold transition">Kirim Pesanan</button>
   </form>
 
 <script>
