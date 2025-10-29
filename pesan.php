@@ -1,444 +1,238 @@
 <?php
-include 'db_connect.php';
+$conn = new mysqli("localhost", "root", "", "happyippiecake");
+$menus = $conn->query("SELECT * FROM menu ORDER BY nama ASC");
+$error = '';
+$success = '';
 
-$id = $_GET['id']; // Mendapatkan ID menu dari URL
-$sql = "SELECT * FROM menu WHERE id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $id);
-$stmt->execute();
-$result = $stmt->get_result();
-$menu = $result->fetch_assoc();
-
-if (!$menu) {
-    die("Menu tidak ditemukan.");
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $nama = trim($_POST['nama']);
+    $alamat = trim($_POST['alamat']);
+    $order = isset($_POST['order']) ? $_POST['order'] : [];
+    if (!$nama || !$alamat || !$order) {
+        $error = "Nama, alamat dan pesanan wajib diisi!";
+    } else {
+        $order_summary = "Pesanan HappyippieCake%0A";
+        $order_summary .= "Nama: $nama%0AAlamat: $alamat%0AOrder:%0A";
+        $total_harga = 0;
+        foreach($order as $menu_id => $jumlah) {
+            $menu_id = intval($menu_id); $jumlah = intval($jumlah);
+            if ($jumlah > 0) {
+                $conn->query("INSERT INTO pesanan (nama_pemesan, menu_id, jumlah, tanggal_pesan) VALUES ('$nama', $menu_id, $jumlah, CURDATE())");
+                $menu = $conn->query("SELECT nama, harga FROM menu WHERE id=$menu_id")->fetch_assoc();
+                $subtotal = $menu['harga']*$jumlah;
+                $order_summary .= "- ".$menu['nama']." x $jumlah (@Rp".number_format($menu['harga'],0,',','.').") = Rp".number_format($subtotal,0,',','.')."%0A";
+                $total_harga += $subtotal;
+            }
+        }
+        $order_summary .= "Total: Rp".number_format($total_harga,0,',','.')."%0A";
+        $wa_admin = '628123456789';
+        $wa_url = "https://wa.me/$wa_admin?text=" . urlencode($order_summary);
+        header("Location: $wa_url");
+        exit;
+    }
 }
 ?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <script type="module" src="https://cdn.jsdelivr.net/gh/domyid/tracker@main/index.js"></script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>happyippieecake</title>
+  <meta charset="UTF-8" />
+  <title>Pilih & Pesan Kue | HappyippieCake</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
   <style>
-    body {
-      font-family: 'Roboto', sans-serif;
-    }
+    .modal-bg { background: rgba(243,197,217,0.97); z-index:99;}
+    .modal-box { z-index:100;}
+    .card-hover:hover { box-shadow: 0 8px 32px -8px #fd5e53;}
+    .footer-link:hover { color:#fd5e53; transform:translateY(-2px);}
   </style>
 </head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XHQ9K68JXX"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+<body class="bg-gradient-to-br from-pink-50 via-white to-pink-100 font-sans">
 
-  gtag('config', 'G-XHQ9K68JXX');
-</script>
-<body class="bg-gray-100">
-  <!-- Header -->
-  <header class="bg-white shadow-md fixed top-0 left-0 w-full z-50">
-<div class="w-full flex justify-between items-center py-4 px-6">
-      <div class="text-2xl lg:text-3xl font-bold text-gray-800 flex items-center space-x-1">
-        <span>happyi</span>
-        <span class="text-pink-500">ppieecake</span>
-      </div>
-      <!-- Navigation -->
-      <nav class="hidden md:flex space-x-6">
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="index.php">Produk</a>
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="index.php">About</a>
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="maps.html">Location</a>
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="login.html">Login</a>
-      </nav>
-      <!-- Mobile Menu Button -->
-<div class="flex justify-end md:hidden">
-  <button id="mobile-menu-button" class="text-gray-600 hover:text-pink-500 focus:outline-none bg-transparent p-0 transition duration-300">
-    <i class="fas fa-bars text-xl"></i>
-  </button>
-</div>
-
-
-      </div>
+  <!-- Navbar Hamburger -->
+  <nav class="w-full bg-white shadow sticky top-0 z-20">
+    <div class="max-w-6xl mx-auto flex justify-between items-center py-3 px-4">
+      <a href="index.php" class="text-2xl font-bold text-pink-500 font-serif">HappyippieCake</a>
+      <button id="nav-toggle" class="md:hidden focus:outline-none text-pink-600 p-2" aria-label="open menu">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="2" d="M4 8h16M4 16h16"/></svg>
+      </button>
+      <ul id="nav-menu" class="hidden md:flex gap-6 font-medium text-gray-700 md:static absolute top-[60px] left-0 w-full bg-white md:w-auto flex-col md:flex-row shadow md:shadow-none">
+        <li><a href="index.php#home" class="nav-link block px-4 py-2">Home</a></li>
+        <li><a href="index.php#about" class="nav-link block px-4 py-2">About</a></li>
+        <li><a href="menu.php" class="nav-link block px-4 py-2">Menu</a></li>
+        <li><a href="index.php#gallery" class="nav-link block px-4 py-2">Gallery</a></li>
+      </ul>
     </div>
-    <!-- Mobile Navigation -->
-    <div id="mobile-menu" class="md:hidden hidden w-full absolute left-0 top-16 z-50">
-      <nav class="flex flex-col space-y-3 px-6 py-4 bg-white">
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="index.php">Produk</a>
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="index.php">About</a>
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="maps.html">Location</a>
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2" href="login.html">Login</a>
-      </nav>
-    </div>
-  </header>
-    
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        if (mobileMenuButton && mobileMenu) {
-          mobileMenuButton.onclick = function(e) {
-            e.stopPropagation();
-            mobileMenu.classList.toggle('hidden');
-            const icon = this.querySelector('i');
-            if (mobileMenu.classList.contains('hidden')) {
-              icon.classList.replace('fa-times', 'fa-bars');
-            } else {
-              icon.classList.replace('fa-bars', 'fa-times');
-            }
-          };
-
-          document.addEventListener('click', function(e) {
-            if (!mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
-              if (!mobileMenu.classList.contains('hidden')) {
-                mobileMenu.classList.add('hidden');
-                mobileMenuButton.querySelector('i').classList.replace('fa-times', 'fa-bars');
-              }
-            }
-          });
-
-          const mobileLinks = mobileMenu.querySelectorAll('a');
-          mobileLinks.forEach(function(link) {
-            link.onclick = function() {
-              mobileMenu.classList.add('hidden');
-              mobileMenuButton.querySelector('i').classList.replace('fa-times', 'fa-bars');
-            };
-          });
+  </nav>
+  <script>
+    var navToggle = document.getElementById('nav-toggle');
+    var navMenu = document.getElementById('nav-menu');
+    navToggle.onclick = function() {
+      navMenu.classList.toggle("hidden");
+    };
+    document.querySelectorAll('#nav-menu a').forEach(link => {
+      link.addEventListener('click', function(){
+        if(window.innerWidth < 768){
+          navMenu.classList.add("hidden");
         }
       });
-    </script>
-    
-
-    <?php if ($menu): ?>
-        <main class="container mx-auto p-4 lg:p-8">
-            <div class="flex flex-col lg:flex-row items-center space-y-6 lg:space-y-0 lg:space-x-8">
-                <!-- Image Section -->
-                <img src="gambar/<?php echo htmlspecialchars($menu['image']); ?>" alt="<?php echo htmlspecialchars($menu['name']); ?>"
-                    class="w-full max-w-md object-cover rounded-lg shadow-lg">
-
-                <!-- Product Details -->
-                <div class="text-center lg:text-left">
-                    <h2 class="text-2xl font-bold"><?php echo htmlspecialchars($menu['name']); ?></h2>
-                    <p class="text-xl text-red-600 font-semibold mt-2">Rp <?php echo number_format($menu['price'], 0, ',', '.'); ?></p>
-                    <ul class="list-disc list-inside text-left space-y-2 mt-4">
-                        <li><?php echo htmlspecialchars($menu['description']); ?></li>
-                    </ul>
-                </div>
-            </div>
-        </main>
-    <?php else: ?>
-        <p>Menu tidak ditemukan. <a href="index.php">Kembali ke halaman utama</a></p>
-    <?php endif; ?>
-  <!-- Main Content -->
-
-  <title>Formulir Pesanan</title>
-  <style>
-    body {
-        font-family: 'Roboto', sans-serif;
-        background-color: #f4f4f4;
-        margin: 0;
-        padding: 0;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-    }
-
-    h1 {
-        text-align: center;
-        color: #333;
-        margin-bottom: 20px;
-    }
-
-    form {
-        max-width: 400px;
-        margin: auto;
-        background: #ffffff; /* Warna latar belakang form */
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Bayangan yang lebih halus */
-        transition: transform 0.3s; /* Efek transisi */
-    }
-
-    form:hover {
-        transform: scale(1.02); /* Efek zoom saat hover */
-    }
-
-    label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
-        color: #555; /* Warna label */
-    }
-
-    input, button {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 15px;
-        border: 1px solid #cccccc;
-        border-radius: 5px;
-        transition: border-color 0.3s;
-    }
-
-    input:focus {
-        border-color: #e43b9b; /* Warna border saat fokus */
-        outline: none;
-    }
-
-
-    @media (max-width: 480px) {
-        h1 {
-            font-size: 24px;
-        }
-        form {
-            padding: 15px;
-        }
-        input, button {
-            padding: 8px;
-        }
-    }
-
-    footer {
-    background-color: #2d2d2d; /* Warna latar belakang footer */
-}
-
-.map-section {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start; /* Menyelaraskan konten peta ke kiri */
-}
-
-footer iframe {
-    width: 100%;
-    height: 200px; /* Tinggi iframe peta */
-    border: none;
-    border-radius: 10px;
-    margin-top: 1rem;
-}
-
-/* Responsif */
-@media (max-width: 768px) {
-    footer {
-        grid-template-columns: 1fr; /* Mengubah menjadi satu kolom pada layar kecil */
-    }
-
-    .map-section {
-        order: 1; /* Memindahkan peta ke bagian bawah */
-    }
-
-    footer iframe {
-        height: 150px; /* Tinggi iframe peta pada layar kecil */
-    }
-}
-</style>
-</head>
-<body>
-  <h1>Formulir Pesanan</h1>
-  <form id="orderForm" class="bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto mt-6">
-    <div class="mb-4">
-      <label for="name" class="block font-semibold mb-1">Nama:</label>
-      <input type="text" id="name" name="name" placeholder="Masukkan nama Anda" required class="w-full border border-gray-300 rounded px-3 py-2 focus:border-pink-400 focus:outline-none">
-    </div>
-
-    <div id="menus-container" class="space-y-4">
-      <!-- Menu item pertama -->
-      <div class="menu-item flex flex-col md:flex-row md:items-end gap-2 bg-gray-50 p-3 rounded-md border border-gray-200 relative">
-        <div class="flex-1">
-          <label class="block font-semibold mb-1">Produk:</label>
-          <select class="product-select w-full border border-gray-300 rounded px-3 py-2 focus:border-pink-400 focus:outline-none" onchange="updateTotal()" required>
-            <option value="<?php echo htmlspecialchars($menu['name']); ?>" data-price="<?php echo htmlspecialchars($menu['price']); ?>" selected><?php echo htmlspecialchars($menu['name']); ?> (Rp <?php echo number_format($menu['price'], 0, ',', '.'); ?>)</option>
-            <?php
-            $sql2 = "SELECT * FROM menu WHERE id != ?";
-            $stmt2 = $conn->prepare($sql2);
-            $stmt2->bind_param("i", $id);
-            $stmt2->execute();
-            $result2 = $stmt2->get_result();
-            while ($row = $result2->fetch_assoc()): ?>
-              <option value="<?php echo htmlspecialchars($row['name']); ?>" data-price="<?php echo htmlspecialchars($row['price']); ?>"><?php echo htmlspecialchars($row['name']); ?> (Rp <?php echo number_format($row['price'], 0, ',', '.'); ?>)</option>
-            <?php endwhile; ?>
-          </select>
-        </div>
-        <div class="w-32">
-          <label class="block font-semibold mb-1">Jumlah:</label>
-          <input type="number" class="quantity-input w-full border border-gray-300 rounded px-3 py-2 focus:border-pink-400 focus:outline-none" min="1" value="1" required oninput="updateTotal()">
-        </div>
-        <button type="button" class="remove-menu-btn hidden absolute top-2 right-2 text-red-500 hover:text-red-700" onclick="removeMenu(this)" title="Hapus menu"><i class="fas fa-trash"></i></button>
-      </div>
-    </div>
-    <button type="button" class="mb-4 mt-2 bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded transition w-full font-semibold flex items-center justify-center gap-2" onclick="addMenu()"><i class="fas fa-plus"></i> Tambah Menu</button>
-
-    <div class="mb-4">
-      <label for="total" class="block font-semibold mb-1">Total Harga:</label>
-      <input type="text" id="total" name="total" value="<?php echo htmlspecialchars($menu['price']); ?>" readonly class="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100 font-bold text-pink-600">
-    </div>
-
-    <div class="mb-4">
-      <label for="address" class="block font-semibold mb-1">Alamat:</label>
-      <input type="text" id="address" name="address" placeholder="Masukkan alamat Anda" required class="w-full border border-gray-300 rounded px-3 py-2 focus:border-pink-400 focus:outline-none">
-    </div>
-
-    <div class="mb-4">
-      <label for="ucapan" class="block font-semibold mb-1">Ucapan:</label>
-      <input type="text" id="ucapan" name="ucapan" placeholder="Masukkan ucapan Anda" required class="w-full border border-gray-300 rounded px-3 py-2 focus:border-pink-400 focus:outline-none">
-    </div>
-
-    <div class="mb-4">
-      <label for="notelfon" class="block font-semibold mb-1">No Hp:</label>
-      <input type="text" id="notelfon" name="notelfon" placeholder="Masukkan notelfon anda" required class="w-full border border-gray-300 rounded px-3 py-2 focus:border-pink-400 focus:outline-none">
-    </div>
-
-    <button type="button" onclick="sendToWhatsApp()" class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded font-bold transition">Kirim Pesanan</button>
-  </form>
-
-<script>
-    // Data produk untuk cloning
-    const produkOptions = `<?php
-      $sql4 = "SELECT * FROM menu";
-      $result4 = $conn->query($sql4);
-      while ($row = $result4->fetch_assoc()): ?>
-        <option value=\"<?php echo htmlspecialchars($row['name']); ?>\" data-price=\"<?php echo htmlspecialchars($row['price']); ?>\"><?php echo htmlspecialchars($row['name']); ?> (Rp <?php echo number_format($row['price'], 0, ',', '.'); ?>)</option>
-      <?php endwhile; ?>`;
-
-    function updateTotal() {
-        var total = 0;
-        document.querySelectorAll('.menu-item').forEach(function(item) {
-            var select = item.querySelector('.product-select');
-            var price = parseInt(select.options[select.selectedIndex].getAttribute('data-price')) || 0;
-            var qty = parseInt(item.querySelector('.quantity-input').value) || 1;
-            total += price * qty;
-        });
-        document.getElementById('total').value = total.toLocaleString('id-ID');
-    }
-
-    function addMenu() {
-        var container = document.getElementById('menus-container');
-        var menuCount = container.querySelectorAll('.menu-item').length + 1;
-        var div = document.createElement('div');
-        div.className = 'menu-item mb-4 flex flex-col md:flex-row md:items-center gap-2';
-        div.innerHTML = `
-          <div class="flex-1">
-            <label>Produk:</label>
-            <select class="product-select mb-2" onchange="updateTotal()" required>
-              ${produkOptions}
-            </select>
-          </div>
-          <div>
-            <label>Jumlah:</label>
-            <input type="number" class="quantity-input" min="1" value="1" required oninput="updateTotal()">
-          </div>
-          <button type="button" class="remove-menu-btn text-red-500 hover:text-red-700 ml-2" onclick="removeMenu(this)"><i class="fas fa-trash"></i></button>
-        `;
-        container.appendChild(div);
-        // Tampilkan tombol hapus jika lebih dari 1 menu
-        updateRemoveButtons();
-        updateTotal();
-    }
-
-    function removeMenu(btn) {
-        var item = btn.closest('.menu-item');
-        item.remove();
-        updateRemoveButtons();
-        updateTotal();
-    }
-
-    function updateRemoveButtons() {
-        var items = document.querySelectorAll('.menu-item');
-        items.forEach(function(item, idx) {
-            var btn = item.querySelector('.remove-menu-btn');
-            if (btn) btn.classList.toggle('hidden', items.length === 1);
-        });
-    }
-
-    function sendToWhatsApp() {
-        const name = document.getElementById('name').value;
-        const address = document.getElementById('address').value;
-        const ucapan = document.getElementById('ucapan').value;
-        const notelfon = document.getElementById('notelfon').value;
-        const total = document.getElementById('total').value;
-        let pesanProduk = '';
-        document.querySelectorAll('.menu-item').forEach(function(item, idx) {
-            var select = item.querySelector('.product-select');
-            var qty = item.querySelector('.quantity-input').value;
-            pesanProduk += `Produk ${idx+1}: ${select.value} (Jumlah: ${qty})\n`;
-        });
-        if (name && address && ucapan && notelfon && pesanProduk) {
-            const message = `Halo, saya ingin memesan kue di toko Happyippiecake:\n\n` +
-                            `Nama: ${name}\n` +
-                            `${pesanProduk}` +
-                            `Total Harga: Rp ${total}\n` +
-                            `Alamat: ${address}\n` +
-                            `Ucapan: ${ucapan}\n` +
-                            `No Hp: ${notelfon}`;
-            const phoneNumber = "6285722341788";
-            const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-            window.open(url, '_blank');
-        } else {
-            alert('Harap isi semua data pada formulir.');
-        }
-    }
-
-    // Inisialisasi tombol hapus menu pertama
-    document.addEventListener('DOMContentLoaded', function() {
-      updateRemoveButtons();
     });
-</script>
+  </script>
 
-
-<!-- Footer -->
-<footer class="bg-gray-800 text-white py-6 mt-12">
-  <div class="container mx-auto px-4 lg:px-6">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"> <!-- Mengubah jumlah kolom menjadi 4 -->
-      <!-- Logo -->
-      <div class="flex flex-col items-center lg:items-start">
-        <img src="gambar/happycake.png" alt="Logo Happy Ippie Cake" class="object-contain mb-4" width="150" />
-        <p class="text-xs text-gray-300 text-center lg:text-left mt-2">Your special moment, our sweet touch!</p>
-      </div>
-
-      <div>
-        <h3 class="text-md font-semibold mb-2">Quick Links</h3>
-        <ul class="space-y-1">
-          <li><a href="#about-container" class="text-gray-300 hover:text-white transition">About</a></li>
-          <li><a href="maps.html" class="text-gray-300 hover:text-white transition">Location</a></li>
-          <li>
-            <a href="https://wa.me/6285722341788" target="_blank" class="text-gray-300 hover:text-white transition"> Contact Us </a>
-          </li>
-        </ul>
-      </div>
-      
-      <!-- Contact Information -->
-      <div>
-        <h3 class="text-md font-semibold mb-2">Contact</h3>
-        <ul class="space-y-2">
-          <li><i class="fas fa-phone-alt"></i>
-            <a href="tel:+6285722341788" class="text-gray-300 hover:text-white transition ml-2">+62 857-2234-1788</a>
-          </li>
-          <li><i class="fas fa-envelope"></i>
-            <a href="mailto:info@happyippiecake.com" class="text-gray-300 hover:text-white transition ml-2">info@happyippiecake.com</a>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Maps Section -->
-      <div class="map-section">
-        <h3 class="text-md font-semibold mb-2">Our Location</h3>
-        <iframe 
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d495.1070132257533!2d107.53570984005971!3d-6.907804161619513!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e569a8e9d7bb%3A0x142ecf9a09a7f3e7!2shappyippieecake!5e0!3m2!1sid!2sid!4v1732411075230!5m2!1sid!2sid"
-          allowfullscreen="" 
-          loading="lazy">
-        </iframe>
-      </div>
+  <div class="max-w-6xl mx-auto py-10 px-2">
+    <div class="text-center mb-8">
+      <h1 class="text-5xl font-extrabold text-pink-600 mb-2 font-serif" style="font-family:'Pacifico',cursive;">HappyippieCake</h1>
+      <p class="text-xl text-gray-700">Pilih & pesan kue istimewa untuk momen spesialmu 🎂</p>
     </div>
-    <div class="mt-4 border-t border-gray-700 pt-2 text-center text-xs">
-      &copy; 2024 HappyippieCake. All rights reserved.
+    <?php if($error): ?>
+      <div class="mb-4 bg-red-100 border-l-4 border-red-400 text-red-700 p-3 rounded"><?= $error ?></div>
+    <?php elseif($success): ?>
+      <div class="mb-4 bg-green-100 border-l-4 border-green-400 text-green-700 p-3 rounded"><?= $success ?></div>
+    <?php endif ?>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-2 gap-y-6 justify-items-center mb-8">
+      <?php foreach($menus as $menu): ?>
+        <div class="bg-white rounded-2xl shadow-xl card-hover transition flex flex-col w-64 sm:w-72 md:w-72">
+          <img src="<?= htmlspecialchars($menu['gambar']) ?>" alt="<?= htmlspecialchars($menu['nama']) ?>" class="rounded-t-2xl h-40 sm:h-44 w-full object-cover"/>
+          <div class="p-4 grow flex flex-col">
+            <span class="font-bold text-lg mb-1 text-pink-600"><?= htmlspecialchars($menu['nama']) ?></span>
+            <span class="text-gray-700 mb-3 text-sm"><?= htmlspecialchars($menu['deskripsi']) ?></span>
+            <div class="flex justify-between items-center mt-auto">
+              <span class="bg-pink-100 rounded font-bold text-pink-700 px-3 py-1 text-base">Rp<?= number_format($menu['harga'],0,',','.') ?></span>
+              <button class="bg-pink-600 text-white rounded px-5 py-1 hover:bg-pink-700 open-modal font-semibold shadow transition"
+                data-id="<?= $menu['id'] ?>"
+                data-nama="<?= htmlspecialchars($menu['nama']) ?>"
+                data-harga="<?= $menu['harga'] ?>"
+                data-gambar="<?= htmlspecialchars($menu['gambar']) ?>"
+              >Pesan</button>
+            </div>
+          </div>
+        </div>
+      <?php endforeach ?>
+    </div>
+    <div class="text-center mb-8">
+      <span class="italic text-gray-400">* Klik "Pesan" untuk mulai pemesanan, bisa pilih lebih dari satu kue, isi detail, lalu order dengan WhatsApp</span>
     </div>
   </div>
-</footer>
 
+  <!-- Modal Form -->
+  <div id="modal" class="fixed inset-0 flex justify-center items-center modal-bg hidden">
+    <div class="modal-box bg-white rounded-2xl p-8 w-full max-w-lg shadow-lg relative">
+      <span class="absolute top-3 right-6 text-lg text-gray-400 cursor-pointer" onclick="closeModal()">&times;</span>
+      <form method="post" onsubmit="return submitOrder();">
+        <h2 class="font-bold text-xl text-pink-600 mb-4 text-center font-serif">Form Pemesanan Kue</h2>
+        <div class="grid gap-4">
+          <div>
+            <label class="block mb-1 font-semibold text-pink-700">Nama</label>
+            <input type="text" name="nama" class="w-full border-pink-200 rounded mb-1 p-2 font-semibold" required>
+          </div>
+          <div>
+            <label class="block mb-1 font-semibold text-pink-700">Alamat Lengkap</label>
+            <input type="text" name="alamat" class="w-full border-pink-200 rounded mb-1 p-2" required>
+          </div>
+        </div>
+        <hr class="my-3">
+        <div>
+          <div class="font-semibold mb-2">Daftar Pesanan</div>
+          <div id="order-list"></div>
+          <button type="button" onclick="addOrderField()" class="mt-2 text-pink-600 underline">+ Tambah Menu Lain</button>
+        </div>
+        <div class="text-right font-bold mt-3">Total Harga: <span id="totalHarga">Rp0</span></div>
+        <div class="mt-6">
+          <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 py-2 rounded text-white font-semibold">Pesan Via WhatsApp</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
+  <footer class="bg-gradient-to-r from-pink-700 via-pink-500 to-pink-400 text-white py-8 shadow-xl mt-16">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+      <div class="mb-4 md:mb-0">
+        <span class="text-2xl font-bold font-serif" style="font-family:'Pacifico',cursive;">HappyippieCake</span>
+        <p class="text-xs mt-1">&copy; 2025 HappyippieCake. All Rights Reserved.</p>
+      </div>
+      <div class="flex gap-6 items-center">
+        <a href="https://instagram.com" target="_blank" class="footer-link text-xl" title="Instagram">IG</a>
+        <a href="https://wa.me/628123456789" target="_blank" class="footer-link text-xl" title="WhatsApp">WA</a>
+        <a href="#" class="footer-link text-xl" title="Facebook">FB</a>
+      </div>
+    </div>
+  </footer>
 
+  <script>
+    // Semua menu
+    const menus = [
+      <?php
+        $result = $conn->query("SELECT id, nama, harga, gambar FROM menu ORDER BY nama ASC");
+        foreach($result as $row){
+          echo "{id:".$row['id'].",nama:'".addslashes($row['nama'])."',harga:".$row['harga'].",gambar:'".addslashes($row['gambar'])."'},";
+        }
+      ?>
+    ];
+
+    // Modal logic
+    let orderFields = [];
+    function openModal(menu) {
+      document.querySelector('#modal form').reset();
+      orderFields = [menu];
+      renderOrderFields();
+      document.getElementById('modal').style.display = 'flex';
+    }
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+      orderFields = [];
+    }
+    function renderOrderFields() {
+      let html = ''; let totalHarga = 0;
+      orderFields.forEach((itm, idx) => {
+        html += `<div class="flex gap-2 items-center mb-2 animate__animated animate__fadeInDown">
+          <img src="${itm.gambar}" class="h-10 w-10 object-cover rounded">
+          <select name="order[${itm.id}]" onchange="changeOrderMenu(${idx}, this.value)" class="border-pink-200 rounded px-2 py-1 bg-pink-50 text-pink-800 font-bold">
+            ${menus.map(menu =>
+              `<option value="${menu.id}" ${menu.id == itm.id ? 'selected':''}>${menu.nama}</option>`
+            ).join('')}
+          </select>
+          <span class="mx-2 font-bold">&times;</span>
+          <input type="number" min="1" max="20" value="${itm.jumlah||1}" onchange="changeOrderQty(${idx},this.value)" class="border-pink-200 rounded w-14 p-1 text-center font-bold">
+          <span class="flex-grow"></span>
+          <span>Rp${(itm.harga*(itm.jumlah||1)).toLocaleString()}</span>
+          <button type="button" onclick="removeOrderField(${idx})" class="ml-2 text-red-500 text-lg" title="Hapus">&#x2716;</button>
+        </div>`;
+        totalHarga += itm.harga*(itm.jumlah||1);
+      });
+      document.getElementById('order-list').innerHTML = html;
+      document.getElementById('totalHarga').innerText = 'Rp'+totalHarga.toLocaleString();
+    }
+    function addOrderField() {
+      orderFields.push({id:menus[0].id, nama:menus[0].nama, harga:menus[0].harga, gambar:menus[0].gambar, jumlah:1});
+      renderOrderFields();
+    }
+    function removeOrderField(idx) {
+      orderFields.splice(idx,1); renderOrderFields();
+    }
+    function changeOrderQty(idx, val){
+      orderFields[idx].jumlah = parseInt(val)||1; renderOrderFields();
+    }
+    function changeOrderMenu(idx, val){
+      const menu = menus.find(m=>m.id==val);
+      orderFields[idx].id = menu.id; orderFields[idx].nama = menu.nama; orderFields[idx].harga = menu.harga; orderFields[idx].gambar = menu.gambar;
+      renderOrderFields();
+    }
+    document.querySelectorAll('.open-modal').forEach(btn => {
+      btn.addEventListener('click', function(){
+        const menu = menus.find(m=>m.id==this.dataset.id);
+        openModal({...menu, jumlah:1});
+      });
+    });
+    function submitOrder() {
+      if (!orderFields.length) return false;
+      for (let itm of orderFields) {
+        let f = document.createElement('input');
+        f.type = 'hidden';
+        f.name = `order[${itm.id}]`;
+        f.value = itm.jumlah||1;
+        document.querySelector('#modal form').appendChild(f);
+      }
+      return true;
+    }
+  </script>
 </body>
 </html>

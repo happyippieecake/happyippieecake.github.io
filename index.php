@@ -1,530 +1,158 @@
 <?php
-// Koneksi ke database
-try {
-  $pdo = new PDO('mysql:host=localhost;dbname=happyipp_db_menu', 'happyipp_fauzi', 'Fauzi2801*');
-  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-  die('Koneksi gagal: ' . $e->getMessage());
-}
-
-
-// Query untuk mengambil data menu  
-$sql = "SELECT * FROM menu";
-$stmt = $pdo->query($sql);
-$menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$conn = new mysqli("localhost", "root", "", "happyippiecake");
+$menus = $conn->query("SELECT * FROM menu ORDER BY id DESC LIMIT 3");
 ?>
-
-
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HappyippieCake</title>
-  <link rel="stylesheet" href="croot.css">
-  <script type="module" src="https://cdn.jsdelivr.net/gh/domyid/tracker@main/index.js"></script>
-
-  <!-- Meta Tags untuk Twitter (opsional) -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="CrootSS: CSS Mobile Friendly Responsive Component and Template" />
-  <meta name="twitter:description" content="CSS Mobile Friendly Responsive Component and Template" />
-  <meta name="twitter:image" content="https://www.do.my.id/crootss.jpeg" />
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>HappyippieCake | Toko Kue Premium Cimahi</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
-  <meta name="google-site-verification" content="FxJ_CP9CXLmS6uC-vBopCr_7V31N4wjJiNTdR8mYDPU" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <style>
+    body { font-family: 'Montserrat', Arial, sans-serif;}
+    .active-link { border-bottom: 2px solid #fd5e53;}
+    .footer-link:hover { color:#fd5e53; transform:translateY(-2px);}
+    .card-hover:hover { box-shadow: 0 6px 32px -2px #fd5e53,0 0 0 4px #fff3f4;}
+    .brand-font { font-family: 'Pacifico',cursive;}
+  </style>
 </head>
+<body class="bg-gradient-to-br from-pink-50 via-white to-pink-100">
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XHQ9K68JXX"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-
-  function gtag() {
-    dataLayer.push(arguments);
-  }
-  gtag('js', new Date());
-
-  gtag('config', 'G-XHQ9K68JXX');
-</script>
-
-<body class="bg-gray-100">
-  <!-- Header -->
-  <header class="bg-white shadow-md fixed top-0 left-0 w-full z-50">
-    <div class="container mx-auto flex justify-between items-center py-4 px-6">
-      <div class="text-2xl lg:text-3xl font-bold text-gray-800 flex items-center space-x-1">
-        <span>happyi</span>
-        <span class="text-pink-500">ppieecake</span>
-      </div>
-      <!-- Desktop Navigation -->
-      <nav class="hidden md:flex space-x-6">
-        <a id="produk-link" class="text-gray-600 hover:text-pink-500 transition duration-300" href="#produk">Produk</a>
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="#about-container">About</a>
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="maps.html">Location</a>
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300" href="login.html">Login</a>
-      </nav>
-      <!-- Mobile Menu Button (Right-aligned) -->
-      <button id="mobile-menu-button" class="md:hidden text-gray-600 hover:text-pink-500 focus:outline-none transition duration-300 ml-auto">
-        <i class="fas fa-bars text-xl"></i>
+  <!-- Navbar Hamburger -->
+  <nav class="w-full bg-white shadow sticky top-0 z-20">
+    <div class="max-w-6xl mx-auto flex justify-between items-center py-3 px-4">
+      <a href="index.php" class="text-3xl font-bold text-pink-500 brand-font tracking-wider">HappyippieCake</a>
+      <button id="nav-toggle" class="md:hidden focus:outline-none text-pink-600 p-2" aria-label="open menu">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="2" d="M4 8h16M4 16h16"/></svg>
       </button>
+      <ul id="nav-menu" class="hidden md:flex gap-8 font-semibold text-gray-700 md:static absolute top-[60px] left-0 w-full bg-white md:w-auto flex-col md:flex-row shadow md:shadow-none">
+        <li><a href="#home" class="nav-link active-link block px-4 py-2 transition">Home</a></li>
+        <li><a href="#about" class="nav-link block px-4 py-2 transition">About</a></li>
+        <li><a href="pesan.php" class="nav-link block px-4 py-2 transition">Menu</a></li>
+        <li><a href="#gallery" class="nav-link block px-4 py-2 transition">Gallery</a></li>
+        <li><a href="login.php" class="nav-link block px-4 py-2 transition">Admin</a></li>
+      </ul>
     </div>
-    <!-- Mobile Navigation (Dropdown) -->
-    <div id="mobile-menu" class="md:hidden hidden bg-white w-full absolute left-0 top-16 shadow-lg">
-      <nav class="flex flex-col space-y-3 px-6 py-4">
-        <a id="produk-link-mobile" class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="#produk">Produk</a>
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="#about-container">About</a>
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2 border-b border-gray-100" href="maps.html">Location</a>
-        <a class="text-gray-600 hover:text-pink-500 transition duration-300 py-2" href="login.html">Login</a>
-      </nav>
-    </div>
-  </header>
-
-  <!-- Hero Section -->
-  <main class="pt-8">
-    <section class="hero-background w-full py-12">
-      <div class="hero-overlay">
-        <div class="container mx-auto px-4 lg:px-6 flex flex-col items-center hero-content">
-          <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6 p-4 rounded-lg">
-            <img alt="Two cakes" class="w-full md:w-1/3 lg:w-1/4 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 mt-6" src="gambar/utama.jpg">
-            <div class="text-center md:text-left">
-              <h1 class="text-3xl md:text-4xl font-bold text-gray-800">KUE ULANG TAHUN, WEDDING CAKE, &amp; MORE</h1>
-              <p class="text-gray-600 mt-2">Pesan cake, pudding, wedding cake, dan lainnya dengan custom design serta same day delivery.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
+  </nav>
   <script>
-    // Pastikan script dijalankan setelah elemen header tersedia
-    window.addEventListener('load', function() {
-      const mobileMenuButton = document.getElementById('mobile-menu-button');
-      const mobileMenu = document.getElementById('mobile-menu');
-
-      if (mobileMenuButton && mobileMenu) {
-        mobileMenuButton.onclick = function(e) {
-          e.stopPropagation();
-          mobileMenu.classList.toggle('hidden');
-          const icon = this.querySelector('i');
-          if (mobileMenu.classList.contains('hidden')) {
-            icon.classList.replace('fa-times', 'fa-bars');
-          } else {
-            icon.classList.replace('fa-bars', 'fa-times');
-          }
-        };
-
-        document.addEventListener('click', function(e) {
-          if (!mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
-            if (!mobileMenu.classList.contains('hidden')) {
-              mobileMenu.classList.add('hidden');
-              mobileMenuButton.querySelector('i').classList.replace('fa-times', 'fa-bars');
-            }
-          }
-        });
-
-        const mobileLinks = mobileMenu.querySelectorAll('a');
-        mobileLinks.forEach(function(link) {
-          link.onclick = function() {
-            mobileMenu.classList.add('hidden');
-            mobileMenuButton.querySelector('i').classList.replace('fa-times', 'fa-bars');
-          };
-        });
-      }
+    var navToggle = document.getElementById('nav-toggle');
+    var navMenu = document.getElementById('nav-menu');
+    navToggle.onclick = function() { navMenu.classList.toggle("hidden"); };
+    document.querySelectorAll('#nav-menu a').forEach(link => {
+      link.addEventListener('click', function(){
+        if(window.innerWidth < 768){
+          navMenu.classList.add("hidden");
+        }
+      });
     });
   </script>
 
-  </header>
-  <style>
-    /* Custom background style */
+  <!-- Hero Section -->
+  <section id="home" class="flex items-center justify-center relative min-h-[60vh] bg-cover bg-no-repeat" style="background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1500&q=80');">
+  <div class="absolute inset-0 bg-gradient-to-br from-pink-300/60 via-transparent to-pink-100/70"></div>
+  <div class="relative text-center z-10 px-2">
+    <h1 class="text-5xl md:text-7xl mb-4 text-pink-600 font-bold brand-font drop-shadow-md">HappyippieCake</h1>
+    <div class="flex justify-center mb-4">
+      <span class="inline-block bg-white/80 rounded-full px-4 py-2 text-pink-800 text-base font-semibold shadow backdrop-blur brand-font">
+        Premium Cake • Custom & Fresh • Cimahi
+      </span>
+    </div>
+    <p class="text-xl md:text-2xl text-white drop-shadow font-semibold mb-6">
+      Toko kue premium untuk momen istimewa,<br class="hidden md:block"> fresh & custom setiap hari!
+    </p>
+    <a href="#menu" class="px-10 py-4 bg-pink-500 text-white text-lg rounded-full hover:bg-pink-600 shadow-xl font-bold transition brand-font tracking-wide border-2 border-white/60">
+      Lihat Menu Kue
+    </a>
+  </div>
+</section>
 
 
-    /* Styling Global */
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(to bottom, #ebeaea, #efeded);
-      color: #333;
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
+  <!-- About Section -->
+  <section id="about" class="py-12 bg-pink-50">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center gap-12">
+      <img src="gambar/utama.jpg" alt="HappyippieCake Team" class="w-72 h-72 md:w-80 md:h-80 object-cover rounded-3xl shadow-2xl mb-6 md:mb-0 ring-4 ring-pink-200" />
+      <div class="md:w-1/2">
+        <h2 class="text-4xl font-bold text-pink-600 mb-6 brand-font">Tentang HappyippieCake</h2>
+        <p class="mb-5 text-gray-700 text-lg">Sejak 2018, HappyippieCake hadir dengan kue custom bertema unik, bahan premium, dan sentuhan artistik. Setiap cake dikerjakan detail, bisa desain sesuai impian dan konsultasi tema <span class="text-pink-500 font-semibold">gratis!</span></p>
+        <ul class="list-disc pl-7 text-pink-700 space-y-2 text-lg font-semibold">
+          <li>Kue fresh dari oven setiap hari</li>
+          <li>Desain custom sesuai keinginan</li>
+          <li>Kualitas premium dan bergaransi</li>
+        </ul>
+      </div>
+    </div>
+  </section>
 
-    .about-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem;
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      color: #333;
-      margin-bottom: 1rem;
-      text-transform: uppercase;
-    }
-
-    p {
-      font-size: 1rem;
-      max-width: 800px;
-      margin-bottom: 2rem;
-      color: #555;
-    }
-
-    .about-image {
-      width: 100%;
-      max-width: 300px;
-      border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-      transform: scale(0.95);
-      transition: transform 0.3s ease-in-out;
-    }
-
-    .about-image:hover {
-      transform: scale(1);
-    }
-
-    .values {
-      margin-top: 3rem;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 2rem;
-    }
-
-    .value-card {
-      background: #fff;
-      padding: 1.5rem;
-      border-radius: 15px;
-      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 250px;
-      text-align: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .value-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
-    }
-
-    .value-card i {
-      font-size: 3rem;
-      color: #ff6363;
-      margin-bottom: 1rem;
-    }
-
-    .value-card h3 {
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .value-card p {
-      font-size: 0.9rem;
-      color: #666;
-    }
-
-    /* Responsif */
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 2rem;
-      }
-
-      p {
-        font-size: 0.9rem;
-      }
-
-      .values {
-        flex-direction: column;
-        gap: 1.5rem;
-      }
-    }
-
-    footer {
-      background-color: #2d2d2d;
-      /* Warna latar belakang footer */
-    }
-
-    .map-section {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      /* Menyelaraskan konten peta ke kiri */
-    }
-
-    footer iframe {
-      width: 100%;
-      height: 200px;
-      /* Tinggi iframe peta */
-      border: none;
-      border-radius: 10px;
-      margin-top: 1rem;
-    }
-
-    /* Responsif */
-    @media (max-width: 768px) {
-      footer {
-        grid-template-columns: 1fr;
-        /* Mengubah menjadi satu kolom pada layar kecil */
-      }
-
-      .map-section {
-        order: 1;
-        /* Memindahkan peta ke bagian bawah */
-      }
-
-      footer iframe {
-        height: 150px;
-        /* Tinggi iframe peta pada layar kecil */
-      }
-    }
-  </style>
-  </head>
-
-  <body>
-
-    <div id="about-container" class="about-container">
-      <h1>About Us</h1>
-      <section class="bg-white-100 py-20">
-        <div class="container mx-auto px-6 lg:px-20">
-          <div class="flex flex-col md:flex-row items-center md:space-x-8">
-            <!-- Left Content -->
-            <div class="w-full md:w-1/2">
-              <h3 class="text-4xl font-bold text-gray-800">HappyippieeCake</h3>
-              <p class="mt-4 text-gray-600 leading-relaxed">
-                Kami adalah tim yang berdedikasi untuk membuat momen spesial Anda lebih istimewa dengan kue dan dessert berkualitas tinggi. Dengan bahan-bahan terbaik dan desain yang kreatif, kami hadir untuk memenuhi semua kebutuhan Anda.
-              </p>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
-                <div class="flex items-center space-x-4">
-                  <span class="text-pink-500 text-3xl">
-                    <i class="fas fa-birthday-cake"></i>
-                  </span>
-                  <div>
-                    <h4 class="text-lg font-semibold">Custom Cake</h4>
-                    <p class="text-gray-600 text-sm">Desain yang sesuai dengan selera Anda.</p>
-                  </div>
-                </div>
-                <div class="flex items-center space-x-4">
-                  <span class="text-pink-500 text-3xl">
-                    <i class="fas fa-truck"></i>
-                  </span>
-                  <div>
-                    <h4 class="text-lg font-semibold">Same Day Delivery</h4>
-                    <p class="text-gray-600 text-sm">Pesanan Anda sampai di hari yang sama.</p>
-                  </div>
-                </div>
-                <div class="flex items-center space-x-4">
-                  <span class="text-pink-500 text-3xl">
-                    <i class="fas fa-heart"></i>
-                  </span>
-                  <div>
-                    <h4 class="text-lg font-semibold">Bahan Berkualitas</h4>
-                    <p class="text-gray-600 text-sm">Kami menggunakan bahan terbaik.</p>
-                  </div>
-                </div>
-                <div class="flex items-center space-x-4">
-                  <span class="text-pink-500 text-3xl">
-                    <i class="fas fa-palette"></i>
-                  </span>
-                  <div class="flex flex-col">
-                    <h4 class="text-lg font-semibold text-center">Desain Kreatif</h4>
-                    <p class="text-gray-600 text-sm text-left">Setiap kue adalah karya seni.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Right Content -->
-            <div class="w-full md:w-1/2 flex items-center justify-center mt-10 md:mt-0">
-              <div class="relative">
-                <img src="gambar/cake utama.jpg" alt="About Us" class="rounded-lg shadow-lg">
-                <div class="absolute inset-0 bg-opacity-30 rounded-lg"></div>
-              </div>
+  <!-- Menu Section: Best Seller/Recent -->
+  <section id="menu" class="py-16 bg-white relative z-0">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-4xl font-bold text-center mb-12 text-pink-600 brand-font tracking-wide">Menu Cake Spesial</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-12 justify-items-center">
+        <?php foreach ($menus as $menu): ?>
+        <div class="bg-white rounded-3xl ring-2 ring-pink-100 shadow-2xl card-hover transition-all flex flex-col w-72 hover:-translate-y-2 hover:z-10 relative overflow-hidden group">
+          <div class="relative">
+            <img src="<?= htmlspecialchars($menu['gambar']) ?>"
+              alt="<?= htmlspecialchars($menu['nama']) ?>"
+              class="rounded-t-3xl h-48 w-full object-cover transition-all group-hover:scale-105" />
+            <div class="absolute top-3 right-3 bg-white/80 px-3 py-1 rounded-full text-pink-700 font-bold text-xs shadow">#BestSeller</div>
+          </div>
+          <div class="p-5 grow flex flex-col">
+            <span class="font-bold text-xl mb-2 text-pink-600 brand-font"><?= htmlspecialchars($menu['nama']) ?></span>
+            <span class="text-gray-700 mb-3 text-[15px] font-medium"><?= htmlspecialchars($menu['deskripsi']) ?></span>
+            <div class="flex justify-between items-center mt-auto">
+              <span class="bg-pink-100 rounded-full font-bold text-pink-700 px-4 py-1 text-base shadow-sm">Rp<?= number_format($menu['harga'],0,',','.') ?></span>
+              <form action="pesan.php" method="GET">
+                <input type="hidden" name="menu" value="<?= $menu['id'] ?>">
+                <button type="submit" class="bg-gradient-to-tr from-pink-500 to-pink-400 text-white rounded-full px-6 py-2 font-semibold hover:from-pink-600 hover:to-pink-400 shadow transition brand-font text-base">Pesan</button>
+              </form>
             </div>
           </div>
         </div>
-      </section>
-    </div>
-
-    <!-- Product Section -->
-    <div id="produk" class="container mx-auto px-4 lg:px-6">
-      <div class="flex justify-between items-center mb-6">
-        <h2 class="text-xl md:text-2xl font-bold text-gray-800">Pilihan Produk</h2>
-        <a href="#" class="text-pink-500 hover:text-pink-700 font-medium transition"></a>
+        <?php endforeach ?>
       </div>
-
-      <div class="bg-gray-100 py-8">
-        <div class="container mx-auto">
-          <h2 class="text-center text-2xl font-bold mb-6">Produk Kami</h2>
-
-          <!-- Scrollable container for all products -->
-          <div class="overflow-x-auto">
-            <div class="flex space-x-4 pb-4" style="width: max-content;">
-              <?php foreach ($menus as $menu): ?>
-                <!-- Card -->
-                <div class="w-64 bg-white shadow-lg rounded-lg p-4 group flex-shrink-0 transition-transform transform hover:scale-105 hover:shadow-2xl">
-                  <div class="relative">
-                    <img src="gambar/<?php echo htmlspecialchars($menu['image']); ?>" alt="<?php echo htmlspecialchars($menu['name']); ?>" class="w-full h-48 object-cover rounded-lg transition-transform transform group-hover:scale-110">
-                    <span class="absolute top-2 right-2 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-2 py-1 rounded shadow animate-pulse">SALE</span>
-                  </div>
-                  <h3 class="text-gray-800 font-semibold mt-4 group-hover:text-pink-500 transition"><?php echo htmlspecialchars($menu['name']); ?></h3>
-                  <div class="mt-2">
-                    <?php
-                    $original_price = $menu['price'];
-                    $discount_price = $original_price * 0.7;
-                    ?>
-
-                    <p class="text-red-600 line-through mb-1">
-                      Rp. <?php echo number_format($original_price, 0, ',', '.'); ?>
-                    </p>
-                    <p class="text-gray-800 font-bold">
-                      Rp. <?php echo number_format($discount_price, 0, ',', '.'); ?>
-                    </p>
-
-                  </div>
-                  <a class="mt-4 block bg-gradient-to-r from-pink-400 to-red-500 text-white text-center py-2 rounded shadow hover:from-pink-600 hover:to-red-600 transition duration-300" href="pesan.php?id=<?= $menu['id']; ?>" target="_blank">
-                    Pesan Sekarang
-                  </a>
-                </div>
-              <?php endforeach; ?>
-            </div>
-          </div>
-        </div>
+      <div class="text-center mt-14">
+        <a href="pesan.php" class="inline-block px-12 py-3 rounded-full bg-gradient-to-tr from-pink-500 to-pink-400 hover:from-pink-600 hover:to-pink-400 text-white shadow-xl font-bold text-xl transition brand-font border-2 border-white/60">Lihat Semua Menu &gt;&gt;</a>
       </div>
     </div>
+  </section>
 
-
-    <!-- Chat Button -->
-    <div class="fixed bottom-4 right-4 animate-bounce">
-      <a
-        href="https://www.instagram.com/happyippieecake?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
-        target="_blank"
-        class="flex items-center space-x-2 bg-pink-500 text-white px-4 py-2 rounded-full shadow-lg hover:bg-pink-600 transition duration-300">
-        <i class="fab fa-instagram text-lg"></i>
-        <span class="font-medium">Follow Us</span>
-      </a>
-    </div>
-
-
-    <script>
-      // Script burger menu mobile, pastikan hanya satu dan setelah header
-      document.addEventListener('DOMContentLoaded', function() {
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        if (mobileMenuButton && mobileMenu) {
-          mobileMenuButton.onclick = function(e) {
-            e.stopPropagation();
-            mobileMenu.classList.toggle('hidden');
-            const icon = this.querySelector('i');
-            if (mobileMenu.classList.contains('hidden')) {
-              icon.classList.replace('fa-times', 'fa-bars');
-            } else {
-              icon.classList.replace('fa-bars', 'fa-times');
-            }
-          };
-
-          document.addEventListener('click', function(e) {
-            if (!mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
-              if (!mobileMenu.classList.contains('hidden')) {
-                mobileMenu.classList.add('hidden');
-                mobileMenuButton.querySelector('i').classList.replace('fa-times', 'fa-bars');
-              }
-            }
-          });
-
-          const mobileLinks = mobileMenu.querySelectorAll('a');
-          mobileLinks.forEach(function(link) {
-            link.onclick = function() {
-              mobileMenu.classList.add('hidden');
-              mobileMenuButton.querySelector('i').classList.replace('fa-times', 'fa-bars');
-            };
-          });
-        }
-
-        // Smooth scroll for Produk link (desktop)
-        const produkLink = document.getElementById('produk-link');
-        if (produkLink) {
-          produkLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            const produkSection = document.getElementById('produk');
-            if (produkSection) {
-              produkSection.scrollIntoView({
-                behavior: 'smooth'
-              });
-            }
-          });
-        }
-
-        // Smooth scroll for Produk link (mobile)
-        const produkLinkMobile = document.getElementById('produk-link-mobile');
-        if (produkLinkMobile) {
-          produkLinkMobile.addEventListener('click', function(e) {
-            e.preventDefault();
-            const produkSection = document.getElementById('produk');
-            if (produkSection) {
-              produkSection.scrollIntoView({
-                behavior: 'smooth'
-              });
-            }
-          });
-        }
-      });
-    </script>
-
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-6 mt-12">
-      <div class="container mx-auto px-4 lg:px-6">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"> <!-- Mengubah jumlah kolom menjadi 4 -->
-          <!-- Logo -->
-          <div class="flex flex-col items-center lg:items-start">
-            <img src="gambar/happycake.png" alt="Logo Happy Ippie Cake" class="object-contain mb-4" width="150" />
-            <p class="text-xs text-gray-300 text-center lg:text-left mt-2">Your special moment, our sweet touch!</p>
-          </div>
-
-          <div>
-            <h3 class="text-md font-semibold mb-2">Quick Links</h3>
-            <ul class="space-y-1">
-              <li><a href="#about-container" class="text-gray-300 hover:text-white transition">About</a></li>
-              <li><a href="maps.html" class="text-gray-300 hover:text-white transition">Location</a></li>
-              <li>
-                <a href="https://wa.me/6285722341788" target="_blank" class="text-gray-300 hover:text-white transition"> Contact Us </a>
-              </li>
-            </ul>
-          </div>
-
-          <!-- Contact Information -->
-          <div>
-            <h3 class="text-md font-semibold mb-2">Contact</h3>
-            <ul class="space-y-2">
-              <li><i class="fas fa-phone-alt"></i>
-                <a href="tel:+6285722341788" class="text-gray-300 hover:text-white transition ml-2">+62 857-2234-1788</a>
-              </li>
-              <li><i class="fas fa-envelope"></i>
-                <a href="mailto:info@happyippiecake.com" class="text-gray-300 hover:text-white transition ml-2">info@happyippiecake.com</a>
-              </li>
-            </ul>
-          </div>
-
-          <!-- Maps Section -->
-          <div class="map-section">
-            <h3 class="text-md font-semibold mb-2">Our Location</h3>
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d495.1070132257533!2d107.53570984005971!3d-6.907804161619513!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e569a8e9d7bb%3A0x142ecf9a09a7f3e7!2shappyippieecake!5e0!3m2!1sid!2sid!4v1732411075230!5m2!1sid!2sid"
-              allowfullscreen=""
-              loading="lazy">
-            </iframe>
-          </div>
-        </div>
-        <div class="mt-4 border-t border-gray-700 pt-2 text-center text-xs">
-          &copy; 2024 HappyippieCake. All rights reserved.
-        </div>
+  <!-- Gallery Section -->
+  <section id="gallery" class="pb-16 pt-6 bg-white">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-4xl font-bold text-center mb-10 text-pink-600 brand-font tracking-wide">Galeri Karya Cake Terbaik</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80" class="rounded-2xl shadow-xl object-cover h-40 w-full">
+        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80" class="rounded-2xl shadow-xl object-cover h-40 w-full">
+        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80" class="rounded-2xl shadow-xl object-cover h-40 w-full">
+        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80" class="rounded-2xl shadow-xl object-cover h-40 w-full">
       </div>
-    </footer>
+    </div>
+  </section>
 
-
-  </body>
-
+  <!-- Footer Modern -->
+  <footer class="bg-gradient-to-t from-pink-700 via-pink-500 to-pink-400 text-white pt-10 pb-5 shadow-xl mt-20">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-8">
+      <div class="mb-4 md:mb-0 text-center md:text-left">
+        <span class="text-3xl font-bold brand-font tracking-wider">HappyippieCake</span>
+        <p class="mt-1 text-base text-white/80">Cakes for Every Story &amp; Memory</p>
+        <p class="text-xs mt-1">&copy; 2025 HappyippieCake. All Rights Reserved.</p>
+      </div>
+      <div class="flex gap-8 items-center text-xl">
+        <a href="https://instagram.com" target="_blank" class="footer-link" title="Instagram">
+          <svg class="inline" width="26" height="26" fill="currentColor"><path d="M7.75 2C4.126 2 1 5.126 1 8.75v6.5C1 18.874 4.126 22 7.75 22h8.5c3.624 0 6.75-3.126 6.75-6.75v-6.5C23 5.126 19.874 2 16.25 2h-8.5zm0 2h8.5c2.623 0 4.75 2.127 4.75 4.75v6.5c0 2.623-2.127 4.75-4.75 4.75h-8.5A4.755 4.755 0 013 13.25v-6.5A4.755 4.755 0 017.75 4zm4.25 2.5a4.25 4.25 0 100 8.5 4.25 4.25 0 000-8.5zm0 2a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5zM18.625 6a.875.875 0 110 1.75.875.875 0 010-1.75z"/></svg>
+        </a>
+        <a href="https://wa.me/628123456789" target="_blank" class="footer-link" title="WhatsApp">
+          <svg class="inline" width="26" height="26" fill="currentColor"><path d="M2 12A10 10 0 0012 22h.043C8.81 22 5.997 20.094 4.257 17.489a.995.995 0 01.156-1.221l1.134-1.12A1.004 1.004 0 016.5 15.05c.9.62 1.867 1.059 2.913 1.285 1.046.227 2.137.228 3.195.002a7.993 7.993 0 001.372-.38c.322-.113.684-.011.883.245l1.127 1.087a.997.997 0 01.157 1.221C18.004 20.106 15.19 22 12.043 22H12A10 10 0 002 12zm10-8a8 8 0 110 16A8 8 0 012 12a8 8 0 0110-8zm-1 9.5a1 1 0 00-1 1V16a1 1 0 102 0v-3.5a1 1 0 00-1-1zm0-2a1 1 0 100 2 1 1 0 000-2z"/></svg>
+        </a>
+        <a href="#" class="footer-link" title="Facebook">
+          <svg class="inline" width="26" height="26" fill="currentColor"><path d="M22.675 0H1.325C.595 0 0 .595 0 1.326V22.675c0 .73.595 1.325 1.325 1.325h11.495v-9.294H9.691V11.09h3.129V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.797.143v3.243l-1.917.001c-1.504 0-1.797.715-1.797 1.762v2.312h3.587l-.467 3.613h-3.12v9.294h6.116c.73 0 1.325-.595 1.325-1.326V1.325C24 .595 23.405 0 22.675 0"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="text-center text-lg pt-4 text-white/80 font-light brand-font">Serving Joy & Elegance in Every Slice</div>
+  </footer>
+</body>
 </html>

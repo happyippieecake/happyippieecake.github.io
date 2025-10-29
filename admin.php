@@ -1,256 +1,68 @@
 <?php
-// Konfigurasi database
-$servername = "localhost"; // Server database
-$username = "happyipp_fauzi"; // Username MySQL (default XAMPP)
-$password = "Fauzi2801*"; // Password MySQL (default kosong di XAMPP)
-$dbname = "happyipp_db_menu"; // Nama database
+$conn = new mysqli("localhost", "root", "", "happyippiecake");
 
-// Membuat koneksi
-$conn = new mysqli($servername, $username, $password, $dbname);
+// Ambil semua data menu
+$menus = $conn->query("SELECT * FROM menu ORDER BY id DESC");
 
-// Periksa koneksi
-if ($conn->connect_error) {
-    die("Koneksi gagal: " . $conn->connect_error);
-}
-
-// Query untuk mengambil semua data menu
-$sql = "SELECT * FROM menu";
-$result = $conn->query($sql);
+// Tambah notifikasi
+$notif = isset($_GET['notif']) ? $_GET['notif'] : '';
 ?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-      <script type="module" src="https://cdn.jsdelivr.net/gh/domyid/tracker@main/index.js"></script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Manage Menu</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <title>Admin Menu | HappyippieCake</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-
-    <!-- Header -->
-    <header>
-        <h1>Admin - Manage Menu</h1>
-    </header>
-
-    <!-- Back and Add Menu Links -->
-    <div class="container">
-        <div style="display: flex; justify-content: space-between;">
-            <a href="index.php" class="button">Back to Index</a>
-            <a href="tambah_menu.php" class="button">Add New Menu</a>
-        </div>
-    </div>
-
-    <!-- Menu Table -->
-    <div class="table-wrapper">
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Description</th>
-                    <th>Category</th>
-                    <th>Image</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>" . $row["id"] . "</td>";
-                        echo "<td>" . $row["name"] . "</td>";
-                        echo "<td>" . $row["price"] . "</td>";
-                        echo "<td>" . $row["description"] . "</td>";
-                        echo "<td>" . $row["category"] . "</td>";
-                        echo "<td><img src='gambar/" . $row["image"] . "' alt='" . $row["name"] . "'></td>";
-                        echo "<td class='actions'>";
-                        echo "<a href='edit_menu.php?id=" . $row["id"] . "'>Edit</a>";
-                        echo "<a href='delete_menu.php?id=" . $row["id"] . "'>Delete</a>";
-                        echo "</td>";
-                        echo "</tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='7'>No menu items available.</td></tr>";
-                }
-                ?>
-            </tbody>
-        </table>
-    </div>
-
-    <footer>
-        <p>&copy; 2024 Admin Menu Management</p>
-    </footer>
-
+<body class="bg-gray-50">
+<nav class="bg-pink-600 text-white py-4 px-8 shadow">
+  <div class="max-w-6xl mx-auto flex items-center justify-between">
+    <span class="font-bold text-xl">CRUD Menu Admin</span>
+    <ul class="flex gap-8 font-medium items-center">
+      <li><a href="dashboard.php">Dashboard</a></li>
+      <li><a href="admin.php" class="border-b-2 border-white pb-1 font-bold">CRUD Menu</a></li>
+      <li><a href="pesanan_admin.php">Data Pesanan</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="max-w-4xl mx-auto mt-8">
+  <?php if($notif): ?>
+    <div class="mb-4 bg-green-100 border-l-4 border-green-400 text-green-700 p-3 rounded"><?= $notif ?></div>
+  <?php endif ?>
+  <a href="edit_menu.php" class="mb-4 inline-block bg-pink-600 text-white px-6 py-2 rounded shadow hover:bg-pink-700">+ Tambah Menu Baru</a>
+  <div class="bg-white shadow rounded overflow-x-auto">
+    <table class="min-w-full">
+      <thead>
+        <tr class="bg-pink-100">
+          <th class="py-2 px-4">Nama</th>
+          <th class="py-2 px-4">Deskripsi</th>
+          <th class="py-2 px-4">Harga</th>
+          <th class="py-2 px-4">Gambar</th>
+          <th class="py-2 px-4">Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach($menus as $m): ?>
+        <tr>
+          <td class="py-1 px-4"><?= htmlspecialchars($m['nama'])?></td>
+          <td class="py-1 px-4"><?= htmlspecialchars($m['deskripsi'])?></td>
+          <td class="py-1 px-4">Rp<?= number_format($m['harga'],0,',','.')?></td>
+          <td class="py-1 px-4">
+            <?php if($m['gambar'] && file_exists($m['gambar'])): ?>
+              <img src="<?= $m['gambar']?>" class="h-12 rounded shadow" />
+            <?php else: ?>
+              <span class="italic text-gray-400">-</span>
+            <?php endif ?>
+          </td>
+          <td class="py-1 px-4">
+            <a href="edit_menu.php?id=<?= $m['id']?>" class="text-blue-600 underline mr-2">Edit</a>
+            <a href="edit_menu.php?delete=<?= $m['id']?>" onclick="return confirm('Yakin hapus menu?')" class="text-red-600 underline">Hapus</a>
+          </td>
+        </tr>
+        <?php endforeach ?>
+      </tbody>
+    </table>
+  </div>
+</div>
 </body>
 </html>
-
-<?php
-$conn->close();
-?>
-
-
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
-
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Roboto', sans-serif;
-    background: linear-gradient(120deg, #fff0f6, #ffdeeb, #fcc2d7);
-    color: #881337;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    flex-direction: column;
-}
-
-header {
-    background: #fecdd3;
-    color: #9d174d;
-    padding: 20px;
-    width: 100%;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-header h1 {
-    font-size: 2rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-a {
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin-top: 20px;
-}
-
-.button {
-    padding: 10px 20px;
-    border-radius: 8px;
-    color: #ffffff;
-    font-weight: 600;
-    background: linear-gradient(90deg, #f472b6, #ec4899);
-    transition: all 0.3s ease-in-out;
-}
-
-.button:hover {
-    background: linear-gradient(90deg, #ec4899, #db2777);
-    transform: scale(1.05);
-}
-
-.table-wrapper {
-    margin-top: 30px;
-    width: 100%;
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    background: #fff9fb;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    border-collapse: collapse;
-}
-
-th, td {
-    padding: 12px;
-    text-align: left;
-    color: #881337;
-    font-weight: 500;
-    border-bottom: 1px solid #fbcfe8;
-}
-
-th {
-    background: linear-gradient(90deg, #fbcfe8, #f9a8d4);
-    color: #9d174d;
-}
-
-tbody tr:hover {
-    background-color: #fce7f3;
-    transform: scale(1.02);
-    transition: all 0.2s ease-in-out;
-}
-
-button {
-    padding: 10px 20px;
-    border-radius: 8px;
-    background: linear-gradient(90deg, #f472b6, #ec4899);
-    color: #ffffff;
-    font-weight: bold;
-    cursor: pointer;
-    border: none;
-    transition: all 0.3s ease;
-}
-
-button:hover {
-    background: linear-gradient(90deg, #ec4899, #db2777);
-    transform: scale(1.05);
-}
-
-button:active {
-    transform: translateY(1px);
-    box-shadow: 0 4px 10px rgba(236, 72, 153, 0.2);
-}
-
-img {
-    width: 60px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 8px;
-    border: 2px solid #fbcfe8;
-}
-
-.actions a {
-    padding: 6px 12px;
-    margin-right: 10px;
-    border-radius: 6px;
-    color: white;
-    font-weight: bold;
-    transition: all 0.2s ease;
-}
-
-.actions a:hover {
-    transform: scale(1.05);
-}
-
-.actions a:nth-child(1) {
-    background-color: #f472b6;
-}
-
-.actions a:nth-child(2) {
-    background-color: #ec4899;
-}
-
-.actions a:nth-child(1):hover {
-    background-color: #ec4899;
-}
-
-.actions a:nth-child(2):hover {
-    background-color: #f472b6;
-}
-
-footer {
-    margin-top: 50px;
-    padding: 10px;
-    width: 100%;
-    background: #fecdd3;
-    text-align: center;
-    color: #9d174d;
-    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
-}
-</style>
