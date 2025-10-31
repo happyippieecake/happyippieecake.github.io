@@ -15,14 +15,23 @@ $menus = $conn->query("SELECT * FROM menu ORDER BY id DESC LIMIT 3");
     body { font-family: 'Montserrat', Arial, sans-serif;}
     .active-link { border-bottom: 2px solid #fd5e53;}
     .footer-link:hover { color:#fd5e53; transform:translateY(-2px);}
-    .card-hover:hover { box-shadow: 0 6px 32px -2px #fd5e53,0 0 0 4px #fff3f4;}
     .brand-font { font-family: 'Pacifico',cursive;}
+    .card-anim { transition: .33s cubic-bezier(.42,.41,.53,.87); box-shadow:0 4px 32px -8px #fd5e531c,0 0 0 4px #fff3f4;}
+    .card-anim:hover { box-shadow:0 8px 40px -10px #fd5e53a5,0 0 0 4px #fde4ec; transform: scale(1.04) translateY(-3px); border:1px solid #fd5e53;}
+    .fade-in, .slide-in {opacity:0;pointer-events:none;}
+    .fade-in.visible, .slide-in.visible {opacity:1;pointer-events:auto;}
+    .fade-in {transform: translateY(24px); transition: opacity 0.7s, transform 0.7s;}
+    .fade-in.visible {transform: none;}
+    .slide-in {transform: scale(.96) translateY(15px); transition: opacity 0.8s cubic-bezier(.43,.64,.38,1.46), transform 0.8s;}
+    .slide-in.visible {transform: none;}
+    .menu-anim {transition: .2s cubic-bezier(.34,1.56,.64,1);}
+    .menu-anim:hover {transform: scale(1.03) rotate(-1deg);}
   </style>
 </head>
 <body class="bg-gradient-to-br from-pink-50 via-white to-pink-100">
 
   <!-- Navbar Hamburger -->
-  <nav class="w-full bg-white shadow sticky top-0 z-20">
+  <nav class="w-full bg-white shadow sticky top-0 z-20 fade-in scroll-animate">
     <div class="max-w-6xl mx-auto flex justify-between items-center py-3 px-4">
       <a href="index.php" class="text-3xl font-bold text-pink-500 brand-font tracking-wider">HappyippieCake</a>
       <button id="nav-toggle" class="md:hidden focus:outline-none text-pink-600 p-2" aria-label="open menu">
@@ -51,29 +60,26 @@ $menus = $conn->query("SELECT * FROM menu ORDER BY id DESC LIMIT 3");
   </script>
 
   <!-- Hero Section -->
-  <section id="home" class="flex items-center justify-center relative min-h-[60vh] bg-cover bg-no-repeat" style="background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1500&q=80');">
-  <div class="absolute inset-0 bg-gradient-to-br from-pink-300/60 via-transparent to-pink-100/70"></div>
-  <div class="relative text-center z-10 px-2">
-    <h1 class="text-5xl md:text-7xl mb-4 text-pink-600 font-bold brand-font drop-shadow-md">HappyippieCake</h1>
-    <div class="flex justify-center mb-4">
-      <span class="inline-block bg-white/80 rounded-full px-4 py-2 text-pink-800 text-base font-semibold shadow backdrop-blur brand-font">
-        Premium Cake • Custom & Fresh • Cimahi
-      </span>
+  <section id="home" class="flex items-center justify-center relative min-h-[60vh] bg-cover bg-no-repeat fade-in scroll-animate" style="background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1500&q=80');">
+    <div class="absolute inset-0 bg-gradient-to-br from-pink-300/60 via-transparent to-pink-100/70"></div>
+    <div class="relative text-center z-10 px-2 slide-in scroll-animate">
+      <h1 class="text-5xl md:text-7xl mb-4 text-pink-600 font-bold brand-font drop-shadow-md animate-bounce">HappyippieCake</h1>
+      <div class="flex justify-center mb-4">
+        <span class="inline-block bg-white/80 rounded-full px-4 py-2 text-pink-800 text-base font-semibold shadow backdrop-blur brand-font">Premium Cake • Custom & Fresh • Cimahi</span>
+      </div>
+      <p class="text-xl md:text-2xl text-white drop-shadow font-semibold mb-6 fade-in scroll-animate">
+        Toko kue premium untuk momen istimewa,<br class="hidden md:block"> fresh & custom setiap hari!
+      </p>
+      <a href="#menu" class="px-10 py-4 bg-pink-500 text-white text-lg rounded-full hover:bg-pink-600 shadow-xl font-bold transition brand-font tracking-wide border-2 border-white/60 fade-in scroll-animate">
+        Lihat Menu Kue
+      </a>
     </div>
-    <p class="text-xl md:text-2xl text-white drop-shadow font-semibold mb-6">
-      Toko kue premium untuk momen istimewa,<br class="hidden md:block"> fresh & custom setiap hari!
-    </p>
-    <a href="#menu" class="px-10 py-4 bg-pink-500 text-white text-lg rounded-full hover:bg-pink-600 shadow-xl font-bold transition brand-font tracking-wide border-2 border-white/60">
-      Lihat Menu Kue
-    </a>
-  </div>
-</section>
-
+  </section>
 
   <!-- About Section -->
-  <section id="about" class="py-12 bg-pink-50">
-    <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center gap-12">
-      <img src="gambar/utama.jpg" alt="HappyippieCake Team" class="w-72 h-72 md:w-80 md:h-80 object-cover rounded-3xl shadow-2xl mb-6 md:mb-0 ring-4 ring-pink-200" />
+  <section id="about" class="py-12 bg-pink-50 fade-in scroll-animate">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center gap-12 slide-in scroll-animate">
+      <img src="gambar/utama.jpg" alt="HappyippieCake Team" class="w-72 h-72 md:w-80 md:h-80 object-cover rounded-3xl shadow-2xl mb-6 md:mb-0 ring-4 ring-pink-200 card-anim" />
       <div class="md:w-1/2">
         <h2 class="text-4xl font-bold text-pink-600 mb-6 brand-font">Tentang HappyippieCake</h2>
         <p class="mb-5 text-gray-700 text-lg">Sejak 2018, HappyippieCake hadir dengan kue custom bertema unik, bahan premium, dan sentuhan artistik. Setiap cake dikerjakan detail, bisa desain sesuai impian dan konsultasi tema <span class="text-pink-500 font-semibold">gratis!</span></p>
@@ -87,17 +93,17 @@ $menus = $conn->query("SELECT * FROM menu ORDER BY id DESC LIMIT 3");
   </section>
 
   <!-- Menu Section: Best Seller/Recent -->
-  <section id="menu" class="py-16 bg-white relative z-0">
+  <section id="menu" class="py-16 bg-white relative z-0 fade-in scroll-animate">
     <div class="max-w-6xl mx-auto px-4">
-      <h2 class="text-4xl font-bold text-center mb-12 text-pink-600 brand-font tracking-wide">Menu Cake Spesial</h2>
+      <h2 class="text-4xl font-bold text-center mb-12 text-pink-600 brand-font tracking-wide slide-in scroll-animate">Menu Cake Spesial</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-12 justify-items-center">
         <?php foreach ($menus as $menu): ?>
-        <div class="bg-white rounded-3xl ring-2 ring-pink-100 shadow-2xl card-hover transition-all flex flex-col w-72 hover:-translate-y-2 hover:z-10 relative overflow-hidden group">
+        <div class="bg-white rounded-3xl ring-2 ring-pink-100 shadow-2xl card-anim transition-all flex flex-col w-72 hover:-translate-y-2 hover:z-10 relative overflow-hidden group menu-anim fade-in scroll-animate">
           <div class="relative">
             <img src="<?= htmlspecialchars($menu['gambar']) ?>"
               alt="<?= htmlspecialchars($menu['nama']) ?>"
-              class="rounded-t-3xl h-48 w-full object-cover transition-all group-hover:scale-105" />
-            <div class="absolute top-3 right-3 bg-white/80 px-3 py-1 rounded-full text-pink-700 font-bold text-xs shadow">#BestSeller</div>
+              class="rounded-t-3xl h-48 w-full object-cover transition-all group-hover:scale-105 card-anim" />
+            <div class="absolute top-3 right-3 bg-white/80 px-3 py-1 rounded-full text-pink-700 font-bold text-xs shadow slide-in scroll-animate">#BestSeller</div>
           </div>
           <div class="p-5 grow flex flex-col">
             <span class="font-bold text-xl mb-2 text-pink-600 brand-font"><?= htmlspecialchars($menu['nama']) ?></span>
@@ -106,34 +112,34 @@ $menus = $conn->query("SELECT * FROM menu ORDER BY id DESC LIMIT 3");
               <span class="bg-pink-100 rounded-full font-bold text-pink-700 px-4 py-1 text-base shadow-sm">Rp<?= number_format($menu['harga'],0,',','.') ?></span>
               <form action="pesan.php" method="GET">
                 <input type="hidden" name="menu" value="<?= $menu['id'] ?>">
-                <button type="submit" class="bg-gradient-to-tr from-pink-500 to-pink-400 text-white rounded-full px-6 py-2 font-semibold hover:from-pink-600 hover:to-pink-400 shadow transition brand-font text-base">Pesan</button>
+                <button type="submit" class="bg-gradient-to-tr from-pink-500 to-pink-400 text-white rounded-full px-6 py-2 font-semibold hover:from-pink-600 hover:to-pink-400 shadow transition brand-font text-base menu-anim">Pesan</button>
               </form>
             </div>
           </div>
         </div>
         <?php endforeach ?>
       </div>
-      <div class="text-center mt-14">
+      <div class="text-center mt-14 fade-in scroll-animate">
         <a href="pesan.php" class="inline-block px-12 py-3 rounded-full bg-gradient-to-tr from-pink-500 to-pink-400 hover:from-pink-600 hover:to-pink-400 text-white shadow-xl font-bold text-xl transition brand-font border-2 border-white/60">Lihat Semua Menu &gt;&gt;</a>
       </div>
     </div>
   </section>
 
   <!-- Gallery Section -->
-  <section id="gallery" class="pb-16 pt-6 bg-white">
+  <section id="gallery" class="pb-16 pt-6 bg-white fade-in scroll-animate">
     <div class="max-w-6xl mx-auto px-4">
-      <h2 class="text-4xl font-bold text-center mb-10 text-pink-600 brand-font tracking-wide">Galeri Karya Cake Terbaik</h2>
+      <h2 class="text-4xl font-bold text-center mb-10 text-pink-600 brand-font tracking-wide slide-in scroll-animate">Galeri Karya Cake Terbaik</h2>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80" class="rounded-2xl shadow-xl object-cover h-40 w-full">
-        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80" class="rounded-2xl shadow-xl object-cover h-40 w-full">
-        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80" class="rounded-2xl shadow-xl object-cover h-40 w-full">
-        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80" class="rounded-2xl shadow-xl object-cover h-40 w-full">
+        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80" class="rounded-2xl shadow-xl object-cover h-40 w-full card-anim fade-in scroll-animate">
+        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80" class="rounded-2xl shadow-xl object-cover h-40 w-full card-anim fade-in scroll-animate">
+        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80" class="rounded-2xl shadow-xl object-cover h-40 w-full card-anim fade-in scroll-animate">
+        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80" class="rounded-2xl shadow-xl object-cover h-40 w-full card-anim fade-in scroll-animate">
       </div>
     </div>
   </section>
 
   <!-- Footer Modern -->
-  <footer class="bg-gradient-to-t from-pink-700 via-pink-500 to-pink-400 text-white pt-10 pb-5 shadow-xl mt-20">
+  <footer class="bg-gradient-to-t from-pink-700 via-pink-500 to-pink-400 text-white pt-10 pb-5 shadow-xl mt-20 fade-in scroll-animate">
     <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-8">
       <div class="mb-4 md:mb-0 text-center md:text-left">
         <span class="text-3xl font-bold brand-font tracking-wider">HappyippieCake</span>
@@ -154,5 +160,19 @@ $menus = $conn->query("SELECT * FROM menu ORDER BY id DESC LIMIT 3");
     </div>
     <div class="text-center text-lg pt-4 text-white/80 font-light brand-font">Serving Joy & Elegance in Every Slice</div>
   </footer>
+
+  <!-- Scroll animation with Intersection Observer -->
+  <script>
+    // reveal .scroll-animate on scroll
+    let observer = new IntersectionObserver((entries, obs)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.classList.add('visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    },{ threshold:.15 });
+    document.querySelectorAll('.scroll-animate').forEach(el=>observer.observe(el));
+  </script>
 </body>
 </html>
