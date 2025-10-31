@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       <ul id="nav-menu" class="hidden md:flex gap-6 font-medium text-gray-700 md:static absolute top-[60px] left-0 w-full bg-white md:w-auto flex-col md:flex-row shadow md:shadow-none">
         <li><a href="index.php#home" class="nav-link block px-4 py-2">Home</a></li>
         <li><a href="index.php#about" class="nav-link block px-4 py-2">About</a></li>
-        <li><a href="menu.php" class="nav-link block px-4 py-2">Menu</a></li>
+        <li><a href="pesan.php" class="nav-link block px-4 py-2">Menu</a></li>
         <li><a href="index.php#gallery" class="nav-link block px-4 py-2">Gallery</a></li>
       </ul>
     </div>
@@ -143,20 +143,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
   </div>
 
-  <footer class="bg-gradient-to-r from-pink-700 via-pink-500 to-pink-400 text-white py-8 shadow-xl mt-16">
-    <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
-      <div class="mb-4 md:mb-0">
-        <span class="text-2xl font-bold font-serif" style="font-family:'Pacifico',cursive;">HappyippieCake</span>
+  <!-- Footer Modern -->
+  <footer class="bg-gradient-to-t from-pink-700 via-pink-500 to-pink-400 text-white pt-10 pb-5 shadow-xl mt-20">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-8">
+      <div class="mb-4 md:mb-0 text-center md:text-left">
+        <span class="text-3xl font-bold brand-font tracking-wider">HappyippieCake</span>
+        <p class="mt-1 text-base text-white/80">Cakes for Every Story &amp; Memory</p>
         <p class="text-xs mt-1">&copy; 2025 HappyippieCake. All Rights Reserved.</p>
       </div>
-      <div class="flex gap-6 items-center">
-        <a href="https://instagram.com" target="_blank" class="footer-link text-xl" title="Instagram">IG</a>
-        <a href="https://wa.me/628123456789" target="_blank" class="footer-link text-xl" title="WhatsApp">WA</a>
-        <a href="#" class="footer-link text-xl" title="Facebook">FB</a>
+      <div class="flex gap-8 items-center text-xl">
+        <a href="https://instagram.com" target="_blank" class="footer-link" title="Instagram">
+          <svg class="inline" width="26" height="26" fill="currentColor"><path d="M7.75 2C4.126 2 1 5.126 1 8.75v6.5C1 18.874 4.126 22 7.75 22h8.5c3.624 0 6.75-3.126 6.75-6.75v-6.5C23 5.126 19.874 2 16.25 2h-8.5zm0 2h8.5c2.623 0 4.75 2.127 4.75 4.75v6.5c0 2.623-2.127 4.75-4.75 4.75h-8.5A4.755 4.755 0 013 13.25v-6.5A4.755 4.755 0 017.75 4zm4.25 2.5a4.25 4.25 0 100 8.5 4.25 4.25 0 000-8.5zm0 2a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5zM18.625 6a.875.875 0 110 1.75.875.875 0 010-1.75z"/></svg>
+        </a>
+        <a href="https://wa.me/628123456789" target="_blank" class="footer-link" title="WhatsApp">
+          <svg class="inline" width="26" height="26" fill="currentColor"><path d="M2 12A10 10 0 0012 22h.043C8.81 22 5.997 20.094 4.257 17.489a.995.995 0 01.156-1.221l1.134-1.12A1.004 1.004 0 016.5 15.05c.9.62 1.867 1.059 2.913 1.285 1.046.227 2.137.228 3.195.002a7.993 7.993 0 001.372-.38c.322-.113.684-.011.883.245l1.127 1.087a.997.997 0 01.157 1.221C18.004 20.106 15.19 22 12.043 22H12A10 10 0 002 12zm10-8a8 8 0 110 16A8 8 0 012 12a8 8 0 0110-8zm-1 9.5a1 1 0 00-1 1V16a1 1 0 102 0v-3.5a1 1 0 00-1-1zm0-2a1 1 0 100 2 1 1 0 000-2z"/></svg>
+        </a>
+        <a href="#" class="footer-link" title="Facebook">
+          <svg class="inline" width="26" height="26" fill="currentColor"><path d="M22.675 0H1.325C.595 0 0 .595 0 1.326V22.675c0 .73.595 1.325 1.325 1.325h11.495v-9.294H9.691V11.09h3.129V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.797.143v3.243l-1.917.001c-1.504 0-1.797.715-1.797 1.762v2.312h3.587l-.467 3.613h-3.12v9.294h6.116c.73 0 1.325-.595 1.325-1.326V1.325C24 .595 23.405 0 22.675 0"/></svg>
+        </a>
       </div>
     </div>
+    <div class="text-center text-lg pt-4 text-white/80 font-light brand-font">Serving Joy & Elegance in Every Slice</div>
   </footer>
-
   <script>
     // Semua menu
     const menus = [
