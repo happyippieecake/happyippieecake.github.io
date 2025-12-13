@@ -1,0 +1,1 @@
+{"version":2,"defects":{"DbConnectTest::testKoneksiDatabaseAda":7,"DbConnectTest::testQueryMenuTidakError":8},"times":{"DbConnectTest::testKoneksiDatabaseAda":0.013,"DbConnectTest::testQueryMenuTidakError":0.006}}

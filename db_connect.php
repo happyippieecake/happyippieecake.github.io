@@ -1,17 +1,13 @@
 <?php
-// Konfigurasi database
-$servername = "localhost"; // Server database
-$username = "root"; // Username MySQL default XAMPP
-$password = ""; // Password default XAMPP (kosong)
-$dbname = "db_menu"; // Nama database
+$servername = "localhost";
+$username   = "root";
+$password   = "";
+$database   = "db_menu";
 
-// Membuat koneksi
-$conn = new mysqli($servername, $username, $password, $dbname);
+// Koneksi
+$conn = new mysqli($servername, $username, $password, $database);
 
-// Cek koneksi
+// Cek error
 if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
 }
-echo "Koneksi berhasil!";
-?>
-    
