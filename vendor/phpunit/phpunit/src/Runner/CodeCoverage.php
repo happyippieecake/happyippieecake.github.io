@@ -47,14 +47,15 @@ final class CodeCoverage
 {
     private static ?self $instance                                      = null;
     private ?\SebastianBergmann\CodeCoverage\CodeCoverage $codeCoverage = null;
+    private ?Driver $driver                                             = null;
+    private bool $collecting                                            = false;
+    private ?TestCase $test                                             = null;
+    private ?Timer $timer                                               = null;
 
     /**
-     * @phpstan-ignore property.internalClass
+     * @var array<string,list<int>>
      */
-    private ?Driver $driver  = null;
-    private bool $collecting = false;
-    private ?TestCase $test  = null;
-    private ?Timer $timer    = null;
+    private array $linesToBeIgnored = [];
 
     public static function instance(): self
     {
@@ -109,11 +110,11 @@ final class CodeCoverage
 
         if ($codeCoverageFilterRegistry->get()->isEmpty()) {
             if (!$codeCoverageFilterRegistry->configured()) {
-                EventFacade::emitter()->testRunnerTriggeredPhpunitWarning(
+                EventFacade::emitter()->testRunnerTriggeredWarning(
                     'No filter is configured, code coverage will not be processed',
                 );
             } else {
-                EventFacade::emitter()->testRunnerTriggeredPhpunitWarning(
+                EventFacade::emitter()->testRunnerTriggeredWarning(
                     'Incorrect filter configuration, code coverage will not be processed',
                 );
             }
@@ -123,7 +124,7 @@ final class CodeCoverage
     }
 
     /**
-     * @phpstan-assert-if-true !null $this->codeCoverage
+     * @phpstan-assert-if-true !null $this->instance
      */
     public function isActive(): bool
     {
@@ -135,12 +136,9 @@ final class CodeCoverage
         return $this->codeCoverage;
     }
 
-    /**
-     * @return non-empty-string
-     */
-    public function driverNameAndVersion(): string
+    public function driver(): Driver
     {
-        return $this->driver->nameAndVersion();
+        return $this->driver;
     }
 
     public function start(TestCase $test): void
@@ -173,7 +171,7 @@ final class CodeCoverage
      * @param array<string,list<int>>|false $linesToBeCovered
      * @param array<string,list<int>>       $linesToBeUsed
      */
-    public function stop(bool $append, array|false $linesToBeCovered = [], array $linesToBeUsed = []): void
+    public function stop(bool $append = true, array|false $linesToBeCovered = [], array $linesToBeUsed = []): void
     {
         if (!$this->collecting) {
             return;
@@ -190,7 +188,7 @@ final class CodeCoverage
         }
 
         /* @noinspection UnusedFunctionResultInspection */
-        $this->codeCoverage->stop($append, $status, $linesToBeCovered, $linesToBeUsed);
+        $this->codeCoverage->stop($append, $status, $linesToBeCovered, $linesToBeUsed, $this->linesToBeIgnored);
 
         $this->test       = null;
         $this->collecting = false;
@@ -229,7 +227,7 @@ final class CodeCoverage
 
             try {
                 $writer = new CloverReport;
-                $writer->process($this->codeCoverage(), $configuration->coverageClover(), 'Clover Coverage');
+                $writer->process($this->codeCoverage(), $configuration->coverageClover());
 
                 $this->codeCoverageGenerationSucceeded($printer);
 
@@ -342,6 +340,22 @@ final class CodeCoverage
         }
     }
 
+    /**
+     * @param array<string,list<int>> $linesToBeIgnored
+     */
+    public function ignoreLines(array $linesToBeIgnored): void
+    {
+        $this->linesToBeIgnored = $linesToBeIgnored;
+    }
+
+    /**
+     * @return array<string,list<int>>
+     */
+    public function linesToBeIgnored(): array
+    {
+        return $this->linesToBeIgnored;
+    }
+
     private function activate(Filter $filter, bool $pathCoverage): void
     {
         try {
@@ -356,7 +370,7 @@ final class CodeCoverage
                 $filter,
             );
         } catch (CodeCoverageException $e) {
-            EventFacade::emitter()->testRunnerTriggeredPhpunitWarning(
+            EventFacade::emitter()->testRunnerTriggeredWarning(
                 $e->getMessage(),
             );
         }

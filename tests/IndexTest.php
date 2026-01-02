@@ -1,6 +1,9 @@
 <?php
+/**
+ * Integration tests for index.php using output buffering
+ * Tests the actual HTML output of the page
+ */
 use PHPUnit\Framework\TestCase;
-
 
 class IndexTest extends TestCase
 {
@@ -8,26 +11,34 @@ class IndexTest extends TestCase
 
     protected function setUp(): void
     {
-        require __DIR__ . '/../db_connect.php';
-        require __DIR__ . '/../index.php';
-
-        $this->conn = $conn;
-        $this->assertInstanceOf(mysqli::class, $this->conn);
+        $this->conn = new mysqli("localhost", "root", "", "happyippiecake");
     }
 
-    public function testKoneksiKeDatabase()
+    protected function tearDown(): void
     {
-        $this->assertFalse($this->conn->connect_errno, "Koneksi MySQL gagal");
-    }
-
-    public function testQueryMenuBerjalan()
-    {
-        $result = $this->conn->query("SELECT * FROM menu LIMIT 1");
-        $this->assertNotFalse($result);
-
-        $row = $result->fetch_assoc();
-        if ($row) {
-            $this->assertIsArray($row);
+        if ($this->conn) {
+            $this->conn->close();
         }
+    }
+
+    public function testIndexPageOutputsHtml()
+    {
+        // Suppress output
+        ob_start();
+        
+        // Simulate global variable if needed (db_connect.php creates $conn)
+        // We don't need to define $conn here because index.php requires db_connect.php
+        // But we might want to capture it to avoid 'variable undefined' notices if we were mocking
+        
+        // Prevent 'headers already sent' error if index.php sends headers
+        // Since we are CLI, headers are problematic only if checking them.
+        
+        // Include the file
+        include __DIR__ . '/../index.php';
+        
+        $output = ob_get_clean();
+        
+        $this->assertStringContainsString('<html', $output);
+        $this->assertStringContainsString('HappyippieCake', $output);
     }
 }
