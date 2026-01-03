@@ -10,9 +10,10 @@ $notif = isset($_GET['notif']) ? $_GET['notif'] : '';
   <title>Admin Menu | HappyippieCake</title>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Montserrat',Arial,sans-serif;}
-    .brand-font { font-family: 'Pacifico', cursive;}
+    .brand-font { font-family: 'Inter', system-ui, sans-serif; font-weight: 600;}
     .btn { transition:.2s; }
     .btn:hover { filter:brightness(1.10) saturate(1.25);}
     .badge { font-size:14px; padding:2px 10px; border-radius:8px;}
@@ -99,7 +100,7 @@ $notif = isset($_GET['notif']) ? $_GET['notif'] : '';
                     </div>
                   <?php endif ?>
                   <div>
-                    <h3 class="font-bold text-gray-800 text-lg group-hover:text-pink-600 transition-colors"><?= htmlspecialchars($m['nama'])?></h3>
+                    <h3 class="font-bold text-gray-800 text-lg group-hover:text-pink-600 transition-colors brand-font tracking-wide"><?= htmlspecialchars($m['nama'])?></h3>
                     <span class="inline-block mt-1 px-2 py-0.5 bg-gray-100 text-gray-500 text-[10px] font-bold uppercase tracking-wider rounded">Cake</span>
                   </div>
                 </div>

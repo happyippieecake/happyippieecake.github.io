@@ -46,10 +46,10 @@ $paymentMethods = PaymentGateway::getPaymentMethods();
   <title>Admin Pembayaran | HappyippieCake</title>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Montserrat', Arial, sans-serif;}
-    .brand-font { font-family: 'Pacifico', cursive;}
+    .brand-font { font-family: 'Inter', system-ui, sans-serif; font-weight: 600;}
     .glass { background: rgba(255,255,255,0.88); backdrop-filter: blur(8px); }
     .badge { font-size: 12px; padding: 4px 12px; border-radius: 20px; }
     .table-row:hover { background: #fff6fa; }

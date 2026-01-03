@@ -44,22 +44,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
         // Check payment method
         if ($payment_method == 'whatsapp') {
-            // Original WhatsApp flow
-            $order_summary = "Pesanan HappyippieCake%0A";
-            $order_summary .= "Order ID: #$orderId%0A"; // Added Order ID to WA
-            $order_summary .= "Nama: $nama%0AAlamat: $alamat%0AOrder:%0A";
+            // WhatsApp Inquiry Flow - for consultation only
+            $inquiry_msg = "Halo Admin HappyippieCake, saya mau tanya/konsultasi tentang pesanan ini:\n\n";
+            $inquiry_msg .= "Item yg diminati:\n";
             foreach($order as $menu_id => $jumlah) {
                 $menu_id = intval($menu_id); 
                 $jumlah = intval($jumlah);
                 if ($jumlah > 0) {
-                    $menu = $conn->query("SELECT nama, harga FROM menu WHERE id=$menu_id")->fetch_assoc();
-                    $subtotal = $menu['harga'] * $jumlah;
-                    $order_summary .= "- ".$menu['nama']." x $jumlah (@Rp".number_format($menu['harga'],0,',','.').") = Rp".number_format($subtotal,0,',','.')."%0A";
+                    $menu = $conn->query("SELECT nama FROM menu WHERE id=$menu_id")->fetch_assoc();
+                    $inquiry_msg .= "- " . $menu['nama'] . " ($jumlah pcs)\n";
                 }
             }
-            $order_summary .= "Total: Rp".number_format($total_harga,0,',','.')."%0A";
-            $wa_admin = '628123456789';
-            $wa_url = "https://wa.me/$wa_admin?text=" . urlencode($order_summary);
+            $inquiry_msg .= "\nApakah stok ready atau bisa custom request?";
+            $wa_admin = '6285722341788';
+            $wa_url = "https://wa.me/$wa_admin?text=" . urlencode($inquiry_msg);
             header("Location: $wa_url");
             exit;
         } else {
@@ -88,10 +86,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <title>Pilih & Pesan Kue | HappyippieCake</title>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Montserrat', Arial, sans-serif; }
-    .brand-font { font-family: 'Pacifico', cursive; }
+    .brand-font { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; }
     .modal-bg { 
       background: linear-gradient(135deg, rgba(236,72,153,0.95) 0%, rgba(219,39,119,0.98) 50%, rgba(190,24,93,0.95) 100%);
       z-index:99;
@@ -161,7 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <!-- Navbar Hamburger -->
   <nav class="w-full bg-white shadow sticky top-0 z-20">
     <div class="max-w-6xl mx-auto flex justify-between items-center py-3 px-4">
-      <a href="index.php" class="text-2xl font-bold text-pink-500 font-serif">HappyippieCake</a>
+      <a href="index.php" class="text-3xl font-bold text-pink-500 brand-font tracking-wider">HappyippieCake</a>
       <button id="nav-toggle" class="md:hidden focus:outline-none text-pink-600 p-2" aria-label="open menu">
         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="2" d="M4 8h16M4 16h16"/></svg>
       </button>
@@ -190,8 +188,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   <div class="max-w-6xl mx-auto py-10 px-2">
     <div class="text-center mb-8">
-      <h1 class="text-5xl font-extrabold text-pink-600 mb-2 font-serif" style="font-family:'Pacifico',cursive;">HappyippieCake</h1>
-      <p class="text-xl text-gray-700">Pilih & pesan kue istimewa untuk momen spesialmu 🎂</p>
+      <h1 class="text-5xl font-extrabold text-pink-600 mb-2 brand-font">HappyippieCake</h1>
+      <p class="text-xl text-pink-700 brand-font tracking-wide mt-2">Pilih & pesan kue istimewa untuk momen spesialmu 🎂</p>
     </div>
     <?php if($error): ?>
       <div class="mb-4 bg-red-100 border-l-4 border-red-400 text-red-700 p-3 rounded"><?= $error ?></div>
@@ -203,11 +201,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="bg-white rounded-2xl shadow-xl card-hover transition flex flex-col w-64 sm:w-72 md:w-72">
           <img src="<?= htmlspecialchars($menu['gambar']) ?>" alt="<?= htmlspecialchars($menu['nama']) ?>" class="rounded-t-2xl h-40 sm:h-44 w-full object-cover"/>
           <div class="p-4 grow flex flex-col">
-            <span class="font-bold text-lg mb-1 text-pink-600"><?= htmlspecialchars($menu['nama']) ?></span>
+            <span class="font-bold text-xl mb-1 text-pink-600 brand-font tracking-wide"><?= htmlspecialchars($menu['nama']) ?></span>
             <span class="text-gray-700 mb-3 text-sm"><?= htmlspecialchars($menu['deskripsi']) ?></span>
             <div class="flex justify-between items-center mt-auto">
               <span class="bg-pink-100 rounded font-bold text-pink-700 px-3 py-1 text-base">Rp<?= number_format($menu['harga'],0,',','.') ?></span>
-              <button class="bg-pink-600 text-white rounded px-5 py-1 hover:bg-pink-700 open-modal font-semibold shadow transition"
+              <button class="bg-pink-600 text-white rounded px-5 py-1 hover:bg-pink-700 open-modal font-semibold shadow transition brand-font tracking-wide"
                 data-id="<?= $menu['id'] ?>"
                 data-nama="<?= htmlspecialchars($menu['nama']) ?>"
                 data-harga="<?= $menu['harga'] ?>"
@@ -313,33 +311,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
               </div>
               <div class="p-4 space-y-3">
                 
-                <!-- WhatsApp -->
-                <label class="block cursor-pointer">
-                  <input type="radio" name="payment_method" value="whatsapp" class="peer hidden" checked>
-                  <div class="peer-checked:border-green-500 peer-checked:bg-green-50 border-2 border-gray-200 rounded-xl p-4 transition-all hover:border-gray-300 flex items-center gap-4">
-                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center shadow-lg flex-shrink-0">
-                      <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
-                    </div>
-                    <div class="flex-1">
-                      <div class="font-bold text-gray-800">WhatsApp Order</div>
-                      <div class="text-sm text-gray-500">Chat langsung dengan admin</div>
-                    </div>
-                    <div class="w-5 h-5 rounded-full border-2 border-gray-300 peer-checked:border-green-500 peer-checked:bg-green-500 flex items-center justify-center">
-                      <svg class="w-3 h-3 text-white hidden peer-checked:block" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
-                    </div>
-                  </div>
-                </label>
-
                 <!-- Bank Transfer Section -->
                 <div class="pt-2">
                   <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 px-2">Transfer Bank</p>
                   <div class="grid grid-cols-3 gap-2">
                     <!-- BCA -->
                     <label class="block cursor-pointer">
-                      <input type="radio" name="payment_method" value="bank_bca" class="peer hidden">
-                      <div class="peer-checked:border-blue-500 peer-checked:bg-blue-50 border-2 border-gray-200 rounded-xl p-3 transition-all hover:border-gray-300 text-center">
-                        <div class="w-12 h-12 mx-auto rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow mb-2">
-                          <span class="text-white font-bold text-sm">BCA</span>
+                      <input type="radio" name="payment_method" value="bank_bca" class="peer hidden" checked>
+                      <div class="peer-checked:border-blue-500 peer-checked:bg-blue-50 border-2 border-gray-200 rounded-xl p-3 transition-all hover:border-gray-300 text-center h-full flex flex-col items-center justify-center">
+                        <div class="h-8 w-full flex items-center justify-center mb-2">
+                          <img src="gambar/logo_bca.png" alt="BCA" class="h-full object-contain">
                         </div>
                         <div class="text-xs font-semibold text-gray-700">Bank BCA</div>
                       </div>
@@ -347,9 +328,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <!-- Mandiri -->
                     <label class="block cursor-pointer">
                       <input type="radio" name="payment_method" value="bank_mandiri" class="peer hidden">
-                      <div class="peer-checked:border-blue-500 peer-checked:bg-blue-50 border-2 border-gray-200 rounded-xl p-3 transition-all hover:border-gray-300 text-center">
-                        <div class="w-12 h-12 mx-auto rounded-lg bg-gradient-to-br from-blue-700 to-blue-900 flex items-center justify-center shadow mb-2">
-                          <span class="text-yellow-400 font-bold text-xs">MDR</span>
+                      <div class="peer-checked:border-blue-500 peer-checked:bg-blue-50 border-2 border-gray-200 rounded-xl p-3 transition-all hover:border-gray-300 text-center h-full flex flex-col items-center justify-center">
+                        <div class="h-8 w-full flex items-center justify-center mb-2">
+                          <img src="gambar/logo_mandiri.png" alt="Mandiri" class="h-full object-contain">
                         </div>
                         <div class="text-xs font-semibold text-gray-700">Mandiri</div>
                       </div>
@@ -357,9 +338,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <!-- BRI -->
                     <label class="block cursor-pointer">
                       <input type="radio" name="payment_method" value="bank_bri" class="peer hidden">
-                      <div class="peer-checked:border-blue-500 peer-checked:bg-blue-50 border-2 border-gray-200 rounded-xl p-3 transition-all hover:border-gray-300 text-center">
-                        <div class="w-12 h-12 mx-auto rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shadow mb-2">
-                          <span class="text-white font-bold text-sm">BRI</span>
+                      <div class="peer-checked:border-blue-500 peer-checked:bg-blue-50 border-2 border-gray-200 rounded-xl p-3 transition-all hover:border-gray-300 text-center h-full flex flex-col items-center justify-center">
+                        <div class="h-8 w-full flex items-center justify-center mb-2">
+                          <img src="gambar/logo_bri.png" alt="BRI" class="h-full object-contain">
                         </div>
                         <div class="text-xs font-semibold text-gray-700">Bank BRI</div>
                       </div>
@@ -375,8 +356,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                   <div id="qris-btn" class="block cursor-pointer" onclick="toggleEwalletOptions()">
                     <input type="radio" name="payment_method" value="qris" class="hidden" id="qris-radio">
                     <div id="qris-card" class="border-2 border-gray-200 rounded-xl p-4 transition-all hover:border-gray-300 flex items-center gap-3">
-                      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg flex-shrink-0">
-                        <svg class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+                      <div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-lg flex-shrink-0 border border-gray-100 overflow-hidden">
+                        <img src="gambar/logo_gopay.png" class="w-full h-full object-contain p-1" alt="QRIS">
                       </div>
                       <div class="flex-1">
                         <div class="font-bold text-gray-800">Scan QRIS</div>
@@ -391,30 +372,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                   <!-- E-Wallet Options (Hidden by default) -->
                   <div id="ewallet-options" class="hidden mt-3 grid grid-cols-4 gap-2 p-3 bg-gray-50 rounded-xl border border-gray-200">
                     <!-- GoPay -->
-                    <button type="button" onclick="selectEwalletOption('GoPay')" class="ewallet-opt-btn flex flex-col items-center p-2 rounded-lg hover:bg-white transition">
-                      <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-green-400 to-teal-500 flex items-center justify-center shadow mb-1">
-                        <span class="text-white font-bold text-xs">Go</span>
+                    <button type="button" onclick="selectEwalletOption('GoPay')" class="ewallet-opt-btn flex flex-col items-center p-2 rounded-lg hover:bg-white transition flex-1">
+                      <div class="w-10 h-10 rounded-lg bg-white flex items-center justify-center shadow mb-1 border border-gray-100 p-1">
+                        <img src="gambar/logo_gopay.png" class="w-full h-full object-contain" alt="GoPay">
                       </div>
                       <span class="text-xs font-medium text-gray-600">GoPay</span>
                     </button>
                     <!-- OVO -->
-                    <button type="button" onclick="selectEwalletOption('OVO')" class="ewallet-opt-btn flex flex-col items-center p-2 rounded-lg hover:bg-white transition">
-                      <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center shadow mb-1">
-                        <span class="text-white font-bold text-xs">OVO</span>
+                    <!-- OVO -->
+                    <button type="button" onclick="selectEwalletOption('OVO')" class="ewallet-opt-btn flex flex-col items-center p-2 rounded-lg hover:bg-white transition flex-1">
+                      <div class="w-10 h-10 rounded-lg bg-white flex items-center justify-center shadow mb-1 border border-gray-100 p-1">
+                        <img src="gambar/logo_ovo.png" class="w-full h-full object-contain" alt="OVO">
                       </div>
                       <span class="text-xs font-medium text-gray-600">OVO</span>
                     </button>
                     <!-- DANA -->
-                    <button type="button" onclick="selectEwalletOption('DANA')" class="ewallet-opt-btn flex flex-col items-center p-2 rounded-lg hover:bg-white transition">
-                      <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shadow mb-1">
-                        <span class="text-white font-bold text-xs">DANA</span>
+                    <!-- DANA -->
+                    <button type="button" onclick="selectEwalletOption('DANA')" class="ewallet-opt-btn flex flex-col items-center p-2 rounded-lg hover:bg-white transition flex-1">
+                      <div class="w-10 h-10 rounded-lg bg-white flex items-center justify-center shadow mb-1 border border-gray-100 p-1">
+                        <img src="gambar/logo_dana.png" class="w-full h-full object-contain" alt="DANA">
                       </div>
                       <span class="text-xs font-medium text-gray-600">DANA</span>
                     </button>
                     <!-- ShopeePay -->
-                    <button type="button" onclick="selectEwalletOption('ShopeePay')" class="ewallet-opt-btn flex flex-col items-center p-2 rounded-lg hover:bg-white transition">
-                      <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center shadow mb-1">
-                        <span class="text-white font-bold text-xs">SP</span>
+                    <!-- ShopeePay -->
+                    <button type="button" onclick="selectEwalletOption('ShopeePay')" class="ewallet-opt-btn flex flex-col items-center p-2 rounded-lg hover:bg-white transition flex-1">
+                      <div class="w-10 h-10 rounded-lg bg-white flex items-center justify-center shadow mb-1 border border-gray-100 p-1">
+                        <img src="gambar/logo_shopeepay.png" class="w-full h-full object-contain" alt="ShopeePay">
                       </div>
                       <span class="text-xs font-medium text-gray-600">ShopeePay</span>
                     </button>
@@ -431,6 +415,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                   </svg>
                   Buat Pesanan
                 </button>
+                
+                <!-- WhatsApp Consultation Button -->
+                <button type="button" onclick="openWhatsAppConsultation()" class="w-full mt-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 py-3 rounded-xl text-white font-bold text-base shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
+                  Tanya/Konsultasi via WA
+                </button>
+                
                 <p class="text-center text-xs text-gray-400 mt-3 flex items-center justify-center gap-1">
                   <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
@@ -458,7 +449,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <a href="https://instagram.com" target="_blank" class="footer-link" title="Instagram">
           <svg class="inline" width="26" height="26" fill="currentColor"><path d="M7.75 2C4.126 2 1 5.126 1 8.75v6.5C1 18.874 4.126 22 7.75 22h8.5c3.624 0 6.75-3.126 6.75-6.75v-6.5C23 5.126 19.874 2 16.25 2h-8.5zm0 2h8.5c2.623 0 4.75 2.127 4.75 4.75v6.5c0 2.623-2.127 4.75-4.75 4.75h-8.5A4.755 4.755 0 013 13.25v-6.5A4.755 4.755 0 017.75 4zm4.25 2.5a4.25 4.25 0 100 8.5 4.25 4.25 0 000-8.5zm0 2a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5zM18.625 6a.875.875 0 110 1.75.875.875 0 010-1.75z"/></svg>
         </a>
-        <a href="https://wa.me/628123456789" target="_blank" class="footer-link" title="WhatsApp">
+        <a href="https://wa.me/6285722341788" target="_blank" class="footer-link" title="WhatsApp">
           <svg class="inline" width="26" height="26" fill="currentColor"><path d="M2 12A10 10 0 0012 22h.043C8.81 22 5.997 20.094 4.257 17.489a.995.995 0 01.156-1.221l1.134-1.12A1.004 1.004 0 016.5 15.05c.9.62 1.867 1.059 2.913 1.285 1.046.227 2.137.228 3.195.002a7.993 7.993 0 001.372-.38c.322-.113.684-.011.883.245l1.127 1.087a.997.997 0 01.157 1.221C18.004 20.106 15.19 22 12.043 22H12A10 10 0 002 12zm10-8a8 8 0 110 16A8 8 0 012 12a8 8 0 0110-8zm-1 9.5a1 1 0 00-1 1V16a1 1 0 102 0v-3.5a1 1 0 00-1-1zm0-2a1 1 0 100 2 1 1 0 000-2z"/></svg>
         </a>
         <a href="#" class="footer-link" title="Facebook">
@@ -599,6 +590,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       
       // Update subtitle to show selected e-wallet
       document.getElementById('qris-subtitle').textContent = 'Bayar dengan ' + ewallet;
+    }
+    
+    // Open WhatsApp for consultation
+    function openWhatsAppConsultation() {
+      let inquiry_msg = "Halo Admin HappyippieCake, saya mau tanya/konsultasi tentang pesanan ini:\n\nItem yg diminati:\n";
+      orderFields.forEach(itm => {
+        inquiry_msg += "- " + itm.nama + " (" + (itm.jumlah||1) + " pcs)\n";
+      });
+      inquiry_msg += "\nApakah stok ready atau bisa custom request?";
+      const wa_admin = '6285722341788';
+      window.open("https://wa.me/" + wa_admin + "?text=" + encodeURIComponent(inquiry_msg), '_blank');
     }
   </script>
 </body>

@@ -82,9 +82,10 @@ function formatRupiah($amount) {
   <title>Data Pesanan | HappyippieCake</title>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Montserrat', Arial, sans-serif;}
+    .brand-font { font-family: 'Inter', system-ui, sans-serif; font-weight: 600;}
     .glass {background:rgba(255,255,255,0.88);backdrop-filter:blur(8px);}
     .badge { font-size:13px; padding:3px 14px; border-radius:14px;}
     .table-row:hover { background:#fff6fa;}
@@ -260,7 +261,7 @@ function formatRupiah($amount) {
                     <?php foreach($group['items'] as $item): ?>
                     <div class="flex justify-between items-start border-b border-gray-100 pb-2 last:border-0 last:pb-0">
                       <div>
-                        <div class="font-bold text-pink-700 text-sm"><?= htmlspecialchars($item['menu_nama']) ?></div>
+                        <div class="font-bold text-pink-700 text-sm brand-font tracking-wide"><?= htmlspecialchars($item['menu_nama']) ?></div>
                         <div class="text-xs text-gray-500"><?= $item['jumlah'] ?> pcs × <?= formatRupiah($item['harga']) ?></div>
                       </div>
                       <div class="font-semibold text-gray-700 text-sm"><?= formatRupiah($item['subtotal']) ?></div>
@@ -370,7 +371,7 @@ function formatRupiah($amount) {
                   <span class="block text-xs text-gray-400 font-normal"><?= htmlspecialchars($p['alamat']) ?></span>
                 </td>
                 <td class="py-4 px-6">
-                  <span class="text-gray-600"><?= htmlspecialchars($p['menu_nama']) ?></span>
+                  <span class="text-gray-600 brand-font"><?= htmlspecialchars($p['menu_nama']) ?></span>
                   <span class="text-gray-400 text-xs ml-1">(<?= $p['jumlah'] ?>x)</span>
                 </td>
                 <td class="py-4 px-6 text-right font-bold text-gray-600">

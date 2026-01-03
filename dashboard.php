@@ -21,9 +21,10 @@ $rekap = $conn->query(
   <title>Dashboard Admin | HappyippieCake</title>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {font-family: 'Montserrat',Arial,sans-serif;}
-    .brand-font { font-family: 'Pacifico', cursive;}
+    .brand-font { font-family: 'Inter', system-ui, sans-serif; font-weight: 600;}
     .stat-card {transition:.3s;box-shadow:0 4px 32px 0 rgba(253,94,83,0.1);}
     .stat-card:hover { box-shadow: 0 8px 32px -6px #ef476f40, 0 2px 16px -4px #fd5e5340;}
     .glass {background:rgba(255,255,255,0.85);backdrop-filter:blur(6px);}
@@ -137,7 +138,7 @@ $rekap = $conn->query(
               $percent = $max_sales > 0 ? ($r['total'] / $max_sales) * 100 : 0;
             ?>
             <tr class="hover:bg-gray-50/80 transition-colors">
-              <td class="py-4 px-6 font-bold text-gray-700 capitalize">
+              <td class="py-4 px-6 font-bold text-gray-700 capitalize brand-font tracking-wide">
                 <?= htmlspecialchars($r['nama']) ?>
               </td>
               <td class="py-4 px-6 align-middle">

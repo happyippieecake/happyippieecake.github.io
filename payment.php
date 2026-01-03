@@ -84,10 +84,10 @@ $qrisData = PaymentGateway::getQrisData();
   <title>Pembayaran | HappyippieCake</title>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Montserrat', Arial, sans-serif;}
-    .brand-font { font-family: 'Pacifico', cursive;}
+    .brand-font { font-family: 'Inter', system-ui, sans-serif; font-weight: 600;}
     .glass { background: rgba(255,255,255,0.92); backdrop-filter: blur(10px); }
     .payment-card { transition: all 0.3s ease; border: 2px solid transparent; }
     .payment-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px -8px rgba(253,94,83,0.25); }
@@ -199,14 +199,9 @@ $qrisData = PaymentGateway::getQrisData();
             <label class="payment-card glass rounded-xl p-4 cursor-pointer block <?= $payment['payment_method'] == 'bank_'.$key ? 'selected' : '' ?>">
               <input type="radio" name="payment_method" value="bank_<?= $key ?>" class="sr-only" 
                 <?= $payment['payment_method'] == 'bank_'.$key ? 'checked' : '' ?>>
-              <div class="text-center">
-                <div class="w-14 h-14 mx-auto mb-2 flex items-center justify-center rounded-xl shadow
-                  <?php 
-                    if($key == 'bca') echo 'bg-gradient-to-br from-blue-500 to-blue-700';
-                    elseif($key == 'mandiri') echo 'bg-gradient-to-br from-blue-700 to-blue-900';
-                    else echo 'bg-gradient-to-br from-blue-400 to-blue-600';
-                  ?>">
-                  <span class="text-white font-bold <?= $key == 'mandiri' ? 'text-yellow-400 text-xs' : '' ?>"><?= strtoupper($key == 'mandiri' ? 'MDR' : $key) ?></span>
+              <div class="text-center h-full flex flex-col items-center justify-center">
+                <div class="h-8 w-full flex items-center justify-center mb-2">
+                  <img src="gambar/logo_<?= $key ?>.png" alt="<?= strtoupper($key) ?>" class="h-full object-contain">
                 </div>
                 <div class="font-semibold text-gray-800 text-sm"><?= $bank['bank_name'] ?></div>
               </div>
@@ -254,8 +249,8 @@ $qrisData = PaymentGateway::getQrisData();
         <?php if($bankInfo): ?>
         <div class="bg-gradient-to-r from-pink-50 to-white rounded-xl p-6 mb-6">
           <div class="text-center mb-4">
-            <div class="inline-block bg-white px-6 py-3 rounded-xl shadow-md">
-              <span class="text-2xl font-bold text-pink-600"><?= strtoupper($selectedBank) ?></span>
+            <div class="inline-block bg-white px-6 py-3 rounded-xl shadow-md border border-gray-100">
+              <img src="gambar/logo_<?= $selectedBank ?>.png" alt="<?= strtoupper($selectedBank) ?>" class="h-12 object-contain">
             </div>
           </div>
           <div class="text-center space-y-3">
@@ -293,30 +288,30 @@ $qrisData = PaymentGateway::getQrisData();
           <h3 class="font-semibold text-gray-700 mb-4 text-center">Pilih E-Wallet untuk Pembayaran</h3>
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <!-- GoPay -->
-            <button type="button" onclick="selectEwallet('gopay')" id="btn-gopay" class="ewallet-btn bg-white border-2 border-gray-200 rounded-xl p-4 text-center hover:border-green-500 transition focus:outline-none">
-              <div class="w-14 h-14 mx-auto rounded-xl bg-gradient-to-br from-green-400 to-teal-500 flex items-center justify-center shadow-lg mb-2">
-                <span class="text-white font-bold text-lg">Go</span>
+            <button type="button" onclick="selectEwallet('gopay')" id="btn-gopay" class="ewallet-btn bg-white border-2 border-gray-200 rounded-xl p-4 text-center hover:border-green-500 transition focus:outline-none flex flex-col items-center justify-center">
+              <div class="h-8 w-full flex items-center justify-center mb-2">
+                <img src="gambar/logo_gopay.png" alt="GoPay" class="h-full object-contain">
               </div>
               <div class="font-semibold text-gray-700">GoPay</div>
             </button>
             <!-- OVO -->
-            <button type="button" onclick="selectEwallet('ovo')" id="btn-ovo" class="ewallet-btn bg-white border-2 border-gray-200 rounded-xl p-4 text-center hover:border-purple-500 transition focus:outline-none">
-              <div class="w-14 h-14 mx-auto rounded-xl bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center shadow-lg mb-2">
-                <span class="text-white font-bold text-lg">OVO</span>
+            <button type="button" onclick="selectEwallet('ovo')" id="btn-ovo" class="ewallet-btn bg-white border-2 border-gray-200 rounded-xl p-4 text-center hover:border-purple-500 transition focus:outline-none flex flex-col items-center justify-center">
+              <div class="h-8 w-full flex items-center justify-center mb-2">
+                <img src="gambar/logo_ovo.png" alt="OVO" class="h-full object-contain">
               </div>
               <div class="font-semibold text-gray-700">OVO</div>
             </button>
             <!-- DANA -->
-            <button type="button" onclick="selectEwallet('dana')" id="btn-dana" class="ewallet-btn bg-white border-2 border-gray-200 rounded-xl p-4 text-center hover:border-blue-500 transition focus:outline-none">
-              <div class="w-14 h-14 mx-auto rounded-xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shadow-lg mb-2">
-                <span class="text-white font-bold text-sm">DANA</span>
+            <button type="button" onclick="selectEwallet('dana')" id="btn-dana" class="ewallet-btn bg-white border-2 border-gray-200 rounded-xl p-4 text-center hover:border-blue-500 transition focus:outline-none flex flex-col items-center justify-center">
+              <div class="h-8 w-full flex items-center justify-center mb-2">
+                <img src="gambar/logo_dana.png" alt="DANA" class="h-full object-contain">
               </div>
               <div class="font-semibold text-gray-700">DANA</div>
             </button>
             <!-- ShopeePay -->
-            <button type="button" onclick="selectEwallet('shopeepay')" id="btn-shopeepay" class="ewallet-btn bg-white border-2 border-gray-200 rounded-xl p-4 text-center hover:border-orange-500 transition focus:outline-none">
-              <div class="w-14 h-14 mx-auto rounded-xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center shadow-lg mb-2">
-                <span class="text-white font-bold text-sm">SP</span>
+            <button type="button" onclick="selectEwallet('shopeepay')" id="btn-shopeepay" class="ewallet-btn bg-white border-2 border-gray-200 rounded-xl p-4 text-center hover:border-orange-500 transition focus:outline-none flex flex-col items-center justify-center">
+              <div class="h-8 w-full flex items-center justify-center mb-2">
+                <img src="gambar/logo_shopeepay.png" alt="ShopeePay" class="h-full object-contain">
               </div>
               <div class="font-semibold text-gray-700">ShopeePay</div>
             </button>
