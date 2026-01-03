@@ -1,22 +1,26 @@
 <?php
+/**
+ * Integration tests for data_pesanan.php functionality
+ */
 use PHPUnit\Framework\TestCase;
 
 class DataPesananTest extends TestCase
 {
-    protected $conn;
-
     protected function setUp(): void
     {
-        require __DIR__ . '/../db_connect.php';
-        require __DIR__ . '/../data_pesanan.php';
-
-        $this->conn = $conn;
-        $this->assertInstanceOf(mysqli::class, $this->conn);
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        $_SESSION['status'] = 'login';
     }
 
-    public function testQueryPesanan()
+    public function testDataPesananPageLoads()
     {
-        $result = $this->conn->query("SELECT * FROM pesanan LIMIT 1");
-        $this->assertNotFalse($result);
+        ob_start();
+        include __DIR__ . '/../data_pesanan.php';
+        $output = ob_get_clean();
+        
+        $this->assertStringContainsString('html', strtolower($output));
+        $this->assertStringContainsString('Data Pesanan', $output);
     }
 }

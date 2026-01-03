@@ -83,6 +83,11 @@ function imgPreview($src) {
   <meta charset="UTF-8">
   <title>Edit Menu | HappyippieCake</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Montserrat', Arial, sans-serif;}
+    .brand-font { font-family: 'Inter', system-ui, sans-serif; font-weight: 600;}
+  </style>
 </head>
 <body class="bg-gray-50">
   <div class="max-w-lg mx-auto mt-12 bg-white p-8 rounded-xl shadow">

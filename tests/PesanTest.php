@@ -1,22 +1,25 @@
 <?php
+/**
+ * Integration tests for pesan.php functionality
+ */
 use PHPUnit\Framework\TestCase;
 
 class PesanTest extends TestCase
 {
-    protected $conn;
-
     protected function setUp(): void
     {
-        require __DIR__ . '/../db_connect.php';
-        require __DIR__ . '/../pesan.php';
-
-        $this->conn = $conn;
-        $this->assertInstanceOf(mysqli::class, $this->conn);
+        // Reset superglobals
+        $_POST = [];
+        $_GET = [];
     }
 
-    public function testQueryMenuUntukPemesanan()
+    public function testPesanPageLoads()
     {
-        $result = $this->conn->query("SELECT * FROM menu LIMIT 1");
-        $this->assertNotFalse($result);
+        ob_start();
+        include __DIR__ . '/../pesan.php';
+        $output = ob_get_clean();
+        
+        $this->assertStringContainsString('html', strtolower($output));
+        $this->assertStringContainsString('Form Pemesanan', $output);
     }
 }

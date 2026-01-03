@@ -11,11 +11,12 @@ $menus = $conn->query("SELECT * FROM menu ORDER BY id DESC LIMIT 3");
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Montserrat', Arial, sans-serif;}
     .active-link { border-bottom: 2px solid #fd5e53;}
     .footer-link:hover { color:#fd5e53; transform:translateY(-2px);}
-    .brand-font { font-family: 'Pacifico',cursive;}
+    .brand-font { font-family: 'Inter', system-ui, sans-serif; font-weight: 600;}
     .card-anim { transition: .33s cubic-bezier(.42,.41,.53,.87); box-shadow:0 4px 32px -8px #fd5e531c,0 0 0 4px #fff3f4;}
     .card-anim:hover { box-shadow:0 8px 40px -10px #fd5e53a5,0 0 0 4px #fde4ec; transform: scale(1.04) translateY(-3px); border:1px solid #fd5e53;}
     .fade-in, .slide-in {opacity:0;pointer-events:none;}
@@ -150,7 +151,7 @@ $menus = $conn->query("SELECT * FROM menu ORDER BY id DESC LIMIT 3");
         <a href="https://instagram.com" target="_blank" class="footer-link" title="Instagram">
           <svg class="inline" width="26" height="26" fill="currentColor"><path d="M7.75 2C4.126 2 1 5.126 1 8.75v6.5C1 18.874 4.126 22 7.75 22h8.5c3.624 0 6.75-3.126 6.75-6.75v-6.5C23 5.126 19.874 2 16.25 2h-8.5zm0 2h8.5c2.623 0 4.75 2.127 4.75 4.75v6.5c0 2.623-2.127 4.75-4.75 4.75h-8.5A4.755 4.755 0 013 13.25v-6.5A4.755 4.755 0 017.75 4zm4.25 2.5a4.25 4.25 0 100 8.5 4.25 4.25 0 000-8.5zm0 2a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5zM18.625 6a.875.875 0 110 1.75.875.875 0 010-1.75z"/></svg>
         </a>
-        <a href="https://wa.me/628123456789" target="_blank" class="footer-link" title="WhatsApp">
+        <a href="https://wa.me/6285722341788" target="_blank" class="footer-link" title="WhatsApp">
           <svg class="inline" width="26" height="26" fill="currentColor"><path d="M2 12A10 10 0 0012 22h.043C8.81 22 5.997 20.094 4.257 17.489a.995.995 0 01.156-1.221l1.134-1.12A1.004 1.004 0 016.5 15.05c.9.62 1.867 1.059 2.913 1.285 1.046.227 2.137.228 3.195.002a7.993 7.993 0 001.372-.38c.322-.113.684-.011.883.245l1.127 1.087a.997.997 0 01.157 1.221C18.004 20.106 15.19 22 12.043 22H12A10 10 0 002 12zm10-8a8 8 0 110 16A8 8 0 012 12a8 8 0 0110-8zm-1 9.5a1 1 0 00-1 1V16a1 1 0 102 0v-3.5a1 1 0 00-1-1zm0-2a1 1 0 100 2 1 1 0 000-2z"/></svg>
         </a>
         <a href="#" class="footer-link" title="Facebook">

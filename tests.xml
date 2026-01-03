@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+<testSuite xmlns="https://xml.phpunit.de/testSuite">
+ <tests>
+  <testClass name="AdminTest" file="C:\baru xampp\htdocs\happy\happyippieecake.github.io\tests\AdminTest.php">
+   <testMethod id="AdminTest::testDatabaseConnect" name="testDatabaseConnect"/>
+  </testClass>
+  <testClass name="DashboardTest" file="C:\baru xampp\htdocs\happy\happyippieecake.github.io\tests\DashboardTest.php">
+   <testMethod id="DashboardTest::testQueryDashboard" name="testQueryDashboard"/>
+  </testClass>
+  <testClass name="DataPesananTest" file="C:\baru xampp\htdocs\happy\happyippieecake.github.io\tests\DataPesananTest.php">
+   <testMethod id="DataPesananTest::testQueryPesanan" name="testQueryPesanan"/>
+  </testClass>
+  <testClass name="DbConnectTest" file="C:\baru xampp\htdocs\happy\happyippieecake.github.io\tests\DbConnectTest.php">
+   <testMethod id="DbConnectTest::testKoneksiDatabaseAda" name="testKoneksiDatabaseAda"/>
+   <testMethod id="DbConnectTest::testQueryMenuTidakError" name="testQueryMenuTidakError"/>
+  </testClass>
+  <testClass name="EditMenuTest" file="C:\baru xampp\htdocs\happy\happyippieecake.github.io\tests\EditMenuTest.php">
+   <testMethod id="EditMenuTest::testAmbilMenu" name="testAmbilMenu"/>
+  </testClass>
+  <testClass name="IndexTest" file="C:\baru xampp\htdocs\happy\happyippieecake.github.io\tests\IndexTest.php">
+   <testMethod id="IndexTest::testKoneksiKeDatabase" name="testKoneksiKeDatabase"/>
+   <testMethod id="IndexTest::testQueryMenuBerjalan" name="testQueryMenuBerjalan"/>
+  </testClass>
+  <testClass name="InfoTest" file="C:\baru xampp\htdocs\happy\happyippieecake.github.io\tests\InfoTest.php">
+   <testMethod id="InfoTest::testInfoFileAda" name="testInfoFileAda"/>
+  </testClass>
+  <testClass name="LoginTest" file="C:\baru xampp\htdocs\happy\happyippieecake.github.io\tests\LoginTest.php">
+   <testMethod id="LoginTest::testQueryUser" name="testQueryUser"/>
+  </testClass>
+  <testClass name="PaymentGatewayTest" file="C:\baru xampp\htdocs\happy\happyippieecake.github.io\tests\PaymentGatewayTest.php">
+   <testMethod id="PaymentGatewayTest::testGetBankAccountsReturnsArray" name="testGetBankAccountsReturnsArray"/>
+   <testMethod id="PaymentGatewayTest::testGetBankAccountsContainsRequiredKeys" name="testGetBankAccountsContainsRequiredKeys"/>
+   <testMethod id="PaymentGatewayTest::testGetBankAccountReturnsSpecificBank" name="testGetBankAccountReturnsSpecificBank"/>
+   <testMethod id="PaymentGatewayTest::testGetBankAccountReturnsNullForInvalidKey" name="testGetBankAccountReturnsNullForInvalidKey"/>
+   <testMethod id="PaymentGatewayTest::testGetQrisDataReturnsArray" name="testGetQrisDataReturnsArray"/>
+   <testMethod id="PaymentGatewayTest::testGenerateOrderIdReturnsUniqueString" name="testGenerateOrderIdReturnsUniqueString"/>
+   <testMethod id="PaymentGatewayTest::testGenerateOrderIdStartsWithPrefix" name="testGenerateOrderIdStartsWithPrefix"/>
+   <testMethod id="PaymentGatewayTest::testGetPaymentMethodsReturnsArray" name="testGetPaymentMethodsReturnsArray"/>
+   <testMethod id="PaymentGatewayTest::testIsValidPaymentMethodReturnsTrueForValidMethods" name="testIsValidPaymentMethodReturnsTrueForValidMethods"/>
+   <testMethod id="PaymentGatewayTest::testIsValidPaymentMethodReturnsFalseForInvalidMethods" name="testIsValidPaymentMethodReturnsFalseForInvalidMethods"/>
+   <testMethod id="PaymentGatewayTest::testFormatRupiahFormatsCorrectly" name="testFormatRupiahFormatsCorrectly"/>
+   <testMethod id="PaymentGatewayTest::testCreatePaymentWithNullConnectionReturnsFalse" name="testCreatePaymentWithNullConnectionReturnsFalse"/>
+   <testMethod id="PaymentGatewayTest::testCreatePaymentWithInvalidMethodReturnsFalse" name="testCreatePaymentWithInvalidMethodReturnsFalse"/>
+   <testMethod id="PaymentGatewayTest::testGetPaymentWithNullConnectionReturnsNull" name="testGetPaymentWithNullConnectionReturnsNull"/>
+   <testMethod id="PaymentGatewayTest::testGetPaymentByOrderIdWithNullConnectionReturnsNull" name="testGetPaymentByOrderIdWithNullConnectionReturnsNull"/>
+   <testMethod id="PaymentGatewayTest::testGetPaymentStatusWithNullConnectionReturnsUnknown" name="testGetPaymentStatusWithNullConnectionReturnsUnknown"/>
+   <testMethod id="PaymentGatewayTest::testConfirmPaymentWithNullConnectionReturnsFalse" name="testConfirmPaymentWithNullConnectionReturnsFalse"/>
+   <testMethod id="PaymentGatewayTest::testCancelPaymentWithNullConnectionReturnsFalse" name="testCancelPaymentWithNullConnectionReturnsFalse"/>
+   <testMethod id="PaymentGatewayTest::testUploadBuktiTransferWithNullConnectionReturnsFalse" name="testUploadBuktiTransferWithNullConnectionReturnsFalse"/>
+   <testMethod id="PaymentGatewayTest::testGetPendingPaymentsWithNullConnectionReturnsEmptyArray" name="testGetPendingPaymentsWithNullConnectionReturnsEmptyArray"/>
+   <testMethod id="PaymentGatewayTest::testGetConfirmedPaymentsWithNullConnectionReturnsEmptyArray" name="testGetConfirmedPaymentsWithNullConnectionReturnsEmptyArray"/>
+   <testMethod id="PaymentGatewayTest::testBankAccountNumbersAreNotEmpty" name="testBankAccountNumbersAreNotEmpty"/>
+   <testMethod id="PaymentGatewayTest::testQrisMerchantNameIsSet" name="testQrisMerchantNameIsSet"/>
+   <testMethod id="PaymentGatewayTest::testGenerateOrderIdHasCorrectFormat" name="testGenerateOrderIdHasCorrectFormat"/>
+  </testClass>
+  <testClass name="PaymentTest" file="C:\baru xampp\htdocs\happy\happyippieecake.github.io\tests\PaymentTest.php">
+   <testMethod id="PaymentTest::testPaymentGatewayClassExists" name="testPaymentGatewayClassExists"/>
+   <testMethod id="PaymentTest::testPaymentGatewayCanBeInstantiatedWithoutConnection" name="testPaymentGatewayCanBeInstantiatedWithoutConnection"/>
+   <testMethod id="PaymentTest::testStaticMethodsWorkWithoutInstance" name="testStaticMethodsWorkWithoutInstance"/>
+   <testMethod id="PaymentTest::testPaymentMethodValidation" name="testPaymentMethodValidation"/>
+   <testMethod id="PaymentTest::testInvalidPaymentMethodValidation" name="testInvalidPaymentMethodValidation"/>
+   <testMethod id="PaymentTest::testFormatRupiahWithVariousAmounts" name="testFormatRupiahWithVariousAmounts"/>
+   <testMethod id="PaymentTest::testGenerateMultipleUniqueOrderIds" name="testGenerateMultipleUniqueOrderIds"/>
+   <testMethod id="PaymentTest::testBankAccountDataIntegrity" name="testBankAccountDataIntegrity"/>
+   <testMethod id="PaymentTest::testQrisDataIntegrity" name="testQrisDataIntegrity"/>
+   <testMethod id="PaymentTest::testPaymentMethodsCount" name="testPaymentMethodsCount"/>
+   <testMethod id="PaymentTest::testGetBankAccountForAllBanks" name="testGetBankAccountForAllBanks"/>
+   <testMethod id="PaymentTest::testPaymentGatewayWithMockConnection" name="testPaymentGatewayWithMockConnection"/>
+   <testMethod id="PaymentTest::testMethodsReturnCorrectTypesWithNullConnection" name="testMethodsReturnCorrectTypesWithNullConnection"/>
+  </testClass>
+  <testClass name="PesanTest" file="C:\baru xampp\htdocs\happy\happyippieecake.github.io\tests\PesanTest.php">
+   <testMethod id="PesanTest::testQueryMenuUntukPemesanan" name="testQueryMenuUntukPemesanan"/>
+  </testClass>
+ </tests>
+ <groups>
+  <group name="default">
+   <test id="AdminTest::testDatabaseConnect"/>
+   <test id="DashboardTest::testQueryDashboard"/>
+   <test id="DataPesananTest::testQueryPesanan"/>
+   <test id="DbConnectTest::testKoneksiDatabaseAda"/>
+   <test id="DbConnectTest::testQueryMenuTidakError"/>
+   <test id="EditMenuTest::testAmbilMenu"/>
+   <test id="IndexTest::testKoneksiKeDatabase"/>
+   <test id="IndexTest::testQueryMenuBerjalan"/>
+   <test id="InfoTest::testInfoFileAda"/>
+   <test id="LoginTest::testQueryUser"/>
+   <test id="PaymentGatewayTest::testGetBankAccountsReturnsArray"/>
+   <test id="PaymentGatewayTest::testGetBankAccountsContainsRequiredKeys"/>
+   <test id="PaymentGatewayTest::testGetBankAccountReturnsSpecificBank"/>
+   <test id="PaymentGatewayTest::testGetBankAccountReturnsNullForInvalidKey"/>
+   <test id="PaymentGatewayTest::testGetQrisDataReturnsArray"/>
+   <test id="PaymentGatewayTest::testGenerateOrderIdReturnsUniqueString"/>
+   <test id="PaymentGatewayTest::testGenerateOrderIdStartsWithPrefix"/>
+   <test id="PaymentGatewayTest::testGetPaymentMethodsReturnsArray"/>
+   <test id="PaymentGatewayTest::testIsValidPaymentMethodReturnsTrueForValidMethods"/>
+   <test id="PaymentGatewayTest::testIsValidPaymentMethodReturnsFalseForInvalidMethods"/>
+   <test id="PaymentGatewayTest::testFormatRupiahFormatsCorrectly"/>
+   <test id="PaymentGatewayTest::testCreatePaymentWithNullConnectionReturnsFalse"/>
+   <test id="PaymentGatewayTest::testCreatePaymentWithInvalidMethodReturnsFalse"/>
+   <test id="PaymentGatewayTest::testGetPaymentWithNullConnectionReturnsNull"/>
+   <test id="PaymentGatewayTest::testGetPaymentByOrderIdWithNullConnectionReturnsNull"/>
+   <test id="PaymentGatewayTest::testGetPaymentStatusWithNullConnectionReturnsUnknown"/>
+   <test id="PaymentGatewayTest::testConfirmPaymentWithNullConnectionReturnsFalse"/>
+   <test id="PaymentGatewayTest::testCancelPaymentWithNullConnectionReturnsFalse"/>
+   <test id="PaymentGatewayTest::testUploadBuktiTransferWithNullConnectionReturnsFalse"/>
+   <test id="PaymentGatewayTest::testGetPendingPaymentsWithNullConnectionReturnsEmptyArray"/>
+   <test id="PaymentGatewayTest::testGetConfirmedPaymentsWithNullConnectionReturnsEmptyArray"/>
+   <test id="PaymentGatewayTest::testBankAccountNumbersAreNotEmpty"/>
+   <test id="PaymentGatewayTest::testQrisMerchantNameIsSet"/>
+   <test id="PaymentGatewayTest::testGenerateOrderIdHasCorrectFormat"/>
+   <test id="PaymentTest::testPaymentGatewayClassExists"/>
+   <test id="PaymentTest::testPaymentGatewayCanBeInstantiatedWithoutConnection"/>
+   <test id="PaymentTest::testStaticMethodsWorkWithoutInstance"/>
+   <test id="PaymentTest::testPaymentMethodValidation"/>
+   <test id="PaymentTest::testInvalidPaymentMethodValidation"/>
+   <test id="PaymentTest::testFormatRupiahWithVariousAmounts"/>
+   <test id="PaymentTest::testGenerateMultipleUniqueOrderIds"/>
+   <test id="PaymentTest::testBankAccountDataIntegrity"/>
+   <test id="PaymentTest::testQrisDataIntegrity"/>
+   <test id="PaymentTest::testPaymentMethodsCount"/>
+   <test id="PaymentTest::testGetBankAccountForAllBanks"/>
+   <test id="PaymentTest::testPaymentGatewayWithMockConnection"/>
+   <test id="PaymentTest::testMethodsReturnCorrectTypesWithNullConnection"/>
+   <test id="PesanTest::testQueryMenuUntukPemesanan"/>
+  </group>
+ </groups>
+</testSuite>

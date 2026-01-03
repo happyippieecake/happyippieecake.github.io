@@ -1,10 +1,12 @@
 
 
-[1;37;40mCode Coverage Report:      [0m
-[1;37;40m  2025-11-21 04:26:38      [0m
-[1;37;40m                           [0m
-[1;37;40m Summary:                  [0m
-[30;42m  Classes:        (0/0)    [0m
-[30;42m  Methods:        (0/0)    [0m
-[30;43m  Lines:   86.85% (687/791)[0m
+Code Coverage Report:
+  2026-01-02 16:24:05
 
+ Summary:
+  Classes:  0.00% (0/1)
+  Methods: 38.89% (7/18)
+  Lines:   77.08% (1362/1767)
+
+PaymentGateway
+  Methods:  38.89% ( 7/18)   Lines:  55.66% ( 59/106)
