@@ -130,7 +130,7 @@ $menus = $conn->query("SELECT * FROM menu ORDER BY id DESC LIMIT 3");
     <div class="max-w-6xl mx-auto px-4">
       <h2 class="text-4xl font-bold text-center mb-10 text-pink-600 brand-font tracking-wide slide-in scroll-animate">Galeri Karya Cake Terbaik</h2>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80" class="rounded-2xl shadow-xl object-cover h-40 w-full card-anim fade-in scroll-animate">
+        <img src="https://www.instagram.com/p/DO2FrYuk2t3/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" class="rounded-2xl shadow-xl object-cover h-40 w-full card-anim fade-in scroll-animate">
         <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80" class="rounded-2xl shadow-xl object-cover h-40 w-full card-anim fade-in scroll-animate">
         <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80" class="rounded-2xl shadow-xl object-cover h-40 w-full card-anim fade-in scroll-animate">
         <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80" class="rounded-2xl shadow-xl object-cover h-40 w-full card-anim fade-in scroll-animate">
