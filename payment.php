@@ -61,6 +61,52 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['upload_bukti'])) {
             
             if (move_uploaded_file($_FILES['bukti_transfer']['tmp_name'], $uploadPath)) {
                 $gateway->uploadBuktiTransfer($payment['id'], $uploadPath);
+                
+                // Send email notification to admin
+                $adminEmail = 'ujipirna07@gmail.com';
+                $subject = '🎂 Pesanan Baru - HappyippieCake #' . $orderId;
+                
+                // Get order details for email
+                $emailBody = "Halo Admin HappyippieCake,\n\n";
+                $emailBody .= "Ada pesanan baru yang sudah upload bukti pembayaran!\n\n";
+                $emailBody .= "━━━━━━━━━━━━━━━━━━━━━━━━\n";
+                $emailBody .= "📋 DETAIL PESANAN\n";
+                $emailBody .= "━━━━━━━━━━━━━━━━━━━━━━━━\n";
+                $emailBody .= "Order ID: " . $orderId . "\n";
+                $emailBody .= "Nama: " . ($orderData['nama'] ?? '-') . "\n";
+                $emailBody .= "Alamat: " . ($orderData['alamat'] ?? '-') . "\n";
+                $emailBody .= "Menu: " . ($orderData['menu'] ?? '-') . "\n";
+                $emailBody .= "Jumlah: " . ($orderData['jumlah'] ?? '-') . " pcs\n";
+                $emailBody .= "Total: Rp" . number_format($payment['amount'] ?? 0, 0, ',', '.') . "\n";
+                $emailBody .= "Metode: " . strtoupper($payment['payment_method'] ?? '-') . "\n";
+                $emailBody .= "━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
+                $emailBody .= "Silakan buka Admin Panel untuk melihat detail lengkap dan konfirmasi pembayaran.\n\n";
+                $emailBody .= "Salam,\nHappyippieCake System";
+                
+                $headers = "From: noreply@happyippiecake.com\r\n";
+                $headers .= "Reply-To: noreply@happyippiecake.com\r\n";
+                $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+                
+                // Send email
+                @mail($adminEmail, $subject, $emailBody, $headers);
+                
+                // Log notification to text file (for testing)
+                $logFile = 'notifikasi_pesanan.txt';
+                $logContent = "\n" . str_repeat("=", 50) . "\n";
+                $logContent .= "📅 " . date('Y-m-d H:i:s') . "\n";
+                $logContent .= str_repeat("=", 50) . "\n";
+                $logContent .= "🎂 PESANAN BARU MASUK!\n\n";
+                $logContent .= "Order ID: " . $orderId . "\n";
+                $logContent .= "Nama: " . ($orderData['nama'] ?? '-') . "\n";
+                $logContent .= "Alamat: " . ($orderData['alamat'] ?? '-') . "\n";
+                $logContent .= "Menu: " . ($orderData['menu'] ?? '-') . "\n";
+                $logContent .= "Jumlah: " . ($orderData['jumlah'] ?? '-') . " pcs\n";
+                $logContent .= "Total: Rp" . number_format($payment['amount'] ?? 0, 0, ',', '.') . "\n";
+                $logContent .= "Metode: " . strtoupper($payment['payment_method'] ?? '-') . "\n";
+                $logContent .= "Bukti: " . $uploadPath . "\n";
+                $logContent .= str_repeat("=", 50) . "\n";
+                file_put_contents($logFile, $logContent, FILE_APPEND);
+                
                 $success = "Bukti transfer berhasil diupload! Admin akan mengkonfirmasi pembayaran Anda.";
                 $payment = $gateway->getPaymentByOrderId($orderId);
             } else {
