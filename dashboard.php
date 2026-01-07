@@ -1,168 +1,314 @@
 <?php
 $conn = new mysqli("localhost", "root", "", "happyippiecake");
-$total_pesanan = $conn->query("SELECT COUNT(*) FROM pesanan")->fetch_row()[0];
-$minggu_awal = date('Y-m-d', strtotime('monday this week'));
+
+// Get current dates
+$hari_ini = date('Y-m-d');
 $bulan_awal = date('Y-m-01');
-$pesanan_minggu = $conn->query("SELECT SUM(jumlah) FROM pesanan WHERE tanggal_pesan >= '$minggu_awal'")->fetch_row()[0] ?: 0;
-$pesanan_bulan = $conn->query("SELECT SUM(jumlah) FROM pesanan WHERE tanggal_pesan >= '$bulan_awal'")->fetch_row()[0] ?: 0;
-$rekap = $conn->query(
-  "SELECT menu.nama, SUM(pesanan.jumlah) as total
-   FROM pesanan 
-   JOIN menu ON pesanan.menu_id = menu.id
-   WHERE pesanan.tanggal_pesan >= '$bulan_awal'
-   GROUP BY menu_id
-   ORDER BY total DESC"
+
+// Total Revenue (All Time) - from payments
+$total_revenue = $conn->query("SELECT SUM(amount) FROM payments WHERE status='confirmed'")->fetch_row()[0] ?: 0;
+
+// Total Orders (All Time)
+$total_orders = $conn->query("SELECT COUNT(*) FROM pesanan")->fetch_row()[0] ?: 0;
+
+// Total Customers (Unique)
+$total_customers = $conn->query("SELECT COUNT(DISTINCT nama_pemesan) FROM pesanan")->fetch_row()[0] ?: 0;
+
+// Perlu Diproses (Pending Orders)
+$pending_orders = $conn->query("SELECT COUNT(*) FROM pesanan WHERE status='pending'")->fetch_row()[0] ?: 0;
+
+// Hari Ini Stats
+$orders_hari_ini = $conn->query("SELECT COUNT(*) FROM pesanan WHERE DATE(tanggal_pesan)='$hari_ini'")->fetch_row()[0] ?: 0;
+$revenue_hari_ini = $conn->query("SELECT SUM(p.amount) FROM payments p JOIN pesanan ps ON p.pesanan_id=ps.id WHERE DATE(ps.tanggal_pesan)='$hari_ini' AND p.status='confirmed'")->fetch_row()[0] ?: 0;
+
+// Bulan Ini Stats  
+$orders_bulan_ini = $conn->query("SELECT COUNT(*) FROM pesanan WHERE tanggal_pesan >= '$bulan_awal'")->fetch_row()[0] ?: 0;
+$revenue_bulan_ini = $conn->query("SELECT SUM(p.amount) FROM payments p JOIN pesanan ps ON p.pesanan_id=ps.id WHERE ps.tanggal_pesan >= '$bulan_awal' AND p.status='confirmed'")->fetch_row()[0] ?: 0;
+
+// Order Terbaru (5 latest pending)
+$recent_orders = $conn->query(
+    "SELECT pesanan.id, pesanan.nama_pemesan, pesanan.tanggal_pesan, pesanan.order_id,
+            menu.nama as menu_nama, menu.harga, pesanan.jumlah,
+            payments.status as payment_status
+     FROM pesanan 
+     JOIN menu ON pesanan.menu_id=menu.id
+     LEFT JOIN payments ON pesanan.id=payments.pesanan_id
+     WHERE pesanan.status='pending'
+     ORDER BY pesanan.id DESC
+     LIMIT 5"
 );
+
+// Menu Terlaris (Top 5)
+$top_menu = $conn->query(
+    "SELECT menu.id, menu.nama, menu.harga, SUM(pesanan.jumlah) as total_sold,
+            SUM(menu.harga * pesanan.jumlah) as revenue
+     FROM pesanan 
+     JOIN menu ON pesanan.menu_id = menu.id
+     GROUP BY menu.id
+     ORDER BY total_sold DESC
+     LIMIT 5"
+);
+
+function formatRupiah($amount) {
+    return 'Rp ' . number_format($amount, 0, ',', '.');
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Dashboard Admin | HappyippieCake</title>
+  <title>Dashboard | HappyippieCake Admin</title>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    body {font-family: 'Montserrat',Arial,sans-serif;}
-    .brand-font { font-family: 'Inter', system-ui, sans-serif; font-weight: 600;}
-    .stat-card {transition:.3s;box-shadow:0 4px 32px 0 rgba(253,94,83,0.1);}
-    .stat-card:hover { box-shadow: 0 8px 32px -6px #ef476f40, 0 2px 16px -4px #fd5e5340;}
-    .glass {background:rgba(255,255,255,0.85);backdrop-filter:blur(6px);}
-    .table-row:hover {background:#fff8fa;}
-    .icon {display: inline-flex; border-radius:9999px; padding:8px; background:linear-gradient(135deg,#ffd6d6 20%,#ffe6ff 100%);}
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin_styles.css">
 </head>
-<body class="bg-gray-50 font-sans text-gray-800 min-h-screen">
-
-  <!-- Navbar Admin -->
-  <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100 mb-8">
-    <div class="max-w-7xl mx-auto flex items-center justify-between py-4 px-6">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 bg-gradient-to-br from-pink-500 to-rose-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-pink-200">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-        </div>
-        <div>
-          <h1 class="text-xl font-bold text-gray-800 tracking-tight">Dashboard Overview</h1>
-          <p class="text-xs text-gray-500 font-medium">Panel Admin HappyippieCake</p>
-        </div>
+<body>
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">HC</div>
+        <span class="brand-text">HappyippieCake</span>
       </div>
-      <ul class="flex gap-1 bg-gray-100/50 p-1 rounded-xl">
-        <li><a href="dashboard.php" class="px-4 py-2 rounded-lg text-sm font-bold text-pink-600 bg-white shadow-sm ring-1 ring-black/5">Dashboard</a></li>
-        <li><a href="admin.php" class="px-4 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-white hover:text-pink-600 hover:shadow-sm transition-all">Menu</a></li>
-        <li><a href="data_pesanan.php" class="px-4 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-white hover:text-pink-600 hover:shadow-sm transition-all">Pesanan</a></li>
-      </ul>
-    </div>
-  </nav>
-
-  <div class="max-w-7xl mx-auto px-6 pb-20">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
       
-      <!-- Card: Total Pesanan -->
-      <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-lg transition-all duration-300">
-        <div class="absolute top-0 right-0 w-32 h-32 bg-pink-50 rounded-full -mr-10 -mt-10 group-hover:bg-pink-100 transition-colors"></div>
-        <div class="relative z-10">
-          <div class="text-gray-500 text-sm font-semibold uppercase tracking-wider mb-2">Total Pesanan</div>
-          <div class="flex items-end gap-3 mb-1">
-            <span class="text-4xl font-extrabold text-gray-800"><?= number_format($total_pesanan) ?></span>
-            <span class="text-gray-400 text-sm mb-1 font-medium">Transaksi</span>
-          </div>
-          <div class="mt-4 flex items-center text-xs font-bold text-pink-600 bg-pink-50 w-max px-2 py-1 rounded-lg">
-            <svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-            All Time
-          </div>
-        </div>
-      </div>
+      <ul class="sidebar-nav">
+        <li>
+          <a href="dashboard.php" class="active">
+            <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+            </svg>
+            <span class="nav-text">Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="admin.php">
+            <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+            </svg>
+            <span class="nav-text">Menu</span>
+          </a>
+        </li>
+        <li>
+          <a href="data_pesanan.php">
+            <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+            </svg>
+            <span class="nav-text">Orders</span>
+          </a>
+        </li>
+        <li>
+          <a href="payment_admin.php">
+            <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+            </svg>
+            <span class="nav-text">Payments</span>
+          </a>
+        </li>
+        <li>
+          <a href="index.php" target="_blank">
+            <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+            </svg>
+            <span class="nav-text">Lihat Toko</span>
+          </a>
+        </li>
+      </ul>
 
-      <!-- Card: Penjualan Minggu Ini -->
-      <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-lg transition-all duration-300">
-        <div class="absolute top-0 right-0 w-32 h-32 bg-green-50 rounded-full -mr-10 -mt-10 group-hover:bg-green-100 transition-colors"></div>
-        <div class="relative z-10">
-          <div class="text-gray-500 text-sm font-semibold uppercase tracking-wider mb-2">Penjualan Minggu Ini</div>
-          <div class="flex items-end gap-3 mb-1">
-            <span class="text-4xl font-extrabold text-gray-800"><?= number_format($pesanan_minggu) ?></span>
-            <span class="text-gray-400 text-sm mb-1 font-medium">Pcs Terjual</span>
-          </div>
-          <div class="mt-4 flex items-center text-xs font-bold text-green-600 bg-green-50 w-max px-2 py-1 rounded-lg">
-            <svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-width="2" d="M12 8v4l3 2"/></svg>
-            Minggu Ini
-          </div>
-        </div>
-      </div>
+      <button class="sidebar-toggle" onclick="toggleSidebar()">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/>
+        </svg>
+        <span class="nav-text">Collapse</span>
+      </button>
+    </aside>
 
-      <!-- Card: Penjualan Bulan Ini -->
-      <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-lg transition-all duration-300">
-        <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-full -mr-10 -mt-10 group-hover:bg-blue-100 transition-colors"></div>
-        <div class="relative z-10">
-          <div class="text-gray-500 text-sm font-semibold uppercase tracking-wider mb-2">Penjualan Bulan Ini</div>
-          <div class="flex items-end gap-3 mb-1">
-            <span class="text-4xl font-extrabold text-gray-800"><?= number_format($pesanan_bulan) ?></span>
-            <span class="text-gray-400 text-sm mb-1 font-medium">Pcs Terjual</span>
-          </div>
-          <div class="mt-4 flex items-center text-xs font-bold text-blue-600 bg-blue-50 w-max px-2 py-1 rounded-lg">
-            <svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-            Bulan Ini
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-      <div class="px-6 py-5 border-b border-gray-100 flex justify-between items-center">
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+      <div class="page-header">
         <div>
-          <h2 class="text-lg font-bold text-gray-800">Top Menu Bulan Ini</h2>
-          <p class="text-sm text-gray-500">Performa penjualan menu berdasarkan pesanan</p>
+          <h1>Dashboard</h1>
+          <p>Selamat datang di panel admin HappyippieCake</p>
         </div>
-        <button class="text-sm font-bold text-pink-600 hover:text-pink-700 bg-pink-50 hover:bg-pink-100 px-4 py-2 rounded-xl transition-colors">
-          Download Report
+        <button class="btn-refresh" onclick="location.reload()">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+          Refresh
         </button>
       </div>
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm text-left">
-          <thead class="bg-gray-50/50 border-b border-gray-100 text-gray-500 font-semibold uppercase tracking-wider text-xs">
-            <tr>
-              <th class="py-4 px-6 rounded-tl-3xl">Menu Item</th>
-              <th class="py-4 px-6 w-1/3">Popularitas</th>
-              <th class="py-4 px-6 text-right rounded-tr-3xl">Total Terjual</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-50">
-            <?php 
-            $max_sales = 0;
-            foreach($rekap as $r) {
-                if($r['total'] > $max_sales) $max_sales = $r['total'];
-            }
-            // Reset pointer
-            $rekap->data_seek(0);
-            ?>
-            <?php foreach($rekap as $r): 
-              $percent = $max_sales > 0 ? ($r['total'] / $max_sales) * 100 : 0;
-            ?>
-            <tr class="hover:bg-gray-50/80 transition-colors">
-              <td class="py-4 px-6 font-bold text-gray-700 capitalize brand-font tracking-wide">
-                <?= htmlspecialchars($r['nama']) ?>
-              </td>
-              <td class="py-4 px-6 align-middle">
-                <div class="flex items-center gap-3">
-                   <div class="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
-                     <div class="bg-pink-500 h-2 rounded-full" style="width: <?= $percent ?>%"></div>
-                   </div>
-                   <span class="text-xs font-bold text-gray-400 w-8"><?= number_format($percent,0) ?>%</span>
-                </div>
-              </td>
-              <td class="py-4 px-6 text-right">
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-pink-50 text-pink-700">
-                  <?= $r['total'] ?> Pcs
-                </span>
-              </td>
-            </tr>
-            <?php endforeach ?>
-            <?php if($rekap->num_rows == 0): ?>
-              <tr><td colspan="3" class="text-center py-10 text-gray-400">Belum ada data penjualan bulan ini.</td></tr>
-            <?php endif ?>
-          </tbody>
-        </table>
+
+      <!-- Stat Cards -->
+      <div class="stat-cards">
+        <!-- Total Revenue -->
+        <div class="stat-card green">
+          <span class="badge">All Time</span>
+          <div class="icon">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <div class="label">Total Revenue</div>
+          <div class="value"><?= formatRupiah($total_revenue) ?></div>
+        </div>
+
+        <!-- Total Orders -->
+        <div class="stat-card teal">
+          <span class="badge">All Time</span>
+          <div class="icon">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+            </svg>
+          </div>
+          <div class="label">Total Orders</div>
+          <div class="value"><?= number_format($total_orders) ?></div>
+        </div>
+
+        <!-- Total Customers -->
+        <div class="stat-card orange">
+          <span class="badge">Unique</span>
+          <div class="icon">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+          </div>
+          <div class="label">Total Customers</div>
+          <div class="value"><?= number_format($total_customers) ?></div>
+        </div>
+
+        <!-- Perlu Diproses -->
+        <div class="stat-card purple">
+          <span class="badge">Pending</span>
+          <div class="icon">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <div class="label">Perlu Diproses</div>
+          <div class="value"><?= number_format($pending_orders) ?></div>
+        </div>
       </div>
-    </div>
+
+      <!-- Summary Cards -->
+      <div class="summary-cards">
+        <!-- Hari Ini -->
+        <div class="summary-card">
+          <div class="header">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+            </svg>
+            Hari Ini
+          </div>
+          <div class="stats">
+            <div class="stat-item">
+              <div class="label">Orders</div>
+              <div class="value"><?= number_format($orders_hari_ini) ?></div>
+            </div>
+            <div class="stat-item">
+              <div class="label">Revenue</div>
+              <div class="value"><?= formatRupiah($revenue_hari_ini) ?></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bulan Ini -->
+        <div class="summary-card">
+          <div class="header">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+            </svg>
+            Bulan Ini
+          </div>
+          <div class="stats">
+            <div class="stat-item">
+              <div class="label">Orders</div>
+              <div class="value"><?= number_format($orders_bulan_ini) ?></div>
+            </div>
+            <div class="stat-item">
+              <div class="label">Revenue</div>
+              <div class="value"><?= formatRupiah($revenue_bulan_ini) ?></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content Cards -->
+      <div class="content-cards">
+        <!-- Order Terbaru -->
+        <div class="content-card">
+          <div class="card-header">
+            <h3>Order Terbaru</h3>
+            <a href="data_pesanan.php">
+              Lihat Semua
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+          <div class="card-body">
+            <?php if($recent_orders->num_rows == 0): ?>
+              <p style="color: #94a3b8; text-align: center; padding: 32px 0;">Belum ada pesanan pending</p>
+            <?php else: ?>
+              <?php while($order = $recent_orders->fetch_assoc()): ?>
+              <div class="order-item">
+                <div class="order-info">
+                  <h4>#<?= $order['order_id'] ?: $order['id'] ?></h4>
+                  <p><?= htmlspecialchars($order['nama_pemesan']) ?> • <?= date('d M Y H:i', strtotime($order['tanggal_pesan'])) ?></p>
+                </div>
+                <div class="order-meta">
+                  <div class="price"><?= formatRupiah($order['harga'] * $order['jumlah']) ?></div>
+                  <span class="status <?= $order['payment_status'] == 'confirmed' ? 'completed' : 'pending' ?>">
+                    <?= $order['payment_status'] == 'confirmed' ? 'Paid' : 'Pending' ?>
+                  </span>
+                </div>
+              </div>
+              <?php endwhile; ?>
+            <?php endif; ?>
+          </div>
+        </div>
+
+        <!-- Menu Terlaris -->
+        <div class="content-card">
+          <div class="card-header">
+            <h3>Menu Terlaris</h3>
+            <a href="admin.php">
+              Kelola Menu
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+          <div class="card-body">
+            <?php if($top_menu->num_rows == 0): ?>
+              <p style="color: #94a3b8; text-align: center; padding: 32px 0;">Belum ada data penjualan</p>
+            <?php else: ?>
+              <?php $rank = 1; while($menu = $top_menu->fetch_assoc()): ?>
+              <div class="menu-item">
+                <div class="rank <?= $rank == 2 ? 'second' : ($rank >= 3 ? 'third' : '') ?>"><?= $rank ?></div>
+                <div class="menu-info">
+                  <h4><?= htmlspecialchars($menu['nama']) ?></h4>
+                  <p>Terjual: <?= $menu['total_sold'] ?> • Revenue: <?= formatRupiah($menu['revenue']) ?></p>
+                </div>
+                <div class="menu-price"><?= formatRupiah($menu['harga']) ?></div>
+              </div>
+              <?php $rank++; endwhile; ?>
+            <?php endif; ?>
+          </div>
+        </div>
+      </div>
+    </main>
   </div>
+
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('collapsed');
+      const mainContent = document.querySelector('.main-content');
+      if(document.getElementById('sidebar').classList.contains('collapsed')) {
+        mainContent.style.marginLeft = '72px';
+      } else {
+        mainContent.style.marginLeft = '260px';
+      }
+    }
+  </script>
 </body>
 </html>
