@@ -340,7 +340,7 @@ $paymentMethods = PaymentGateway::getPaymentMethods();
                     <span class="method-badge"><?= $paymentMethods[$p['payment_method']] ?? $p['payment_method'] ?></span>
                   </td>
                   <td style="text-align: center;">
-                    <?php if($p['bukti_transfer']): ?>
+                    <?php if($p['bukti_transfer'] && file_exists($p['bukti_transfer'])): ?>
                       <a href="<?= htmlspecialchars($p['bukti_transfer']) ?>" target="_blank" class="btn-view-bukti">
                         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path stroke-linecap="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -348,6 +348,8 @@ $paymentMethods = PaymentGateway::getPaymentMethods();
                         </svg>
                         Lihat Bukti
                       </a>
+                    <?php elseif($p['bukti_transfer']): ?>
+                      <span style="color: #ef4444; font-size: 12px; font-style: italic;" title="<?= htmlspecialchars($p['bukti_transfer']) ?>">⚠️ File hilang</span>
                     <?php else: ?>
                       <span style="color: var(--text-secondary); font-size: 12px; font-style: italic;">Belum upload</span>
                     <?php endif ?>

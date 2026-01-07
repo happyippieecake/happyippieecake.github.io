@@ -1,7 +1,46 @@
 <?php
 $conn = new mysqli("localhost", "root", "", "happyippiecake");
+
+// Auto-add stok_tersedia column if it doesn't exist
+$stok_column_exists = $conn->query("SHOW COLUMNS FROM menu LIKE 'stok_tersedia'")->num_rows > 0;
+if (!$stok_column_exists) {
+    $conn->query("ALTER TABLE menu ADD COLUMN stok_tersedia TINYINT(1) DEFAULT 1");
+    $stok_column_exists = true; // Column now exists
+}
+
+// Auto-add kategori column if it doesn't exist
+$kategori_column_exists = $conn->query("SHOW COLUMNS FROM menu LIKE 'kategori'")->num_rows > 0;
+if (!$kategori_column_exists) {
+    $conn->query("ALTER TABLE menu ADD COLUMN kategori VARCHAR(50) DEFAULT 'Lainnya'");
+}
+
+// Handle stock toggle
+if (isset($_GET['toggle_stok'])) {
+    $id = intval($_GET['toggle_stok']);
+    // Get current value and toggle
+    $result = $conn->query("SELECT stok_tersedia FROM menu WHERE id = $id");
+    if ($row = $result->fetch_assoc()) {
+        $new_value = ($row['stok_tersedia'] == 1 || $row['stok_tersedia'] === null) ? 0 : 1;
+        $conn->query("UPDATE menu SET stok_tersedia = $new_value WHERE id = $id");
+    }
+    header('Location: admin.php?notif=Status+stok+berhasil+diubah');
+    exit;
+}
+
 $menus = $conn->query("SELECT * FROM menu ORDER BY id DESC");
 $notif = isset($_GET['notif']) ? $_GET['notif'] : '';
+
+// Get unique categories - only if column exists
+$categories = ['Semua'];
+$kategori_column_exists = $conn->query("SHOW COLUMNS FROM menu LIKE 'kategori'")->num_rows > 0;
+if ($kategori_column_exists) {
+    $cat_result = $conn->query("SELECT DISTINCT kategori FROM menu WHERE kategori IS NOT NULL AND kategori != ''");
+    if ($cat_result) {
+        while ($cat = $cat_result->fetch_row()) {
+            if ($cat[0]) $categories[] = $cat[0];
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -97,6 +136,20 @@ $notif = isset($_GET['notif']) ? $_GET['notif'] : '';
       color: #94a3b8;
       margin: 0 0 24px;
     }
+    /* Category & Stock Styles */
+    .category-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+    .category-tab { padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid #e2e8f0; background: white; color: #64748b; transition: all 0.2s; }
+    .category-tab:hover { border-color: #0d9488; color: #0d9488; }
+    .category-tab.active { background: #0d9488; color: white; border-color: #0d9488; }
+    .menu-card-badge { position: absolute; top: 12px; left: 12px; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; background: rgba(13,148,136,0.9); color: white; }
+    .menu-card-stock { position: absolute; top: 12px; right: 12px; }
+    .stock-toggle { display: flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; }
+    .stock-toggle.available { background: #dcfce7; color: #16a34a; }
+    .stock-toggle.unavailable { background: #fee2e2; color: #dc2626; }
+    .stock-toggle:hover { opacity: 0.8; }
+    .menu-card { position: relative; }
+    .out-of-stock { opacity: 0.6; }
+    .out-of-stock .menu-card-img, .out-of-stock .no-image { filter: grayscale(50%); }
   </style>
 </head>
 <body>
@@ -184,6 +237,15 @@ $notif = isset($_GET['notif']) ? $_GET['notif'] : '';
         </a>
       </div>
 
+      <!-- Category Tabs -->
+      <div class="category-tabs">
+        <?php foreach($categories as $cat): ?>
+        <button class="category-tab <?= $cat === 'Semua' ? 'active' : '' ?>" onclick="filterCategory('<?= htmlspecialchars($cat) ?>')">
+          <?= htmlspecialchars($cat) ?>
+        </button>
+        <?php endforeach; ?>
+      </div>
+
       <!-- Menu Grid -->
       <?php if($menus->num_rows == 0): ?>
         <div class="empty-state">
@@ -212,6 +274,16 @@ $notif = isset($_GET['notif']) ? $_GET['notif'] : '';
                 </svg>
               </div>
             <?php endif ?>
+            <!-- Category Badge -->
+            <?php if(isset($m['kategori']) && $m['kategori']): ?>
+              <span class="menu-card-badge"><?= htmlspecialchars($m['kategori']) ?></span>
+            <?php endif ?>
+            <!-- Stock Toggle -->
+            <div class="menu-card-stock">
+              <a href="?toggle_stok=<?= $m['id'] ?>" class="stock-toggle <?= (isset($m['stok_tersedia']) && !$m['stok_tersedia']) ? 'unavailable' : 'available' ?>" onclick="return confirm('Ubah status stok menu ini?')">
+                <?= (isset($m['stok_tersedia']) && !$m['stok_tersedia']) ? '❌ Habis' : '✅ Tersedia' ?>
+              </a>
+            </div>
             <div class="menu-card-body">
               <h3 class="menu-card-title"><?= htmlspecialchars($m['nama'])?></h3>
               <p class="menu-card-desc"><?= htmlspecialchars($m['deskripsi'])?></p>
@@ -234,6 +306,22 @@ $notif = isset($_GET['notif']) ? $_GET['notif'] : '';
           </div>
           <?php endforeach ?>
         </div>
+
+        <script>
+          function filterCategory(cat) {
+            document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.querySelectorAll('.menu-card').forEach(card => {
+              const cardCat = card.querySelector('.menu-card-badge')?.textContent || '';
+              if (cat === 'Semua' || cardCat === cat) {
+                card.style.display = '';
+              } else {
+                card.style.display = 'none';
+              }
+            });
+          }
+        </script>
 
         <div style="margin-top: 24px; padding: 16px 20px; background: white; border-radius: 12px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: #64748b;">
           <span>Menampilkan <?= $menus->num_rows ?> produk</span>

@@ -49,6 +49,16 @@ $top_menu = $conn->query(
      LIMIT 5"
 );
 
+// Chart Data - Revenue 7 hari terakhir
+$chart_labels = [];
+$chart_data = [];
+for ($i = 6; $i >= 0; $i--) {
+    $date = date('Y-m-d', strtotime("-$i days"));
+    $chart_labels[] = date('d M', strtotime($date));
+    $rev = $conn->query("SELECT COALESCE(SUM(p.amount), 0) FROM payments p JOIN pesanan ps ON p.pesanan_id=ps.id WHERE DATE(ps.tanggal_pesan)='$date' AND p.status='confirmed'")->fetch_row()[0] ?: 0;
+    $chart_data[] = (int)$rev;
+}
+
 function formatRupiah($amount) {
     return 'Rp ' . number_format($amount, 0, ',', '.');
 }
@@ -61,6 +71,12 @@ function formatRupiah($amount) {
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="admin_styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .chart-card { background: white; border-radius: 16px; border: 1px solid #e2e8f0; padding: 24px; margin-bottom: 32px; }
+    .chart-card h3 { font-size: 16px; font-weight: 600; margin: 0 0 20px; color: #1e293b; }
+    .header-actions { display: flex; align-items: center; }
+  </style>
 </head>
 <body>
   <div class="admin-layout">
@@ -130,12 +146,14 @@ function formatRupiah($amount) {
           <h1>Dashboard</h1>
           <p>Selamat datang di panel admin HappyippieCake</p>
         </div>
-        <button class="btn-refresh" onclick="location.reload()">
-          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-          </svg>
-          Refresh
-        </button>
+        <div class="header-actions">
+          <button class="btn-refresh" onclick="location.reload()">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+            Refresh
+          </button>
+        </div>
       </div>
 
       <!-- Stat Cards -->
@@ -232,6 +250,12 @@ function formatRupiah($amount) {
         </div>
       </div>
 
+      <!-- Sales Chart -->
+      <div class="chart-card">
+        <h3>📈 Grafik Penjualan 7 Hari Terakhir</h3>
+        <canvas id="salesChart" height="100"></canvas>
+      </div>
+
       <!-- Content Cards -->
       <div class="content-cards">
         <!-- Order Terbaru -->
@@ -300,6 +324,52 @@ function formatRupiah($amount) {
   </div>
 
   <script>
+    // Chart initialization
+    const ctx = document.getElementById('salesChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: <?= json_encode($chart_labels) ?>,
+        datasets: [{
+          label: 'Revenue (Rp)',
+          data: <?= json_encode($chart_data) ?>,
+          borderColor: '#0d9488',
+          backgroundColor: 'rgba(13, 148, 136, 0.1)',
+          borderWidth: 3,
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: '#0d9488',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+          pointRadius: 5
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return 'Rp ' + context.raw.toLocaleString('id-ID');
+              }
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return 'Rp ' + (value/1000) + 'K';
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Sidebar toggle
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('collapsed');
       const mainContent = document.querySelector('.main-content');
@@ -309,6 +379,8 @@ function formatRupiah($amount) {
         mainContent.style.marginLeft = '260px';
       }
     }
+
+    // Notification functions removed per user request
   </script>
 </body>
 </html>

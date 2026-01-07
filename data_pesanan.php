@@ -153,6 +153,15 @@ $completed_count = $conn->query("SELECT COUNT(*) FROM pesanan WHERE status='sele
       margin-bottom: 16px;
       opacity: 0.5;
     }
+    /* Search & Filter Styles */
+    .search-filter-bar { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+    .search-input { flex: 1; min-width: 200px; padding: 10px 16px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 14px; }
+    .search-input:focus { outline: none; border-color: #0d9488; box-shadow: 0 0 0 3px rgba(13,148,136,0.1); }
+    .filter-select { padding: 10px 16px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 14px; background: white; cursor: pointer; }
+    .filter-select:focus { outline: none; border-color: #0d9488; }
+    .btn-export { display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; background: #059669; color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; }
+    .btn-export:hover { background: #047857; }
+    .highlight { background: #fef08a; }
   </style>
 </head>
 <body>
@@ -232,12 +241,35 @@ $completed_count = $conn->query("SELECT COUNT(*) FROM pesanan WHERE status='sele
           <h1>Order Management</h1>
           <p>Kelola semua pesanan masuk</p>
         </div>
-        <button class="btn-refresh" onclick="location.reload()">
-          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-          </svg>
-          Refresh
-        </button>
+        <div style="display:flex; gap:12px;">
+          <a href="export_laporan.php" class="btn-export">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            Export CSV
+          </a>
+          <button class="btn-refresh" onclick="location.reload()">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+            Refresh
+          </button>
+        </div>
+      </div>
+
+      <!-- Search & Filter Bar -->
+      <div class="search-filter-bar">
+        <input type="text" class="search-input" id="searchInput" placeholder="🔍 Cari nama pelanggan..." oninput="filterOrders()">
+        <select class="filter-select" id="filterDate" onchange="filterOrders()">
+          <option value="all">Semua Tanggal</option>
+          <option value="7">7 Hari Terakhir</option>
+          <option value="30">30 Hari Terakhir</option>
+        </select>
+        <select class="filter-select" id="filterStatus" onchange="filterOrders()">
+          <option value="all">Semua Status</option>
+          <option value="paid">Sudah Bayar</option>
+          <option value="pending">Belum Bayar</option>
+        </select>
       </div>
 
       <!-- Tabs -->
@@ -490,6 +522,48 @@ $completed_count = $conn->query("SELECT COUNT(*) FROM pesanan WHERE status='sele
       
       event.target.classList.add('active');
       document.getElementById('section-' + tab).classList.add('active');
+    }
+
+    // Filter orders function
+    function filterOrders() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const dateFilter = document.getElementById('filterDate').value;
+      const statusFilter = document.getElementById('filterStatus').value;
+      
+      const rows = document.querySelectorAll('#section-pending tbody tr, #section-completed tbody tr');
+      
+      rows.forEach(row => {
+        const name = row.querySelector('td:first-child')?.textContent.toLowerCase() || '';
+        const dateCell = row.querySelector('.badge-info, [style*="font-size:11px"]')?.textContent || '';
+        const statusBadge = row.querySelector('.badge-success, .badge-pending')?.textContent.toLowerCase() || '';
+        
+        let showRow = true;
+        
+        // Search filter
+        if (search && !name.includes(search)) {
+          showRow = false;
+        }
+        
+        // Status filter
+        if (statusFilter === 'paid' && !statusBadge.includes('bayar') && !statusBadge.includes('selesai') && !statusBadge.includes('lunas')) {
+          showRow = false;
+        }
+        if (statusFilter === 'pending' && (statusBadge.includes('bayar') || statusBadge.includes('selesai'))) {
+          showRow = false;
+        }
+        
+        row.style.display = showRow ? '' : 'none';
+      });
+      
+      // Update export link with filters
+      const exportLink = document.querySelector('.btn-export');
+      if (exportLink) {
+        let url = 'export_laporan.php?';
+        if (dateFilter !== 'all') url += 'days=' + dateFilter + '&';
+        if (statusFilter === 'paid') url += 'status=selesai';
+        else if (statusFilter === 'pending') url += 'status=pending';
+        exportLink.href = url;
+      }
     }
   </script>
 </body>

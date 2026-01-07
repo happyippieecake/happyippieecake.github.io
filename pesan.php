@@ -3,7 +3,14 @@ require_once 'db_connect.php';
 require_once 'PaymentGateway.php';
 
 $conn = new mysqli("localhost", "root", "", "happyippiecake");
-$menus = $conn->query("SELECT * FROM menu ORDER BY nama ASC");
+// Check if stok_tersedia column exists
+$has_stok = $conn->query("SHOW COLUMNS FROM menu LIKE 'stok_tersedia'")->num_rows > 0;
+// Only show available items if column exists, otherwise show all
+if ($has_stok) {
+    $menus = $conn->query("SELECT * FROM menu WHERE stok_tersedia = 1 OR stok_tersedia IS NULL ORDER BY nama ASC");
+} else {
+    $menus = $conn->query("SELECT * FROM menu ORDER BY nama ASC");
+}
 $error = '';
 $success = '';
 

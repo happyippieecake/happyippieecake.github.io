@@ -2,8 +2,11 @@
 $conn = new mysqli("localhost", "root", "", "happyippiecake");
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-$menu = ['nama'=>'', 'deskripsi'=>'', 'harga'=>'', 'gambar'=>''];
+$menu = ['nama'=>'', 'deskripsi'=>'', 'harga'=>'', 'gambar'=>'', 'kategori'=>'Lainnya', 'stok_tersedia'=>1];
 $error = ''; $success = '';
+
+// Available categories
+$kategori_options = ['Cake', 'Cookies', 'Brownies', 'Bread', 'Pastry', 'Lainnya'];
 
 if (isset($_GET['delete'])) {
   $del_id = intval($_GET['delete']);
@@ -22,6 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $nama = trim($_POST['nama']);
   $deskripsi = trim($_POST['deskripsi']);
   $harga = trim($_POST['harga']);
+  $kategori = isset($_POST['kategori']) ? trim($_POST['kategori']) : 'Lainnya';
+  $stok_tersedia = isset($_POST['stok_tersedia']) ? 1 : 0;
   $gambar = isset($_POST['old_gambar']) ? $_POST['old_gambar'] : '';
 
   // Proses upload gambar jika ada file baru
@@ -50,14 +55,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } elseif (!is_numeric($harga) || $harga < 1000) {
       $error = "Harga harus angka dan lebih dari 1.000";
     } else {
+      // Check if new columns exist
+      $has_kategori = $conn->query("SHOW COLUMNS FROM menu LIKE 'kategori'")->num_rows > 0;
+      $has_stok = $conn->query("SHOW COLUMNS FROM menu LIKE 'stok_tersedia'")->num_rows > 0;
+      
       if ($id) {
-        $stmt = $conn->prepare("UPDATE menu SET nama=?, deskripsi=?, harga=?, gambar=? WHERE id=?");
-        $stmt->bind_param("ssisi", $nama, $deskripsi, $harga, $gambar, $id);
+        // UPDATE
+        if ($has_kategori && $has_stok) {
+          $stmt = $conn->prepare("UPDATE menu SET nama=?, deskripsi=?, harga=?, gambar=?, kategori=?, stok_tersedia=? WHERE id=?");
+          $stmt->bind_param("ssissii", $nama, $deskripsi, $harga, $gambar, $kategori, $stok_tersedia, $id);
+        } else {
+          $stmt = $conn->prepare("UPDATE menu SET nama=?, deskripsi=?, harga=?, gambar=? WHERE id=?");
+          $stmt->bind_param("ssisi", $nama, $deskripsi, $harga, $gambar, $id);
+        }
         $stmt->execute();
         $success = "Menu berhasil diupdate!";
       } else {
-        $stmt = $conn->prepare("INSERT INTO menu (nama, deskripsi, harga, gambar) VALUES (?,?,?,?)");
-        $stmt->bind_param("ssis", $nama, $deskripsi, $harga, $gambar);
+        // INSERT
+        if ($has_kategori && $has_stok) {
+          $stmt = $conn->prepare("INSERT INTO menu (nama, deskripsi, harga, gambar, kategori, stok_tersedia) VALUES (?,?,?,?,?,?)");
+          $stmt->bind_param("ssissi", $nama, $deskripsi, $harga, $gambar, $kategori, $stok_tersedia);
+        } else {
+          $stmt = $conn->prepare("INSERT INTO menu (nama, deskripsi, harga, gambar) VALUES (?,?,?,?)");
+          $stmt->bind_param("ssis", $nama, $deskripsi, $harga, $gambar);
+        }
         $stmt->execute();
         $success = "Menu berhasil ditambahkan!";
       }
@@ -254,6 +275,25 @@ function imgPreview($src) {
               <input type="hidden" name="old_gambar" value="<?= htmlspecialchars($menu['gambar']) ?>">
             <?php endif; ?>
             <p style="font-size: 12px; color: #94a3b8; margin-top: 8px;">Format: JPG, PNG, GIF, WebP. Maks 2MB</p>
+          </div>
+          
+          <!-- Category -->
+          <div class="form-group">
+            <label>Kategori</label>
+            <select name="kategori" class="form-control">
+              <?php foreach($kategori_options as $kat): ?>
+                <option value="<?= $kat ?>" <?= (isset($menu['kategori']) && $menu['kategori'] == $kat) ? 'selected' : '' ?>><?= $kat ?></option>
+              <?php endforeach; ?>
+            </select>
+          </div>
+          
+          <!-- Stock Toggle -->
+          <div class="form-group">
+            <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+              <input type="checkbox" name="stok_tersedia" value="1" <?= (!isset($menu['stok_tersedia']) || $menu['stok_tersedia']) ? 'checked' : '' ?> style="width: 20px; height: 20px; accent-color: #0d9488;">
+              <span>Tersedia untuk dijual</span>
+            </label>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Hapus centang untuk menandai menu sebagai "Habis"</p>
           </div>
           
           <div class="form-actions">
