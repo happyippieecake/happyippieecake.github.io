@@ -13,11 +13,9 @@ use const PHP_OS;
 use const PHP_OS_FAMILY;
 use const PHP_VERSION;
 use function addcslashes;
-use function array_column;
 use function assert;
 use function extension_loaded;
 use function function_exists;
-use function in_array;
 use function ini_get;
 use function method_exists;
 use function phpversion;
@@ -31,23 +29,18 @@ use PHPUnit\Metadata\RequiresOperatingSystemFamily;
 use PHPUnit\Metadata\RequiresPhp;
 use PHPUnit\Metadata\RequiresPhpExtension;
 use PHPUnit\Metadata\RequiresPhpunit;
-use PHPUnit\Metadata\RequiresPhpunitExtension;
 use PHPUnit\Metadata\RequiresSetting;
 use PHPUnit\Runner\Version;
-use PHPUnit\TextUI\Configuration\Registry as ConfigurationRegistry;
 
 /**
- * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
- *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-final readonly class Requirements
+final class Requirements
 {
     /**
-     * @param class-string     $className
-     * @param non-empty-string $methodName
+     * @psalm-param class-string $className
      *
-     * @return list<string>
+     * @psalm-return list<string>
      */
     public function requirementsNotSatisfiedFor(string $className, string $methodName): array
     {
@@ -60,7 +53,7 @@ final readonly class Requirements
                 if (!$metadata->versionRequirement()->isSatisfiedBy(PHP_VERSION)) {
                     $notSatisfied[] = sprintf(
                         'PHP %s is required.',
-                        $metadata->versionRequirement()->asString(),
+                        $metadata->versionRequirement()->asString()
                     );
                 }
             }
@@ -74,7 +67,7 @@ final readonly class Requirements
                     $notSatisfied[] = sprintf(
                         'PHP extension %s%s is required.',
                         $metadata->extension(),
-                        $metadata->hasVersionRequirement() ? (' ' . $metadata->versionRequirement()->asString()) : '',
+                        $metadata->hasVersionRequirement() ? (' ' . $metadata->versionRequirement()->asString()) : ''
                     );
                 }
             }
@@ -85,22 +78,7 @@ final readonly class Requirements
                 if (!$metadata->versionRequirement()->isSatisfiedBy(Version::id())) {
                     $notSatisfied[] = sprintf(
                         'PHPUnit %s is required.',
-                        $metadata->versionRequirement()->asString(),
-                    );
-                }
-            }
-
-            if ($metadata->isRequiresPhpunitExtension()) {
-                assert($metadata instanceof RequiresPhpunitExtension);
-
-                $configuration = ConfigurationRegistry::get();
-
-                $extensionBootstrappers = array_column($configuration->extensionBootstrappers(), 'className');
-
-                if ($configuration->noExtensions() || !in_array($metadata->extensionClass(), $extensionBootstrappers, true)) {
-                    $notSatisfied[] = sprintf(
-                        'PHPUnit extension "%s" is required.',
-                        $metadata->extensionClass(),
+                        $metadata->versionRequirement()->asString()
                     );
                 }
             }
@@ -111,7 +89,7 @@ final readonly class Requirements
                 if ($metadata->operatingSystemFamily() !== PHP_OS_FAMILY) {
                     $notSatisfied[] = sprintf(
                         'Operating system %s is required.',
-                        $metadata->operatingSystemFamily(),
+                        $metadata->operatingSystemFamily()
                     );
                 }
             }
@@ -121,13 +99,13 @@ final readonly class Requirements
 
                 $pattern = sprintf(
                     '/%s/i',
-                    addcslashes($metadata->operatingSystem(), '/'),
+                    addcslashes($metadata->operatingSystem(), '/')
                 );
 
                 if (!preg_match($pattern, PHP_OS)) {
                     $notSatisfied[] = sprintf(
                         'Operating system %s is required.',
-                        $metadata->operatingSystem(),
+                        $metadata->operatingSystem()
                     );
                 }
             }
@@ -138,7 +116,7 @@ final readonly class Requirements
                 if (!function_exists($metadata->functionName())) {
                     $notSatisfied[] = sprintf(
                         'Function %s() is required.',
-                        $metadata->functionName(),
+                        $metadata->functionName()
                     );
                 }
             }
@@ -150,7 +128,7 @@ final readonly class Requirements
                     $notSatisfied[] = sprintf(
                         'Method %s::%s() is required.',
                         $metadata->className(),
-                        $metadata->methodName(),
+                        $metadata->methodName()
                     );
                 }
             }
@@ -162,7 +140,7 @@ final readonly class Requirements
                     $notSatisfied[] = sprintf(
                         'Setting "%s" is required to be "%s".',
                         $metadata->setting(),
-                        $metadata->value(),
+                        $metadata->value()
                     );
                 }
             }

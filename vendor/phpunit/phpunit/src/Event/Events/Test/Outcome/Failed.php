@@ -11,7 +11,6 @@ namespace PHPUnit\Event\Test;
 
 use const PHP_EOL;
 use function sprintf;
-use function trim;
 use PHPUnit\Event\Code;
 use PHPUnit\Event\Code\ComparisonFailure;
 use PHPUnit\Event\Code\Throwable;
@@ -19,16 +18,16 @@ use PHPUnit\Event\Event;
 use PHPUnit\Event\Telemetry;
 
 /**
- * @immutable
+ * @psalm-immutable
  *
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final readonly class Failed implements Event
+final class Failed implements Event
 {
-    private Telemetry\Info $telemetryInfo;
-    private Code\Test $test;
-    private Throwable $throwable;
-    private ?ComparisonFailure $comparisonFailure;
+    private readonly Telemetry\Info $telemetryInfo;
+    private readonly Code\Test $test;
+    private readonly Throwable $throwable;
+    private readonly ?ComparisonFailure $comparisonFailure;
 
     public function __construct(Telemetry\Info $telemetryInfo, Code\Test $test, Throwable $throwable, ?ComparisonFailure $comparisonFailure)
     {
@@ -54,7 +53,7 @@ final readonly class Failed implements Event
     }
 
     /**
-     * @phpstan-assert-if-true !null $this->comparisonFailure
+     * @psalm-assert-if-true !null $this->comparisonFailure
      */
     public function hasComparisonFailure(): bool
     {
@@ -75,7 +74,7 @@ final readonly class Failed implements Event
 
     public function asString(): string
     {
-        $message = trim($this->throwable->message());
+        $message = $this->throwable->message();
 
         if (!empty($message)) {
             $message = PHP_EOL . $message;
@@ -84,7 +83,7 @@ final readonly class Failed implements Event
         return sprintf(
             'Test Failed (%s)%s',
             $this->test->id(),
-            $message,
+            $message
         );
     }
 }

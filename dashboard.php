@@ -59,8 +59,10 @@ for ($i = 6; $i >= 0; $i--) {
     $chart_data[] = (int)$rev;
 }
 
-function formatRupiah($amount) {
-    return 'Rp ' . number_format($amount, 0, ',', '.');
+if (!function_exists('formatRupiah')) {
+    function formatRupiah($amount) {
+        return 'Rp ' . number_format($amount, 0, ',', '.');
+    }
 }
 ?>
 <!DOCTYPE html>

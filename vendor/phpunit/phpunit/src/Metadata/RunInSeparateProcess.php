@@ -10,13 +10,13 @@
 namespace PHPUnit\Metadata;
 
 /**
- * @immutable
+ * @internal This class is not covered by the backward compatibility promise for PHPUnit
  *
- * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ * @psalm-immutable
  */
-final readonly class RunInSeparateProcess extends Metadata
+final class RunInSeparateProcess extends Metadata
 {
-    public function isRunInSeparateProcess(): true
+    public function isRunInSeparateProcess(): bool
     {
         return true;
     }

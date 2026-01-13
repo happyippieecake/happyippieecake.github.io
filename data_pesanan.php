@@ -47,8 +47,10 @@ function formatPaymentMethod($method) {
 }
 
 // Function to format currency
-function formatRupiah($amount) {
-    return 'Rp ' . number_format($amount, 0, ',', '.');
+if (!function_exists('formatRupiah')) {
+    function formatRupiah($amount) {
+        return 'Rp ' . number_format($amount, 0, ',', '.');
+    }
 }
 
 // Count stats

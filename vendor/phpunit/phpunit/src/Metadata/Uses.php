@@ -10,21 +10,14 @@
 namespace PHPUnit\Metadata;
 
 /**
- * @immutable
+ * @internal This class is not covered by the backward compatibility promise for PHPUnit
  *
- * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ * @psalm-immutable
  */
-final readonly class Uses extends Metadata
+final class Uses extends Metadata
 {
-    /**
-     * @var non-empty-string
-     */
-    private string $target;
+    private readonly string $target;
 
-    /**
-     * @param 0|1              $level
-     * @param non-empty-string $target
-     */
     protected function __construct(int $level, string $target)
     {
         parent::__construct($level);
@@ -32,14 +25,11 @@ final readonly class Uses extends Metadata
         $this->target = $target;
     }
 
-    public function isUses(): true
+    public function isUses(): bool
     {
         return true;
     }
 
-    /**
-     * @return non-empty-string
-     */
     public function target(): string
     {
         return $this->target;

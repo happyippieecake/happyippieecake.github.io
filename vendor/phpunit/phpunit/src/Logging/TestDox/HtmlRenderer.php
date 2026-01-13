@@ -12,11 +12,9 @@ namespace PHPUnit\Logging\TestDox;
 use function sprintf;
 
 /**
- * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
- *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-final readonly class HtmlRenderer
+final class HtmlRenderer
 {
     /**
      * @var string
@@ -30,7 +28,6 @@ final readonly class HtmlRenderer
         <style>
             body {
                 text-rendering: optimizeLegibility;
-                font-family: Source SansSerif Pro, Arial, sans-serif;
                 font-variant-ligatures: common-ligatures;
                 font-kerning: normal;
                 margin-left: 2rem;
@@ -39,21 +36,23 @@ final readonly class HtmlRenderer
             }
 
             body > ul > li {
+                font-family: Source Serif Pro, PT Sans, Trebuchet MS, Helvetica, Arial;
                 font-size: larger;
             }
 
             h2 {
+                font-family: Tahoma, Helvetica, Arial;
                 font-size: larger;
-                text-decoration-line: underline;
-                text-decoration-thickness: 2px;
                 margin: 0;
                 padding: 0.5rem 0;
             }
 
             ul {
                 list-style: none;
-                margin: 0 0 2rem;
-                padding: 0 0 0 1rem;
+                margin: 0;
+                padding: 0;
+                margin-bottom: 2rem;
+                padding-left: 1rem;
                 text-indent: -1rem;
             }
 
@@ -104,7 +103,7 @@ EOT;
 EOT;
 
     /**
-     * @param array<string, TestResultCollection> $tests
+     * @psalm-param array<string, TestResultCollection> $tests
      */
     public function render(array $tests): string
     {
@@ -113,14 +112,14 @@ EOT;
         foreach ($tests as $prettifiedClassName => $_tests) {
             $buffer .= sprintf(
                 self::CLASS_HEADER,
-                $prettifiedClassName,
+                $prettifiedClassName
             );
 
-            foreach ($this->reduce($_tests) as $prettifiedMethodName => $outcome) {
+            foreach ($_tests as $test) {
                 $buffer .= sprintf(
                     "            <li class=\"%s\">%s</li>\n",
-                    $outcome,
-                    $prettifiedMethodName,
+                    $test->status()->isSuccess() ? 'success' : 'defect',
+                    $test->test()->testDox()->prettifiedMethodName()
                 );
             }
 
@@ -128,31 +127,5 @@ EOT;
         }
 
         return $buffer . self::PAGE_FOOTER;
-    }
-
-    /**
-     * @return array<string, 'defect'|'success'>
-     */
-    private function reduce(TestResultCollection $tests): array
-    {
-        $result = [];
-
-        foreach ($tests as $test) {
-            $prettifiedMethodName = $test->test()->testDox()->prettifiedMethodName();
-
-            if (!isset($result[$prettifiedMethodName])) {
-                $result[$prettifiedMethodName] = $test->status()->isSuccess() ? 'success' : 'defect';
-
-                continue;
-            }
-
-            if ($test->status()->isSuccess()) {
-                continue;
-            }
-
-            $result[$prettifiedMethodName] = 'defect';
-        }
-
-        return $result;
     }
 }

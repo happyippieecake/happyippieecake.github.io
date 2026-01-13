@@ -11,26 +11,46 @@ namespace PHPUnit\Metadata;
 
 use function array_filter;
 use function array_merge;
+use function class_exists;
 use function count;
+use function method_exists;
 use Countable;
 use IteratorAggregate;
+use PHPUnit\Metadata\Parser\Registry as MetadataRegistry;
 
 /**
+ * @internal This class is not covered by the backward compatibility promise for PHPUnit
+ *
  * @template-implements IteratorAggregate<int, Metadata>
  *
- * @immutable
- *
- * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ * @psalm-immutable
  */
-final readonly class MetadataCollection implements Countable, IteratorAggregate
+final class MetadataCollection implements Countable, IteratorAggregate
 {
     /**
-     * @var list<Metadata>
+     * @psalm-var list<Metadata>
      */
-    private array $metadata;
+    private readonly array $metadata;
 
     /**
-     * @param list<Metadata> $metadata
+     * @psalm-param class-string $className
+     * @psalm-param non-empty-string $methodName
+     */
+    public static function for(string $className, string $methodName): self
+    {
+        if (class_exists($className)) {
+            if (method_exists($className, $methodName)) {
+                return MetadataRegistry::parser()->forClassAndMethod($className, $methodName);
+            }
+
+            return MetadataRegistry::parser()->forClass($className);
+        }
+
+        return self::fromArray([]);
+    }
+
+    /**
+     * @psalm-param list<Metadata> $metadata
      */
     public static function fromArray(array $metadata): self
     {
@@ -43,7 +63,7 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
     }
 
     /**
-     * @return list<Metadata>
+     * @psalm-return list<Metadata>
      */
     public function asArray(): array
     {
@@ -75,8 +95,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_merge(
                 $this->asArray(),
-                $other->asArray(),
-            ),
+                $other->asArray()
+            )
         );
     }
 
@@ -85,8 +105,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isClassLevel(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isClassLevel()
+            )
         );
     }
 
@@ -95,8 +115,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isMethodLevel(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isMethodLevel()
+            )
         );
     }
 
@@ -105,8 +125,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isAfter(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isAfter()
+            )
         );
     }
 
@@ -115,8 +135,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isAfterClass(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isAfterClass()
+            )
         );
     }
 
@@ -125,8 +145,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isBackupGlobals(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isBackupGlobals()
+            )
         );
     }
 
@@ -135,8 +155,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isBackupStaticProperties(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isBackupStaticProperties()
+            )
         );
     }
 
@@ -145,8 +165,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isBeforeClass(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isBeforeClass()
+            )
         );
     }
 
@@ -155,8 +175,18 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isBefore(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isBefore()
+            )
+        );
+    }
+
+    public function isCodeCoverageIgnore(): self
+    {
+        return new self(
+            ...array_filter(
+                $this->metadata,
+                static fn (Metadata $metadata): bool => $metadata->isCodeCoverageIgnore()
+            )
         );
     }
 
@@ -165,8 +195,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isCovers(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isCovers()
+            )
         );
     }
 
@@ -175,8 +205,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isCoversClass(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isCoversClass()
+            )
         );
     }
 
@@ -185,18 +215,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isCoversDefaultClass(),
-            ),
-        );
-    }
-
-    public function isCoversTrait(): self
-    {
-        return new self(
-            ...array_filter(
-                $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isCoversTrait(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isCoversDefaultClass()
+            )
         );
     }
 
@@ -205,18 +225,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isCoversFunction(),
-            ),
-        );
-    }
-
-    public function isCoversMethod(): self
-    {
-        return new self(
-            ...array_filter(
-                $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isCoversMethod(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isCoversFunction()
+            )
         );
     }
 
@@ -225,8 +235,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isExcludeGlobalVariableFromBackup(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isExcludeGlobalVariableFromBackup()
+            )
         );
     }
 
@@ -235,8 +245,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isExcludeStaticPropertyFromBackup(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isExcludeStaticPropertyFromBackup()
+            )
         );
     }
 
@@ -245,8 +255,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isCoversNothing(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isCoversNothing()
+            )
         );
     }
 
@@ -255,8 +265,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isDataProvider(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isDataProvider()
+            )
         );
     }
 
@@ -265,8 +275,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isDependsOnClass() || $metadata->isDependsOnMethod(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isDependsOnClass() || $metadata->isDependsOnMethod()
+            )
         );
     }
 
@@ -275,8 +285,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isDependsOnClass(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isDependsOnClass()
+            )
         );
     }
 
@@ -285,18 +295,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isDependsOnMethod(),
-            ),
-        );
-    }
-
-    public function isDisableReturnValueGenerationForTestDoubles(): self
-    {
-        return new self(
-            ...array_filter(
-                $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isDisableReturnValueGenerationForTestDoubles(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isDependsOnMethod()
+            )
         );
     }
 
@@ -305,8 +305,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isDoesNotPerformAssertions(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isDoesNotPerformAssertions()
+            )
         );
     }
 
@@ -315,31 +315,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isGroup(),
-            ),
-        );
-    }
-
-    public function isIgnoreDeprecations(): self
-    {
-        return new self(
-            ...array_filter(
-                $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isIgnoreDeprecations(),
-            ),
-        );
-    }
-
-    /**
-     * @internal This method is not covered by the backward compatibility promise for PHPUnit
-     */
-    public function isIgnorePhpunitDeprecations(): self
-    {
-        return new self(
-            ...array_filter(
-                $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isIgnorePhpunitDeprecations(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isGroup()
+            )
         );
     }
 
@@ -348,8 +325,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isRunClassInSeparateProcess(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isRunClassInSeparateProcess()
+            )
         );
     }
 
@@ -358,8 +335,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isRunInSeparateProcess(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isRunInSeparateProcess()
+            )
         );
     }
 
@@ -368,8 +345,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isRunTestsInSeparateProcesses(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isRunTestsInSeparateProcesses()
+            )
         );
     }
 
@@ -378,8 +355,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isTest(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isTest()
+            )
         );
     }
 
@@ -388,8 +365,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isPreCondition(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isPreCondition()
+            )
         );
     }
 
@@ -398,8 +375,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isPostCondition(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isPostCondition()
+            )
         );
     }
 
@@ -408,8 +385,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isPreserveGlobalState(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isPreserveGlobalState()
+            )
         );
     }
 
@@ -418,8 +395,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isRequiresMethod(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isRequiresMethod()
+            )
         );
     }
 
@@ -428,8 +405,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isRequiresFunction(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isRequiresFunction()
+            )
         );
     }
 
@@ -438,8 +415,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isRequiresOperatingSystem(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isRequiresOperatingSystem()
+            )
         );
     }
 
@@ -448,8 +425,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isRequiresOperatingSystemFamily(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isRequiresOperatingSystemFamily()
+            )
         );
     }
 
@@ -458,8 +435,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isRequiresPhp(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isRequiresPhp()
+            )
         );
     }
 
@@ -468,8 +445,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isRequiresPhpExtension(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isRequiresPhpExtension()
+            )
         );
     }
 
@@ -478,18 +455,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isRequiresPhpunit(),
-            ),
-        );
-    }
-
-    public function isRequiresPhpunitExtension(): self
-    {
-        return new self(
-            ...array_filter(
-                $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isRequiresPhpunitExtension(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isRequiresPhpunit()
+            )
         );
     }
 
@@ -498,8 +465,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isRequiresSetting(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isRequiresSetting()
+            )
         );
     }
 
@@ -508,8 +475,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isTestDox(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isTestDox()
+            )
         );
     }
 
@@ -518,8 +485,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isTestWith(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isTestWith()
+            )
         );
     }
 
@@ -528,8 +495,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isUses(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isUses()
+            )
         );
     }
 
@@ -538,8 +505,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isUsesClass(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isUsesClass()
+            )
         );
     }
 
@@ -548,18 +515,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isUsesDefaultClass(),
-            ),
-        );
-    }
-
-    public function isUsesTrait(): self
-    {
-        return new self(
-            ...array_filter(
-                $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isUsesTrait(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isUsesDefaultClass()
+            )
         );
     }
 
@@ -568,28 +525,8 @@ final readonly class MetadataCollection implements Countable, IteratorAggregate
         return new self(
             ...array_filter(
                 $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isUsesFunction(),
-            ),
-        );
-    }
-
-    public function isUsesMethod(): self
-    {
-        return new self(
-            ...array_filter(
-                $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isUsesMethod(),
-            ),
-        );
-    }
-
-    public function isWithoutErrorHandler(): self
-    {
-        return new self(
-            ...array_filter(
-                $this->metadata,
-                static fn (Metadata $metadata): bool => $metadata->isWithoutErrorHandler(),
-            ),
+                static fn (Metadata $metadata): bool => $metadata->isUsesFunction()
+            )
         );
     }
 }

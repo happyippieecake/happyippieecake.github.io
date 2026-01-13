@@ -11,25 +11,18 @@ namespace PHPUnit\Metadata\Parser;
 
 use const JSON_THROW_ON_ERROR;
 use function assert;
-use function class_exists;
 use function json_decode;
-use function method_exists;
-use function sprintf;
 use function str_starts_with;
-use function strtolower;
-use function trim;
-use PHPUnit\Event\Facade as EventFacade;
 use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\Attributes\AfterClass;
 use PHPUnit\Framework\Attributes\BackupGlobals;
 use PHPUnit\Framework\Attributes\BackupStaticProperties;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\BeforeClass;
+use PHPUnit\Framework\Attributes\CodeCoverageIgnore;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversFunction;
-use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\CoversNothing;
-use PHPUnit\Framework\Attributes\CoversTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\Attributes\Depends;
@@ -41,13 +34,10 @@ use PHPUnit\Framework\Attributes\DependsOnClassUsingDeepClone;
 use PHPUnit\Framework\Attributes\DependsOnClassUsingShallowClone;
 use PHPUnit\Framework\Attributes\DependsUsingDeepClone;
 use PHPUnit\Framework\Attributes\DependsUsingShallowClone;
-use PHPUnit\Framework\Attributes\DisableReturnValueGenerationForTestDoubles;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\Attributes\ExcludeGlobalVariableFromBackup;
 use PHPUnit\Framework\Attributes\ExcludeStaticPropertyFromBackup;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\IgnoreDeprecations;
-use PHPUnit\Framework\Attributes\IgnorePhpunitDeprecations;
 use PHPUnit\Framework\Attributes\Large;
 use PHPUnit\Framework\Attributes\Medium;
 use PHPUnit\Framework\Attributes\PostCondition;
@@ -60,7 +50,6 @@ use PHPUnit\Framework\Attributes\RequiresOperatingSystemFamily;
 use PHPUnit\Framework\Attributes\RequiresPhp;
 use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 use PHPUnit\Framework\Attributes\RequiresPhpunit;
-use PHPUnit\Framework\Attributes\RequiresPhpunitExtension;
 use PHPUnit\Framework\Attributes\RequiresSetting;
 use PHPUnit\Framework\Attributes\RunClassInSeparateProcess;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
@@ -73,9 +62,6 @@ use PHPUnit\Framework\Attributes\TestWithJson;
 use PHPUnit\Framework\Attributes\Ticket;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesFunction;
-use PHPUnit\Framework\Attributes\UsesMethod;
-use PHPUnit\Framework\Attributes\UsesTrait;
-use PHPUnit\Framework\Attributes\WithoutErrorHandler;
 use PHPUnit\Metadata\Metadata;
 use PHPUnit\Metadata\MetadataCollection;
 use PHPUnit\Metadata\Version\ConstraintRequirement;
@@ -83,27 +69,19 @@ use ReflectionClass;
 use ReflectionMethod;
 
 /**
- * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
- *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-final readonly class AttributeParser implements Parser
+final class AttributeParser implements Parser
 {
     /**
-     * @param class-string $className
+     * @psalm-param class-string $className
      */
     public function forClass(string $className): MetadataCollection
     {
-        assert(class_exists($className));
-
         $result = [];
 
         foreach ((new ReflectionClass($className))->getAttributes() as $attribute) {
             if (!str_starts_with($attribute->getName(), 'PHPUnit\\Framework\\Attributes\\')) {
-                continue;
-            }
-
-            if (!class_exists($attribute->getName())) {
                 continue;
             }
 
@@ -124,17 +102,15 @@ final readonly class AttributeParser implements Parser
 
                     break;
 
+                case CodeCoverageIgnore::class:
+                    $result[] = Metadata::codeCoverageIgnoreOnClass();
+
+                    break;
+
                 case CoversClass::class:
                     assert($attributeInstance instanceof CoversClass);
 
                     $result[] = Metadata::coversClass($attributeInstance->className());
-
-                    break;
-
-                case CoversTrait::class:
-                    assert($attributeInstance instanceof CoversTrait);
-
-                    $result[] = Metadata::coversTrait($attributeInstance->traitName());
 
                     break;
 
@@ -145,23 +121,8 @@ final readonly class AttributeParser implements Parser
 
                     break;
 
-                case CoversMethod::class:
-                    assert($attributeInstance instanceof CoversMethod);
-
-                    $result[] = Metadata::coversMethod(
-                        $attributeInstance->className(),
-                        $attributeInstance->methodName(),
-                    );
-
-                    break;
-
                 case CoversNothing::class:
                     $result[] = Metadata::coversNothingOnClass();
-
-                    break;
-
-                case DisableReturnValueGenerationForTestDoubles::class:
-                    $result[] = Metadata::disableReturnValueGenerationForTestDoubles();
 
                     break;
 
@@ -182,7 +143,7 @@ final readonly class AttributeParser implements Parser
 
                     $result[] = Metadata::excludeStaticPropertyFromBackupOnClass(
                         $attributeInstance->className(),
-                        $attributeInstance->propertyName(),
+                        $attributeInstance->propertyName()
                     );
 
                     break;
@@ -190,9 +151,7 @@ final readonly class AttributeParser implements Parser
                 case Group::class:
                     assert($attributeInstance instanceof Group);
 
-                    if (!$this->isSizeGroup($attributeInstance->name(), $className)) {
-                        $result[] = Metadata::groupOnClass($attributeInstance->name());
-                    }
+                    $result[] = Metadata::groupOnClass($attributeInstance->name());
 
                     break;
 
@@ -203,20 +162,6 @@ final readonly class AttributeParser implements Parser
 
                 case Medium::class:
                     $result[] = Metadata::groupOnClass('medium');
-
-                    break;
-
-                case IgnoreDeprecations::class:
-                    assert($attributeInstance instanceof IgnoreDeprecations);
-
-                    $result[] = Metadata::ignoreDeprecationsOnClass();
-
-                    break;
-
-                case IgnorePhpunitDeprecations::class:
-                    assert($attributeInstance instanceof IgnorePhpunitDeprecations);
-
-                    $result[] = Metadata::ignorePhpunitDeprecationsOnClass();
 
                     break;
 
@@ -232,7 +177,7 @@ final readonly class AttributeParser implements Parser
 
                     $result[] = Metadata::requiresMethodOnClass(
                         $attributeInstance->className(),
-                        $attributeInstance->methodName(),
+                        $attributeInstance->methodName()
                     );
 
                     break;
@@ -263,8 +208,8 @@ final readonly class AttributeParser implements Parser
 
                     $result[] = Metadata::requiresPhpOnClass(
                         ConstraintRequirement::from(
-                            $attributeInstance->versionRequirement(),
-                        ),
+                            $attributeInstance->versionRequirement()
+                        )
                     );
 
                     break;
@@ -281,7 +226,7 @@ final readonly class AttributeParser implements Parser
 
                     $result[] = Metadata::requiresPhpExtensionOnClass(
                         $attributeInstance->extension(),
-                        $versionConstraint,
+                        $versionConstraint
                     );
 
                     break;
@@ -291,17 +236,8 @@ final readonly class AttributeParser implements Parser
 
                     $result[] = Metadata::requiresPhpunitOnClass(
                         ConstraintRequirement::from(
-                            $attributeInstance->versionRequirement(),
-                        ),
-                    );
-
-                    break;
-
-                case RequiresPhpunitExtension::class:
-                    assert($attributeInstance instanceof RequiresPhpunitExtension);
-
-                    $result[] = Metadata::requiresPhpunitExtensionOnClass(
-                        $attributeInstance->extensionClass(),
+                            $attributeInstance->versionRequirement()
+                        )
                     );
 
                     break;
@@ -311,7 +247,7 @@ final readonly class AttributeParser implements Parser
 
                     $result[] = Metadata::requiresSettingOnClass(
                         $attributeInstance->setting(),
-                        $attributeInstance->value(),
+                        $attributeInstance->value()
                     );
 
                     break;
@@ -352,27 +288,10 @@ final readonly class AttributeParser implements Parser
 
                     break;
 
-                case UsesTrait::class:
-                    assert($attributeInstance instanceof UsesTrait);
-
-                    $result[] = Metadata::usesTrait($attributeInstance->traitName());
-
-                    break;
-
                 case UsesFunction::class:
                     assert($attributeInstance instanceof UsesFunction);
 
                     $result[] = Metadata::usesFunction($attributeInstance->functionName());
-
-                    break;
-
-                case UsesMethod::class:
-                    assert($attributeInstance instanceof UsesMethod);
-
-                    $result[] = Metadata::usesMethod(
-                        $attributeInstance->className(),
-                        $attributeInstance->methodName(),
-                    );
 
                     break;
             }
@@ -382,14 +301,10 @@ final readonly class AttributeParser implements Parser
     }
 
     /**
-     * @param class-string     $className
-     * @param non-empty-string $methodName
+     * @psalm-param class-string $className
      */
     public function forMethod(string $className, string $methodName): MetadataCollection
     {
-        assert(class_exists($className));
-        assert(method_exists($className, $methodName));
-
         $result = [];
 
         foreach ((new ReflectionMethod($className, $methodName))->getAttributes() as $attribute) {
@@ -397,24 +312,16 @@ final readonly class AttributeParser implements Parser
                 continue;
             }
 
-            if (!class_exists($attribute->getName())) {
-                continue;
-            }
-
             $attributeInstance = $attribute->newInstance();
 
             switch ($attribute->getName()) {
                 case After::class:
-                    assert($attributeInstance instanceof After);
-
-                    $result[] = Metadata::after($attributeInstance->priority());
+                    $result[] = Metadata::after();
 
                     break;
 
                 case AfterClass::class:
-                    assert($attributeInstance instanceof AfterClass);
-
-                    $result[] = Metadata::afterClass($attributeInstance->priority());
+                    $result[] = Metadata::afterClass();
 
                     break;
 
@@ -433,16 +340,17 @@ final readonly class AttributeParser implements Parser
                     break;
 
                 case Before::class:
-                    assert($attributeInstance instanceof Before);
-
-                    $result[] = Metadata::before($attributeInstance->priority());
+                    $result[] = Metadata::before();
 
                     break;
 
                 case BeforeClass::class:
-                    assert($attributeInstance instanceof BeforeClass);
+                    $result[] = Metadata::beforeClass();
 
-                    $result[] = Metadata::beforeClass($attributeInstance->priority());
+                    break;
+
+                case CodeCoverageIgnore::class:
+                    $result[] = Metadata::codeCoverageIgnoreOnMethod();
 
                     break;
 
@@ -547,7 +455,7 @@ final readonly class AttributeParser implements Parser
 
                     $result[] = Metadata::excludeStaticPropertyFromBackupOnMethod(
                         $attributeInstance->className(),
-                        $attributeInstance->propertyName(),
+                        $attributeInstance->propertyName()
                     );
 
                     break;
@@ -555,37 +463,17 @@ final readonly class AttributeParser implements Parser
                 case Group::class:
                     assert($attributeInstance instanceof Group);
 
-                    if (!$this->isSizeGroup($attributeInstance->name(), $className, $methodName)) {
-                        $result[] = Metadata::groupOnMethod($attributeInstance->name());
-                    }
-
-                    break;
-
-                case IgnoreDeprecations::class:
-                    assert($attributeInstance instanceof IgnoreDeprecations);
-
-                    $result[] = Metadata::ignoreDeprecationsOnMethod();
-
-                    break;
-
-                case IgnorePhpunitDeprecations::class:
-                    assert($attributeInstance instanceof IgnorePhpunitDeprecations);
-
-                    $result[] = Metadata::ignorePhpunitDeprecationsOnMethod();
+                    $result[] = Metadata::groupOnMethod($attributeInstance->name());
 
                     break;
 
                 case PostCondition::class:
-                    assert($attributeInstance instanceof PostCondition);
-
-                    $result[] = Metadata::postCondition($attributeInstance->priority());
+                    $result[] = Metadata::postCondition();
 
                     break;
 
                 case PreCondition::class:
-                    assert($attributeInstance instanceof PreCondition);
-
-                    $result[] = Metadata::preCondition($attributeInstance->priority());
+                    $result[] = Metadata::preCondition();
 
                     break;
 
@@ -601,7 +489,7 @@ final readonly class AttributeParser implements Parser
 
                     $result[] = Metadata::requiresMethodOnMethod(
                         $attributeInstance->className(),
-                        $attributeInstance->methodName(),
+                        $attributeInstance->methodName()
                     );
 
                     break;
@@ -632,8 +520,8 @@ final readonly class AttributeParser implements Parser
 
                     $result[] = Metadata::requiresPhpOnMethod(
                         ConstraintRequirement::from(
-                            $attributeInstance->versionRequirement(),
-                        ),
+                            $attributeInstance->versionRequirement()
+                        )
                     );
 
                     break;
@@ -650,7 +538,7 @@ final readonly class AttributeParser implements Parser
 
                     $result[] = Metadata::requiresPhpExtensionOnMethod(
                         $attributeInstance->extension(),
-                        $versionConstraint,
+                        $versionConstraint
                     );
 
                     break;
@@ -660,17 +548,8 @@ final readonly class AttributeParser implements Parser
 
                     $result[] = Metadata::requiresPhpunitOnMethod(
                         ConstraintRequirement::from(
-                            $attributeInstance->versionRequirement(),
-                        ),
-                    );
-
-                    break;
-
-                case RequiresPhpunitExtension::class:
-                    assert($attributeInstance instanceof RequiresPhpunitExtension);
-
-                    $result[] = Metadata::requiresPhpunitExtensionOnMethod(
-                        $attributeInstance->extensionClass(),
+                            $attributeInstance->versionRequirement()
+                        )
                     );
 
                     break;
@@ -680,7 +559,7 @@ final readonly class AttributeParser implements Parser
 
                     $result[] = Metadata::requiresSettingOnMethod(
                         $attributeInstance->setting(),
-                        $attributeInstance->value(),
+                        $attributeInstance->value()
                     );
 
                     break;
@@ -705,17 +584,14 @@ final readonly class AttributeParser implements Parser
                 case TestWith::class:
                     assert($attributeInstance instanceof TestWith);
 
-                    $result[] = Metadata::testWith($attributeInstance->data(), $attributeInstance->name());
+                    $result[] = Metadata::testWith($attributeInstance->data());
 
                     break;
 
                 case TestWithJson::class:
                     assert($attributeInstance instanceof TestWithJson);
 
-                    $result[] = Metadata::testWith(
-                        json_decode($attributeInstance->json(), true, 512, JSON_THROW_ON_ERROR),
-                        $attributeInstance->name(),
-                    );
+                    $result[] = Metadata::testWith(json_decode($attributeInstance->json(), true, 512, JSON_THROW_ON_ERROR));
 
                     break;
 
@@ -725,13 +601,6 @@ final readonly class AttributeParser implements Parser
                     $result[] = Metadata::groupOnMethod($attributeInstance->text());
 
                     break;
-
-                case WithoutErrorHandler::class:
-                    assert($attributeInstance instanceof WithoutErrorHandler);
-
-                    $result[] = Metadata::withoutErrorHandler();
-
-                    break;
             }
         }
 
@@ -739,40 +608,12 @@ final readonly class AttributeParser implements Parser
     }
 
     /**
-     * @param class-string     $className
-     * @param non-empty-string $methodName
+     * @psalm-param class-string $className
      */
     public function forClassAndMethod(string $className, string $methodName): MetadataCollection
     {
         return $this->forClass($className)->mergeWith(
-            $this->forMethod($className, $methodName),
+            $this->forMethod($className, $methodName)
         );
-    }
-
-    /**
-     * @param non-empty-string  $groupName
-     * @param class-string      $testClassName
-     * @param ?non-empty-string $testMethodName
-     */
-    private function isSizeGroup(string $groupName, string $testClassName, ?string $testMethodName = null): bool
-    {
-        $_groupName = strtolower(trim($groupName));
-
-        if ($_groupName !== 'small' && $_groupName !== 'medium' && $_groupName !== 'large') {
-            return false;
-        }
-
-        EventFacade::emitter()->testRunnerTriggeredWarning(
-            sprintf(
-                'Group name "%s" is not allowed for %s %s%s%s',
-                $_groupName,
-                $testMethodName !== null ? 'method' : 'class',
-                $testClassName,
-                $testMethodName !== null ? '::' : '',
-                $testMethodName !== null ? $testMethodName : '',
-            ),
-        );
-
-        return true;
     }
 }

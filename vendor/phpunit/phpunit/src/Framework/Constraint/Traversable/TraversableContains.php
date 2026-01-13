@@ -11,7 +11,6 @@ namespace PHPUnit\Framework\Constraint;
 
 use function is_array;
 use function sprintf;
-use PHPUnit\Util\Exporter;
 
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
@@ -30,7 +29,7 @@ abstract class TraversableContains extends Constraint
      */
     public function toString(): string
     {
-        return 'contains ' . Exporter::export($this->value);
+        return 'contains ' . $this->exporter()->export($this->value);
     }
 
     /**
@@ -44,7 +43,7 @@ abstract class TraversableContains extends Constraint
         return sprintf(
             '%s %s',
             is_array($other) ? 'an array' : 'a traversable',
-            $this->toString(),
+            $this->toString()
         );
     }
 

@@ -10,7 +10,6 @@
 namespace PHPUnit\Metadata\Api;
 
 use function array_flip;
-use function array_key_exists;
 use function array_unique;
 use function assert;
 use function strtolower;
@@ -21,37 +20,22 @@ use PHPUnit\Metadata\CoversClass;
 use PHPUnit\Metadata\CoversFunction;
 use PHPUnit\Metadata\Group;
 use PHPUnit\Metadata\Parser\Registry;
-use PHPUnit\Metadata\RequiresPhpExtension;
 use PHPUnit\Metadata\Uses;
 use PHPUnit\Metadata\UsesClass;
 use PHPUnit\Metadata\UsesFunction;
 
 /**
- * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
- *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 final class Groups
 {
     /**
-     * @var array<string, list<non-empty-string>>
-     */
-    private static array $groupCache = [];
-
-    /**
-     * @param class-string     $className
-     * @param non-empty-string $methodName
+     * @psalm-param class-string $className
      *
-     * @return list<non-empty-string>
+     * @psalm-return list<string>
      */
     public function groups(string $className, string $methodName, bool $includeVirtual = true): array
     {
-        $key = $className . '::' . $methodName . '::' . $includeVirtual;
-
-        if (array_key_exists($key, self::$groupCache)) {
-            return self::$groupCache[$key];
-        }
-
         $groups = [];
 
         foreach (Registry::parser()->forClassAndMethod($className, $methodName)->isGroup() as $group) {
@@ -60,16 +44,19 @@ final class Groups
             $groups[] = $group->groupName();
         }
 
+        if ($groups === []) {
+            $groups[] = 'default';
+        }
+
         if (!$includeVirtual) {
-            return self::$groupCache[$key] = array_unique($groups);
+            return array_unique($groups);
         }
 
         foreach (Registry::parser()->forClassAndMethod($className, $methodName) as $metadata) {
             if ($metadata->isCoversClass() || $metadata->isCoversFunction()) {
-                /** @phpstan-ignore booleanOr.alwaysTrue */
                 assert($metadata instanceof CoversClass || $metadata instanceof CoversFunction);
 
-                $groups[] = '__phpunit_covers_' . $this->canonicalizeName($metadata->asStringForCodeUnitMapper());
+                $groups[] = '__phpunit_covers_' . self::canonicalizeName($metadata->asStringForCodeUnitMapper());
 
                 continue;
             }
@@ -77,16 +64,15 @@ final class Groups
             if ($metadata->isCovers()) {
                 assert($metadata instanceof Covers);
 
-                $groups[] = '__phpunit_covers_' . $this->canonicalizeName($metadata->target());
+                $groups[] = '__phpunit_covers_' . self::canonicalizeName($metadata->target());
 
                 continue;
             }
 
             if ($metadata->isUsesClass() || $metadata->isUsesFunction()) {
-                /** @phpstan-ignore booleanOr.alwaysTrue */
                 assert($metadata instanceof UsesClass || $metadata instanceof UsesFunction);
 
-                $groups[] = '__phpunit_uses_' . $this->canonicalizeName($metadata->asStringForCodeUnitMapper());
+                $groups[] = '__phpunit_uses_' . self::canonicalizeName($metadata->asStringForCodeUnitMapper());
 
                 continue;
             }
@@ -94,22 +80,15 @@ final class Groups
             if ($metadata->isUses()) {
                 assert($metadata instanceof Uses);
 
-                $groups[] = '__phpunit_uses_' . $this->canonicalizeName($metadata->target());
-            }
-
-            if ($metadata->isRequiresPhpExtension()) {
-                assert($metadata instanceof RequiresPhpExtension);
-
-                $groups[] = '__phpunit_requires_php_extension' . $this->canonicalizeName($metadata->extension());
+                $groups[] = '__phpunit_uses_' . self::canonicalizeName($metadata->target());
             }
         }
 
-        return self::$groupCache[$key] = array_unique($groups);
+        return array_unique($groups);
     }
 
     /**
-     * @param class-string     $className
-     * @param non-empty-string $methodName
+     * @psalm-param class-string $className
      */
     public function size(string $className, string $methodName): TestSize
     {
@@ -130,7 +109,7 @@ final class Groups
         return TestSize::unknown();
     }
 
-    private function canonicalizeName(string $name): string
+    private static function canonicalizeName(string $name): string
     {
         return strtolower(trim($name, '\\'));
     }

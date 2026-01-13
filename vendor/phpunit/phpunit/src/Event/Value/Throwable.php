@@ -11,27 +11,51 @@ namespace PHPUnit\Event\Code;
 
 use const PHP_EOL;
 use PHPUnit\Event\NoPreviousThrowableException;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Util\Filter;
+use PHPUnit\Util\ThrowableToStringMapper;
 
 /**
- * @immutable
+ * @psalm-immutable
  *
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final readonly class Throwable
+final class Throwable
 {
     /**
-     * @var class-string
+     * @psalm-var class-string
      */
-    private string $className;
-    private string $message;
-    private string $description;
-    private string $stackTrace;
-    private ?Throwable $previous;
+    private readonly string $className;
+    private readonly string $message;
+    private readonly string $description;
+    private readonly string $stackTrace;
+    private readonly ?Throwable $previous;
 
     /**
-     * @param class-string $className
+     * @throws Exception
+     * @throws NoPreviousThrowableException
      */
-    public function __construct(string $className, string $message, string $description, string $stackTrace, ?self $previous)
+    public static function from(\Throwable $t): self
+    {
+        $previous = $t->getPrevious();
+
+        if ($previous !== null) {
+            $previous = self::from($previous);
+        }
+
+        return new self(
+            $t::class,
+            $t->getMessage(),
+            ThrowableToStringMapper::map($t),
+            Filter::getFilteredStacktrace($t),
+            $previous
+        );
+    }
+
+    /**
+     * @psalm-param class-string $className
+     */
+    private function __construct(string $className, string $message, string $description, string $stackTrace, ?self $previous)
     {
         $this->className   = $className;
         $this->message     = $message;
@@ -59,7 +83,7 @@ final readonly class Throwable
     }
 
     /**
-     * @return class-string
+     * @psalm-return class-string
      */
     public function className(): string
     {
@@ -82,7 +106,7 @@ final readonly class Throwable
     }
 
     /**
-     * @phpstan-assert-if-true !null $this->previous
+     * @psalm-assert-if-true !null $this->previous
      */
     public function hasPrevious(): bool
     {

@@ -9,31 +9,23 @@
  */
 namespace PHPUnit\Framework;
 
-use function assert;
-use function class_exists;
 use function explode;
 use PHPUnit\Framework\TestSize\TestSize;
 use PHPUnit\Metadata\Api\Groups;
 
 /**
- * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
- *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 final class DataProviderTestSuite extends TestSuite
 {
     /**
-     * @var list<ExecutionOrderDependency>
+     * @psalm-var list<ExecutionOrderDependency>
      */
-    private array $dependencies = [];
-
-    /**
-     * @var ?non-empty-list<ExecutionOrderDependency>
-     */
+    private array $dependencies   = [];
     private ?array $providedTests = null;
 
     /**
-     * @param list<ExecutionOrderDependency> $dependencies
+     * @psalm-param list<ExecutionOrderDependency> $dependencies
      */
     public function setDependencies(array $dependencies): void
     {
@@ -41,27 +33,28 @@ final class DataProviderTestSuite extends TestSuite
 
         foreach ($this->tests() as $test) {
             if (!$test instanceof TestCase) {
+                // @codeCoverageIgnoreStart
                 continue;
+                // @codeCoverageIgnoreStart
             }
-
             $test->setDependencies($dependencies);
         }
     }
 
     /**
-     * @return non-empty-list<ExecutionOrderDependency>
+     * @psalm-return list<ExecutionOrderDependency>
      */
     public function provides(): array
     {
         if ($this->providedTests === null) {
-            $this->providedTests = [new ExecutionOrderDependency($this->name())];
+            $this->providedTests = [new ExecutionOrderDependency($this->getName())];
         }
 
         return $this->providedTests;
     }
 
     /**
-     * @return list<ExecutionOrderDependency>
+     * @psalm-return list<ExecutionOrderDependency>
      */
     public function requires(): array
     {
@@ -71,14 +64,11 @@ final class DataProviderTestSuite extends TestSuite
     }
 
     /**
-     * Returns the size of each test created using the data provider(s).
+     * Returns the size of the each test created using the data provider(s).
      */
     public function size(): TestSize
     {
-        [$className, $methodName] = explode('::', $this->name());
-
-        assert(class_exists($className));
-        assert($methodName !== '');
+        [$className, $methodName] = explode('::', $this->getName());
 
         return (new Groups)->size($className, $methodName);
     }

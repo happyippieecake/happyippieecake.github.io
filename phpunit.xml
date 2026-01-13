@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
     bootstrap="vendor/autoload.php"
     colors="true"
     cacheResult="false"
-    stopOnFailure="false"
-    beStrictAboutTestsThatDoNotTestAnything="false"
-    beStrictAboutOutputDuringTests="false">
+    stopOnFailure="false">
 
     <!-- Test Suites -->
     <testsuites>
@@ -19,24 +19,5 @@
         <ini name="error_reporting" value="-1"/>
         <ini name="display_errors" value="1"/>
     </php>
-
-    <!-- Source Code: Folder yang akan dicakup coverage -->
-    <source>
-        <include>
-            <directory suffix=".php">.</directory>
-        </include>
-        <exclude>
-            <directory>vendor</directory>
-            <directory>tests</directory>
-        </exclude>
-    </source>
-
-    <!-- Coverage Settings -->
-    <coverage>
-        <report>
-            <html outputDirectory="coverage" lowUpperBound="50" highLowerBound="90"/>
-            <text outputFile="coverage.txt"/>
-        </report>
-    </coverage>
 
 </phpunit>

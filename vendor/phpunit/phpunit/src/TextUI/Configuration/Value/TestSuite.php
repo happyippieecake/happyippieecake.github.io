@@ -12,21 +12,15 @@ namespace PHPUnit\TextUI\Configuration;
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
- * @immutable
+ * @psalm-immutable
  */
-final readonly class TestSuite
+final class TestSuite
 {
-    /**
-     * @var non-empty-string
-     */
-    private string $name;
-    private TestDirectoryCollection $directories;
-    private TestFileCollection $files;
-    private FileCollection $exclude;
+    private readonly string $name;
+    private readonly TestDirectoryCollection $directories;
+    private readonly TestFileCollection $files;
+    private readonly FileCollection $exclude;
 
-    /**
-     * @param non-empty-string $name
-     */
     public function __construct(string $name, TestDirectoryCollection $directories, TestFileCollection $files, FileCollection $exclude)
     {
         $this->name        = $name;
@@ -35,9 +29,6 @@ final readonly class TestSuite
         $this->exclude     = $exclude;
     }
 
-    /**
-     * @return non-empty-string
-     */
     public function name(): string
     {
         return $this->name;

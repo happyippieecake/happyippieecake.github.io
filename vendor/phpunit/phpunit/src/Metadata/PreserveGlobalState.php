@@ -10,17 +10,14 @@
 namespace PHPUnit\Metadata;
 
 /**
- * @immutable
+ * @internal This class is not covered by the backward compatibility promise for PHPUnit
  *
- * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ * @psalm-immutable
  */
-final readonly class PreserveGlobalState extends Metadata
+final class PreserveGlobalState extends Metadata
 {
-    private bool $enabled;
+    private readonly bool $enabled;
 
-    /**
-     * @param 0|1 $level
-     */
     protected function __construct(int $level, bool $enabled)
     {
         parent::__construct($level);
@@ -28,7 +25,7 @@ final readonly class PreserveGlobalState extends Metadata
         $this->enabled = $enabled;
     }
 
-    public function isPreserveGlobalState(): true
+    public function isPreserveGlobalState(): bool
     {
         return true;
     }

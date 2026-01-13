@@ -10,38 +10,14 @@
 namespace PHPUnit\Metadata;
 
 /**
- * @immutable
+ * @internal This class is not covered by the backward compatibility promise for PHPUnit
  *
- * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ * @psalm-immutable
  */
-final readonly class BeforeClass extends Metadata
+final class BeforeClass extends Metadata
 {
-    /**
-     * @var non-negative-int
-     */
-    private int $priority;
-
-    /**
-     * @param 0|1              $level
-     * @param non-negative-int $priority
-     */
-    protected function __construct(int $level, int $priority)
-    {
-        parent::__construct($level);
-
-        $this->priority = $priority;
-    }
-
-    public function isBeforeClass(): true
+    public function isBeforeClass(): bool
     {
         return true;
-    }
-
-    /**
-     * @return non-negative-int
-     */
-    public function priority(): int
-    {
-        return $this->priority;
     }
 }

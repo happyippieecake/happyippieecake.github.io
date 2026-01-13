@@ -15,12 +15,12 @@ use Iterator;
 /**
  * @template-implements Iterator<int, Metadata>
  *
- * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 final class MetadataCollectionIterator implements Iterator
 {
     /**
-     * @var list<Metadata>
+     * @psalm-var list<Metadata>
      */
     private readonly array $metadata;
     private int $position = 0;
