@@ -52,6 +52,7 @@ jobs:
             --allow-unauthenticated \
             --memory=256MB \
             --timeout=60s \
+            --set-build-env-vars="GOOGLE_FUNCTION_SOURCE=router.php" \
             --set-env-vars="APP_ENV=production,DB_HOST=${{ secrets.DB_HOST }},DB_USERNAME=${{ secrets.DB_USERNAME }},DB_PASSWORD=${{ secrets.DB_PASSWORD }},DB_DATABASE=${{ secrets.DB_DATABASE }}"
 
       - name: Output deployment URL
