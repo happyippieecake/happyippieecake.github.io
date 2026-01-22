@@ -6,9 +6,10 @@
 .github/
 
 # Composer files
-# We include composer.json/lock so Cloud Build can install dependencies
-# We exclude vendor/ to ensure dependencies are built for the target OS (Linux)
+# We include composer.json so Cloud Build can install dependencies
+# We exclude vendor/ and composer.lock to ensure dependencies are built for the target OS (Linux)
 vendor/
+composer.lock
 
 .env.example
 
@@ -39,6 +40,7 @@ LICENSE
 *.md
 
 # Development/debug files
+php.ini
 info.php
 migration_*.php
 notifikasi_pesanan.txt
