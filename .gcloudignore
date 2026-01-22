@@ -21,8 +21,8 @@ node_modules/
 package.json
 package-lock.json
 
-# Vendor folder (Cloud Functions will run composer install)
-vendor/
+# NOTE: vendor/ is NOT ignored - we include it to skip composer install during build
+# This avoids network issues when Cloud Build tries to download composer
 
 # Test files
 tests/

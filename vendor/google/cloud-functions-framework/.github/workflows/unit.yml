@@ -1,0 +1,51 @@
+name: PHP Unit CI
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: [ubuntu-latest]
+        php-versions: [ '8.1','8.2','8.3' ]
+    name: PHP ${{ matrix.php-versions }} Unit Test
+    steps:
+    - name: Harden Runner
+      uses: step-security/harden-runner@002fdce3c6a235733a90a27c80493a3241e56863 # v2.12.1
+      with:
+        egress-policy: block
+        allowed-endpoints: >
+          api.github.com:443
+          gcr.io:443
+          github.com:443
+          objects.githubusercontent.com:443
+          packagist.org:443
+          packagist.org:80
+          production.cloudflare.docker.com:443
+          registry-1.docker.io:443
+          repo.packagist.org:443
+          repo.packagist.org:80
+          storage.googleapis.com:443
+          auth.docker.io:443
+          *.githubusercontent.com:443
+
+    - name: Checkout
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+    - name: Uses PHP ${{ matrix.php-versions }}
+      uses: shivammathur/setup-php@0f7f1d08e3e32076e51cae65eb0b0c871405b16e # v2
+      with:
+        php-version: ${{ matrix.php-versions }}
+    - name: Install Dependencies
+      uses: nick-invision/retry@ce71cc2ab81d554ebbe88c79ab5975992d79ba08 # v3.0.2
+      with:
+        timeout_minutes: 10
+        max_attempts: 3
+        command: composer install
+    - name: Run Script
+      run: vendor/bin/phpunit

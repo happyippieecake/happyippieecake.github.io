@@ -3,7 +3,7 @@
 .spago
 bower_components
 node_modules
-vendor
+# vendor - NOT ignored, needs to be committed for Cloud Functions deployment
 
 # Generated files
 .psci
