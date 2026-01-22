@@ -18,6 +18,8 @@ if ($has_stok) {
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script> 
   <style>
     body { font-family: 'Montserrat', Arial, sans-serif;}
     .active-link { border-bottom: 2px solid #fd5e53;}
@@ -37,47 +39,85 @@ if ($has_stok) {
 </head>
 <body class="bg-gradient-to-br from-pink-50 via-white to-pink-100">
 
-  <!-- Navbar Hamburger -->
-  <nav class="w-full bg-white shadow sticky top-0 z-20 fade-in scroll-animate">
-    <div class="max-w-6xl mx-auto flex justify-between items-center py-3 px-4">
-      <a href="index.php" class="text-3xl font-bold text-pink-500 brand-font tracking-wider">HappyippieCake</a>
-      <button id="nav-toggle" class="md:hidden focus:outline-none text-pink-600 p-2" aria-label="open menu">
-        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="2" d="M4 8h16M4 16h16"/></svg>
-      </button>
-      <ul id="nav-menu" class="hidden md:flex gap-8 font-semibold text-gray-700 md:static absolute top-[60px] left-0 w-full bg-white md:w-auto flex-col md:flex-row shadow md:shadow-none">
-        <li><a href="#home" class="nav-link active-link block px-4 py-2 transition">Home</a></li>
-        <li><a href="#about" class="nav-link block px-4 py-2 transition">About</a></li>
-        <li><a href="pesan.php" class="nav-link block px-4 py-2 transition">Menu</a></li>
-        <li><a href="#gallery" class="nav-link block px-4 py-2 transition">Gallery</a></li>
-        <li><a href="login.php" class="nav-link block px-4 py-2 transition">Admin</a></li>
-      </ul>
+  <!-- Desktop Navbar -->
+  <nav class="fixed top-0 left-0 w-full z-50 glass-nav header-animate shadow-sm transition-all duration-300" id="navbar">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-20">
+        <!-- Logo -->
+        <a href="index.php" class="flex-shrink-0 flex items-center gap-2 group">
+           <div class="w-10 h-10 bg-gradient-to-tr from-pink-500 to-rose-400 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg group-hover:scale-110 transition-transform">H</div>
+           <span class="text-xl md:text-2xl font-bold text-pink-600 font-['Pacifico'] tracking-wide group-hover:text-pink-500 transition-colors">HappyippieCake</span>
+        </a>
+
+        <!-- Desktop Menu -->
+        <div class="hidden lg:flex space-x-6 xl:space-x-8 items-center">
+          <a href="#home" class="nav-link text-gray-600 hover:text-pink-600 font-medium transition-colors">Home</a>
+          <a href="#about" class="nav-link text-gray-600 hover:text-pink-600 font-medium transition-colors">About</a>
+          <a href="#menu" class="nav-link text-gray-600 hover:text-pink-600 font-medium transition-colors">Menu</a>
+          <a href="#gallery" class="nav-link text-gray-600 hover:text-pink-600 font-medium transition-colors">Gallery</a>
+          <a href="pesan.php" class="px-5 py-2.5 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-full font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2">
+            <i data-lucide="shopping-bag" class="w-4 h-4"></i> Order Now
+          </a>
+        </div>
+
+        <!-- Mobile/Tablet Menu Button -->
+        <div class="lg:hidden flex items-center">
+          <button id="mobile-menu-btn" class="text-pink-600 hover:text-pink-800 focus:outline-none p-2 rounded-md transition-colors">
+            <i data-lucide="menu" class="w-7 h-7"></i>
+          </button>
+        </div>
+      </div>
     </div>
   </nav>
-  <script>
-    var navToggle = document.getElementById('nav-toggle');
-    var navMenu = document.getElementById('nav-menu');
-    navToggle.onclick = function() { navMenu.classList.toggle("hidden"); };
-    document.querySelectorAll('#nav-menu a').forEach(link => {
-      link.addEventListener('click', function(){
-        if(window.innerWidth < 768){
-          navMenu.classList.add("hidden");
-        }
-      });
-    });
-  </script>
+
+  <!-- Mobile Menu Overlay -->
+  <div id="mobile-menu-overlay" class="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm hidden transition-opacity duration-300 opacity-0"></div>
+  
+  <!-- Mobile Menu Drawer -->
+  <div id="mobile-menu-drawer" class="fixed top-0 right-0 h-full w-4/5 max-w-sm bg-white z-50 shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+      <div class="p-6 flex justify-between items-center border-b border-gray-100">
+        <span class="text-xl font-bold text-pink-600 font-['Pacifico']">Menu</span>
+        <button id="close-menu-btn" class="text-gray-500 hover:text-red-500 transition-colors">
+          <i data-lucide="x" class="w-7 h-7"></i>
+        </button>
+      </div>
+      <div class="flex-1 overflow-y-auto py-6 px-4 space-y-4">
+        <a href="#home" class="mobile-link block px-4 py-3 rounded-xl text-lg font-medium text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors">
+          <i data-lucide="home" class="w-5 h-5 inline-block mr-3 mb-1"></i> Home
+        </a>
+        <a href="#about" class="mobile-link block px-4 py-3 rounded-xl text-lg font-medium text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors">
+          <i data-lucide="info" class="w-5 h-5 inline-block mr-3 mb-1"></i> About
+        </a>
+        <a href="#menu" class="mobile-link block px-4 py-3 rounded-xl text-lg font-medium text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors">
+          <i data-lucide="cake" class="w-5 h-5 inline-block mr-3 mb-1"></i> Menu
+        </a>
+        <a href="#gallery" class="mobile-link block px-4 py-3 rounded-xl text-lg font-medium text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors">
+          <i data-lucide="image" class="w-5 h-5 inline-block mr-3 mb-1"></i> Gallery
+        </a>
+        <a href="login.php" class="mobile-link block px-4 py-3 rounded-xl text-lg font-medium text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors">
+          <i data-lucide="user" class="w-5 h-5 inline-block mr-3 mb-1"></i> Admin Login
+        </a>
+      </div>
+      <div class="p-6 border-t border-gray-100 bg-gray-50">
+        <a href="pesan.php" class="block w-full text-center py-3.5 bg-pink-500 hover:bg-pink-600 text-white rounded-xl font-bold shadow-lg transition-all transform hover:scale-[1.02]">
+          Start Order
+        </a>
+      </div>
+  </div>
+
 
   <!-- Hero Section -->
-  <section id="home" class="flex items-center justify-center relative min-h-[60vh] bg-cover bg-no-repeat fade-in scroll-animate" style="background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1500&q=80');">
+  <section id="home" class="flex items-center justify-center relative min-h-[60vh] bg-cover bg-no-repeat fade-in scroll-animate pt-32 pb-20" style="background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1500&q=80');">
     <div class="absolute inset-0 bg-gradient-to-br from-pink-300/60 via-transparent to-pink-100/70"></div>
-    <div class="relative text-center z-10 px-2 slide-in scroll-animate">
-      <h1 class="text-5xl md:text-7xl mb-4 text-pink-600 font-bold brand-font drop-shadow-md animate-bounce">HappyippieCake</h1>
-      <div class="flex justify-center mb-4">
-        <span class="inline-block bg-white/80 rounded-full px-4 py-2 text-pink-800 text-base font-semibold shadow backdrop-blur brand-font">Premium Cake • Custom & Fresh • Cimahi</span>
+    <div class="relative text-center z-10 px-4 slide-in scroll-animate max-w-4xl mx-auto">
+      <h1 class="text-5xl md:text-7xl mb-6 text-pink-600 font-bold brand-font drop-shadow-md animate-bounce leading-relaxed py-2">HappyippieCake</h1>
+      <div class="flex justify-center mb-8">
+        <span class="inline-block bg-white/80 rounded-full px-6 py-3 text-pink-800 text-base md:text-lg font-semibold shadow backdrop-blur brand-font whitespace-nowrap">Premium Cake • Custom & Fresh</span>
       </div>
-      <p class="text-xl md:text-2xl text-white drop-shadow font-semibold mb-6 fade-in scroll-animate">
+      <p class="text-xl md:text-2xl text-white drop-shadow font-semibold mb-8 fade-in scroll-animate leading-snug">
         Toko kue premium untuk momen istimewa,<br class="hidden md:block"> fresh & custom setiap hari!
       </p>
-      <a href="#menu" class="px-10 py-4 bg-pink-500 text-white text-lg rounded-full hover:bg-pink-600 shadow-xl font-bold transition brand-font tracking-wide border-2 border-white/60 fade-in scroll-animate">
+      <a href="#menu" class="inline-block px-10 py-4 bg-pink-500 text-white text-lg rounded-full hover:bg-pink-600 shadow-xl font-bold transition brand-font tracking-wide border-2 border-white/60 fade-in scroll-animate transform hover:scale-105">
         Lihat Menu Kue
       </a>
     </div>
@@ -145,28 +185,110 @@ if ($has_stok) {
     </div>
   </section>
 
-  <!-- Footer Modern -->
-  <footer class="bg-gradient-to-t from-pink-700 via-pink-500 to-pink-400 text-white pt-10 pb-5 shadow-xl mt-20 fade-in scroll-animate">
-    <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-8">
-      <div class="mb-4 md:mb-0 text-center md:text-left">
-        <span class="text-3xl font-bold brand-font tracking-wider">HappyippieCake</span>
-        <p class="mt-1 text-base text-white/80">Cakes for Every Story &amp; Memory</p>
-        <p class="text-xs mt-1">&copy; 2025 HappyippieCake. All Rights Reserved.</p>
+  <!-- Modern Footer -->
+  <footer class="bg-gradient-to-t from-pink-900 via-pink-800 to-pink-700 text-white relative pt-20 pb-10 mt-12 overflow-hidden">
+    <!-- Decorative curve -->
+    <div class="absolute top-0 left-0 w-full overflow-hidden leading-none z-0">
+        <svg class="relative block w-full h-[60px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" class="fill-pink-50"></path>
+        </svg>
+    </div>
+
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+        <!-- Brand -->
+        <div class="col-span-1 md:col-span-1">
+          <h2 class="text-3xl font-bold font-['Pacifico'] mb-4 text-pink-200">HappyippieCake</h2>
+          <p class="text-pink-100/80 mb-6 leading-relaxed">
+            Menghadirkan kebahagiaan di setiap moment spesial Anda dengan kue berkualitas tinggi dan desain yang memukau.
+          </p>
+          <div class="flex space-x-4">
+            <a href="https://instagram.com" target="_blank" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors">
+              <i data-lucide="instagram" class="w-5 h-5"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div>
+          <h3 class="text-xl font-bold mb-6 border-b border-pink-500/30 pb-2 inline-block">Quick Links</h3>
+          <ul class="space-y-3">
+            <li><a href="#home" class="text-pink-100/80 hover:text-white transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="w-4 h-4"></i> Home</a></li>
+            <li><a href="#about" class="text-pink-100/80 hover:text-white transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="w-4 h-4"></i> About Us</a></li>
+            <li><a href="#menu" class="text-pink-100/80 hover:text-white transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="w-4 h-4"></i> Our Menu</a></li>
+            <li><a href="#gallery" class="text-pink-100/80 hover:text-white transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="w-4 h-4"></i> Gallery</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact -->
+        <div>
+          <h3 class="text-xl font-bold mb-6 border-b border-pink-500/30 pb-2 inline-block">Hubungi Kami</h3>
+          <ul class="space-y-4">
+             <li class="flex items-start gap-3 text-pink-100/80">
+                <i data-lucide="map-pin" class="w-5 h-5 mt-1 text-pink-300"></i>
+                <span>Jl. Encep Kartawiria No. 12<br>Cimahi, Jawa Barat</span>
+             </li>
+             <li class="flex items-center gap-3 text-pink-100/80">
+                <i data-lucide="phone" class="w-5 h-5 text-pink-300"></i>
+                <span>+62 812-3456-7890</span>
+             </li>
+             <li class="flex items-center gap-3 text-pink-100/80">
+                <i data-lucide="mail" class="w-5 h-5 text-pink-300"></i>
+                <span>hello@happyippiecake.com</span>
+             </li>
+          </ul>
+        </div>
       </div>
-      <div class="flex gap-8 items-center text-xl">
-        <a href="https://instagram.com" target="_blank" class="footer-link" title="Instagram">
-          <svg class="inline" width="26" height="26" fill="currentColor"><path d="M7.75 2C4.126 2 1 5.126 1 8.75v6.5C1 18.874 4.126 22 7.75 22h8.5c3.624 0 6.75-3.126 6.75-6.75v-6.5C23 5.126 19.874 2 16.25 2h-8.5zm0 2h8.5c2.623 0 4.75 2.127 4.75 4.75v6.5c0 2.623-2.127 4.75-4.75 4.75h-8.5A4.755 4.755 0 013 13.25v-6.5A4.755 4.755 0 017.75 4zm4.25 2.5a4.25 4.25 0 100 8.5 4.25 4.25 0 000-8.5zm0 2a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5zM18.625 6a.875.875 0 110 1.75.875.875 0 010-1.75z"/></svg>
-        </a>
-        <a href="https://wa.me/628123456789" target="_blank" class="footer-link" title="WhatsApp">
-          <svg class="inline" width="26" height="26" fill="currentColor"><path d="M2 12A10 10 0 0012 22h.043C8.81 22 5.997 20.094 4.257 17.489a.995.995 0 01.156-1.221l1.134-1.12A1.004 1.004 0 016.5 15.05c.9.62 1.867 1.059 2.913 1.285 1.046.227 2.137.228 3.195.002a7.993 7.993 0 001.372-.38c.322-.113.684-.011.883.245l1.127 1.087a.997.997 0 01.157 1.221C18.004 20.106 15.19 22 12.043 22H12A10 10 0 002 12zm10-8a8 8 0 110 16A8 8 0 012 12a8 8 0 0110-8zm-1 9.5a1 1 0 00-1 1V16a1 1 0 102 0v-3.5a1 1 0 00-1-1zm0-2a1 1 0 100 2 1 1 0 000-2z"/></svg>
-        </a>
-        <a href="#" class="footer-link" title="Facebook">
-          <svg class="inline" width="26" height="26" fill="currentColor"><path d="M22.675 0H1.325C.595 0 0 .595 0 1.326V22.675c0 .73.595 1.325 1.325 1.325h11.495v-9.294H9.691V11.09h3.129V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.797.143v3.243l-1.917.001c-1.504 0-1.797.715-1.797 1.762v2.312h3.587l-.467 3.613h-3.12v9.294h6.116c.73 0 1.325-.595 1.325-1.326V1.325C24 .595 23.405 0 22.675 0"/></svg>
-        </a>
+
+      <div class="border-t border-pink-600/30 pt-8 text-center text-pink-200/60 text-sm">
+        <p>&copy; <?= date('Y') ?> HappyippieCake. All rights reserved. Created with ❤️ in Cimahi.</p>
       </div>
     </div>
-    <div class="text-center text-lg pt-4 text-white/80 font-light brand-font">Serving Joy & Elegance in Every Slice</div>
   </footer>
+
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Mobile Menu Logic
+    const btn = document.getElementById('mobile-menu-btn');
+    const closeBtn = document.getElementById('close-menu-btn');
+    const drawer = document.getElementById('mobile-menu-drawer');
+    const overlay = document.getElementById('mobile-menu-overlay');
+
+    function toggleMenu() {
+        if (drawer.classList.contains('translate-x-full')) {
+            // Open
+            drawer.classList.remove('translate-x-full');
+            overlay.classList.remove('hidden');
+            setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+        } else {
+            // Close
+            drawer.classList.add('translate-x-full');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => overlay.classList.add('hidden'), 300);
+        }
+    }
+
+    btn.addEventListener('click', toggleMenu);
+    closeBtn.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', toggleMenu);
+
+    // Close menu when clicking a link
+    document.querySelectorAll('.mobile-link').forEach(link => {
+        link.addEventListener('click', toggleMenu);
+    });
+
+    // Navbar Scroll Effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.classList.add('shadow-md', 'bg-white/90');
+        } else {
+            navbar.classList.remove('shadow-md');
+        }
+    });
+  </script>
 
   <!-- Scroll animation with Intersection Observer -->
   <script>
