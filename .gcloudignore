@@ -5,10 +5,11 @@
 .gitignore
 .github/
 
-# Composer files - exclude to prevent buildpack from running composer install
-# Vendor folder is already included with all dependencies
-composer.json
-composer.lock
+# Composer files
+# We include composer.json/lock so Cloud Build can install dependencies
+# We exclude vendor/ to ensure dependencies are built for the target OS (Linux)
+vendor/
+
 .env.example
 
 # IDE and editor files
@@ -21,9 +22,6 @@ composer.lock
 node_modules/
 package.json
 package-lock.json
-
-# NOTE: vendor/ is NOT ignored - we include it to skip composer install during build
-# This avoids network issues when Cloud Build tries to download composer
 
 # Test files
 tests/
