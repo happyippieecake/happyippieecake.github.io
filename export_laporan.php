@@ -4,11 +4,7 @@
  * Supports filtering by date range and status
  */
 
-$conn = new mysqli("localhost", "root", "", "happyippiecake");
-
-if ($conn->connect_error) {
-    die("Koneksi gagal: " . $conn->connect_error);
-}
+require_once __DIR__ . '/db_connect.php';
 
 // Get filter parameters
 $filter_days = isset($_GET['days']) ? intval($_GET['days']) : 0;

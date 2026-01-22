@@ -1,0 +1,62 @@
+name: Deploy to Cloud Functions
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  REGION: asia-southeast1
+  FUNCTION_NAME: happyippiecake-app
+
+jobs:
+  deploy:
+    name: Deploy to Google Cloud Functions
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create production .env file
+        run: |
+          cat > .env << EOF
+          APP_ENV=production
+          APP_DEBUG=false
+          DB_HOST=${{ secrets.DB_HOST }}
+          DB_USERNAME=${{ secrets.DB_USERNAME }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          DB_DATABASE=${{ secrets.DB_DATABASE }}
+          EOF
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Setup Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: Deploy to Cloud Functions
+        run: |
+          gcloud functions deploy $FUNCTION_NAME \
+            --gen2 \
+            --runtime=php82 \
+            --region=$REGION \
+            --source=. \
+            --entry-point=app \
+            --trigger-http \
+            --allow-unauthenticated \
+            --memory=256MB \
+            --timeout=60s \
+            --set-build-env-vars="GOOGLE_FUNCTION_SOURCE=router.php,GOOGLE_SKIP_FRAMEWORK_COMPOSER_CHECK=true" \
+            --set-env-vars="APP_ENV=production,DB_HOST=${{ secrets.DB_HOST }},DB_USERNAME=${{ secrets.DB_USERNAME }},DB_PASSWORD=${{ secrets.DB_PASSWORD }},DB_DATABASE=${{ secrets.DB_DATABASE }}"
+
+      - name: Output deployment URL
+        run: |
+          echo "🚀 Deployment complete!"
+          FUNCTION_URL=$(gcloud functions describe $FUNCTION_NAME --region=$REGION --gen2 --format='value(serviceConfig.uri)')
+          echo "URL: $FUNCTION_URL"

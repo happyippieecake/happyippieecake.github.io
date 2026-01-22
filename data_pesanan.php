@@ -1,5 +1,5 @@
 <?php
-$conn = new mysqli("localhost","root","","happyippiecake");
+require_once __DIR__ . '/db_connect.php';
 
 // Hapus pesanan dari riwayat
 if(isset($_GET['hapus'])){

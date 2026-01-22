@@ -2,7 +2,6 @@
 require_once 'db_connect.php';
 require_once 'PaymentGateway.php';
 
-$conn = new mysqli("localhost", "root", "", "happyippiecake");
 // Check if stok_tersedia column exists
 $has_stok = $conn->query("SHOW COLUMNS FROM menu LIKE 'stok_tersedia'")->num_rows > 0;
 // Only show available items if column exists, otherwise show all

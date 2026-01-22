@@ -3,10 +3,22 @@
 .spago
 bower_components
 node_modules
+# vendor - NOT ignored, needs to be committed for Cloud Functions deployment
 
 # Generated files
 .psci
 output
 
+<<<<<<< HEAD
 # Environment variables
 .env
+=======
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# App Engine
+*.pyc
+__pycache__/
+>>>>>>> 50a0037281ce780f4a6865c822869ac193020056

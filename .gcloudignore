@@ -1,0 +1,59 @@
+# Files not uploaded to Google Cloud Functions
+
+# Git files
+.git/
+.gitignore
+.github/
+
+# Composer files
+# We include composer.json so Cloud Build can install dependencies
+# We exclude vendor/ and composer.lock to ensure dependencies are built for the target OS (Linux)
+vendor/
+composer.lock
+
+.env.example
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node.js (not needed)
+node_modules/
+package.json
+package-lock.json
+
+# Test files
+tests/
+phpunit.xml
+.phpunit.result.cache
+coverage/
+coverage.txt
+coverage_output.txt
+test_output.txt
+tests.xml
+
+# Documentation
+README.md
+LICENSE
+*.md
+
+# Development/debug files
+php.ini
+info.php
+migration_*.php
+notifikasi_pesanan.txt
+
+# App Engine files (not used)
+app.yaml
+
+# Keep these files (NOT ignored):
+# - composer.json
+# - composer.lock
+# - router.php
+# - .env (created by workflow)
+# - All PHP files
+# - gambar/
+# - uploads/
+# - *.css, *.js

@@ -1,5 +1,5 @@
 <?php
-$conn = new mysqli("localhost", "root", "", "happyippiecake");
+require_once __DIR__ . '/db_connect.php';
 // Check if stok_tersedia column exists
 $has_stok = $conn->query("SHOW COLUMNS FROM menu LIKE 'stok_tersedia'")->num_rows > 0;
 // Only show available items if column exists, otherwise show all

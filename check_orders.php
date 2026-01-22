@@ -7,12 +7,7 @@
 header('Content-Type: application/json');
 header('Cache-Control: no-cache, must-revalidate');
 
-$conn = new mysqli("localhost", "root", "", "happyippiecake");
-
-if ($conn->connect_error) {
-    echo json_encode(['error' => 'Database connection failed']);
-    exit;
-}
+require_once __DIR__ . '/db_connect.php';
 
 // Get unique pending orders (grouped by order_id)
 $result = $conn->query(
