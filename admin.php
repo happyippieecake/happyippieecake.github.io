@@ -1,5 +1,5 @@
 <?php
-$conn = new mysqli("localhost", "root", "", "happyippiecake");
+require_once __DIR__ . '/db_connect.php';
 
 // Auto-add stok_tersedia column if it doesn't exist
 $stok_column_exists = $conn->query("SHOW COLUMNS FROM menu LIKE 'stok_tersedia'")->num_rows > 0;

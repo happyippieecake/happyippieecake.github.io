@@ -3,7 +3,17 @@
 .spago
 bower_components
 node_modules
+vendor
 
 # Generated files
 .psci
 output
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# App Engine
+*.pyc
+__pycache__/

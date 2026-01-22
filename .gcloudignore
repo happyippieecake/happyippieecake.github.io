@@ -1,0 +1,46 @@
+# This file specifies files that are *not* uploaded to Google Cloud Functions
+# Similar to .gitignore
+
+# Git files
+.git/
+.gitignore
+.github/
+
+# Development files
+.env
+.env.local
+.env.*.local
+.env.example
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node.js (not needed for PHP app)
+node_modules/
+package.json
+package-lock.json
+
+# Test files
+tests/
+phpunit.xml
+.phpunit.result.cache
+coverage/
+coverage.txt
+coverage_output.txt
+test_output.txt
+tests.xml
+
+# Documentation
+README.md
+LICENSE
+
+# Development scripts and files
+info.php
+migration_*.php
+notifikasi_pesanan.txt
+
+# App Engine files (not needed for Cloud Functions)
+app.yaml

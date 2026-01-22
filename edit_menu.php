@@ -1,5 +1,5 @@
 <?php
-$conn = new mysqli("localhost", "root", "", "happyippiecake");
+require_once __DIR__ . '/db_connect.php';
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 $menu = ['nama'=>'', 'deskripsi'=>'', 'harga'=>'', 'gambar'=>'', 'kategori'=>'Lainnya', 'stok_tersedia'=>1];

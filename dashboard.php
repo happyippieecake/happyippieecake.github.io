@@ -1,5 +1,5 @@
 <?php
-$conn = new mysqli("localhost", "root", "", "happyippiecake");
+require_once __DIR__ . '/db_connect.php';
 
 // Get current dates
 $hari_ini = date('Y-m-d');
