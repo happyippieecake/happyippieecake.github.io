@@ -263,7 +263,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       <?php endforeach ?>
     </div>
     <div class="text-center mb-8">
-      <span class="italic text-gray-400">* Klik "Pesan" untuk mulai pemesanan, bisa pilih lebih dari satu kue, isi detail, lalu order dengan WhatsApp</span>
+      <span class="italic text-gray-400">
     </div>
   </div>
 
