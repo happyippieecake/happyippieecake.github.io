@@ -1,13 +1,11 @@
-# This file specifies files that are *not* uploaded to Google Cloud Functions
-# Similar to .gitignore
+# Files not uploaded to Google Cloud Functions
 
 # Git files
 .git/
 .gitignore
 .github/
 
-# Development files
-.env
+# Development environment files
 .env.local
 .env.*.local
 .env.example
@@ -18,10 +16,13 @@
 *.swp
 *.swo
 
-# Node.js (not needed for PHP app)
+# Node.js (not needed)
 node_modules/
 package.json
 package-lock.json
+
+# Vendor folder (Cloud Functions will run composer install)
+vendor/
 
 # Test files
 tests/
@@ -36,11 +37,22 @@ tests.xml
 # Documentation
 README.md
 LICENSE
+*.md
 
-# Development scripts and files
+# Development/debug files
 info.php
 migration_*.php
 notifikasi_pesanan.txt
 
-# App Engine files (not needed for Cloud Functions)
+# App Engine files (not used)
 app.yaml
+
+# Keep these files (NOT ignored):
+# - composer.json
+# - composer.lock
+# - router.php
+# - .env (created by workflow)
+# - All PHP files
+# - gambar/
+# - uploads/
+# - *.css, *.js
