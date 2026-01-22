@@ -5,9 +5,10 @@
 .gitignore
 .github/
 
-# Development environment files
-.env.local
-.env.*.local
+# Composer files - exclude to prevent buildpack from running composer install
+# Vendor folder is already included with all dependencies
+composer.json
+composer.lock
 .env.example
 
 # IDE and editor files
