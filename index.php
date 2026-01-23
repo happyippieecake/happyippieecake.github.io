@@ -146,7 +146,14 @@ if ($has_stok) {
         <?php foreach ($menus as $menu): ?>
         <div class="bg-white rounded-3xl ring-2 ring-pink-100 shadow-2xl card-anim transition-all flex flex-col w-72 hover:-translate-y-2 hover:z-10 relative overflow-hidden group menu-anim fade-in scroll-animate">
           <div class="relative">
-            <img src="<?= htmlspecialchars($menu['gambar']) ?>"
+            <?php 
+              $imgPath = $menu['gambar'];
+              $imgPath = str_replace('\\', '/', $imgPath);
+              if(empty($imgPath) || !file_exists($imgPath)) {
+                  $imgPath = 'https://dummyimage.com/300x300/e2e8f0/94a3b8.png&text=No+Image';
+              }
+            ?>
+            <img src="<?= htmlspecialchars($imgPath) ?>"
               alt="<?= htmlspecialchars($menu['nama']) ?>"
               class="rounded-t-3xl h-48 w-full object-cover transition-all group-hover:scale-105 card-anim" />
             <div class="absolute top-3 right-3 bg-white/80 px-3 py-1 rounded-full text-pink-700 font-bold text-xs shadow slide-in scroll-animate">#BestSeller</div>

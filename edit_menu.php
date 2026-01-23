@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         chmod($dest, 0644); // Ensure file is readable
         // Hapus file lama jika update
         if ($id && $gambar && file_exists($gambar)) unlink($gambar);
-        $gambar = $dest;
+        $gambar = str_replace('\\', '/', $dest); // FORCE forward slash
       } else {
         $error = "Upload gambar gagal!";
       }
