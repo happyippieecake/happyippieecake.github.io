@@ -155,6 +155,7 @@ if ($has_stok) {
             ?>
             <img src="<?= htmlspecialchars($imgPath) ?>"
               alt="<?= htmlspecialchars($menu['nama']) ?>"
+              loading="lazy"
               class="rounded-t-3xl h-48 w-full object-cover transition-all group-hover:scale-105 card-anim" />
             <div class="absolute top-3 right-3 bg-white/80 px-3 py-1 rounded-full text-pink-700 font-bold text-xs shadow slide-in scroll-animate">#BestSeller</div>
           </div>

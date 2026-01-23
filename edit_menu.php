@@ -40,7 +40,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $namafile = uniqid('cake_').'.'.$ext;
       $dest = 'uploads/'.$namafile;
       if (move_uploaded_file($_FILES['gambar']['tmp_name'], $dest)) {
-        chmod($dest, 0644); // Ensure file is readable
+        chmod($dest, 0644); 
+        
+        // COMPRESS & RESIZE IMAGE
+        $info = getimagesize($dest);
+        if ($info) {
+             $mime = $info['mime'];
+             switch ($mime) {
+                 case 'image/jpeg': $image = imagecreatefromjpeg($dest); break;
+                 case 'image/png': $image = imagecreatefrompng($dest); break;
+                 case 'image/webp': $image = imagecreatefromwebp($dest); break;
+                 default: $image = false;
+             }
+             if ($image) {
+                 $width = imagesx($image);
+                 $height = imagesy($image);
+                 // Resize if wider than 800px
+                 if ($width > 800) {
+                     $new_width = 800;
+                     $new_height = ($height / $width) * 800;
+                     $tmp = imagecreatetruecolor($new_width, $new_height);
+                     
+                     // Preserve transparency
+                     if($mime == 'image/png' || $mime == 'image/webp'){
+                         imagealphablending($tmp, false);
+                         imagesavealpha($tmp, true);
+                     }
+                     
+                     imagecopyresampled($tmp, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+                     imagedestroy($image);
+                     $image = $tmp;
+                 }
+                 
+                 // Save compressed
+                 if ($mime == 'image/jpeg') imagejpeg($image, $dest, 75);
+                 elseif ($mime == 'image/png') imagepng($image, $dest, 8); // 0-9 for PNG
+                 elseif ($mime == 'image/webp') imagewebp($image, $dest, 75);
+                 imagedestroy($image);
+             }
+        }
+        
         // Hapus file lama jika update
         if ($id && $gambar && file_exists($gambar)) unlink($gambar);
         $gambar = str_replace('\\', '/', $dest); // FORCE forward slash

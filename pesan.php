@@ -634,7 +634,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       let html = ''; let totalHarga = 0;
       orderFields.forEach((itm, idx) => {
         html += `<div class="bg-gray-50 rounded-xl p-4 flex flex-col md:flex-row items-start md:items-center gap-4 border border-gray-200 hover:border-pink-300 transition">
-          <img src="${itm.gambar}" class="w-20 h-20 rounded-xl object-cover shadow-md flex-shrink-0" alt="${itm.nama}">
+          <img src="${itm.gambar}" loading="lazy" class="w-20 h-20 rounded-xl object-cover shadow-md flex-shrink-0" alt="${itm.nama}">
           <div class="flex-1 w-full md:w-auto">
             <select name="order[${itm.id}]" onchange="changeOrderMenu(${idx}, this.value)" class="w-full bg-white border-2 border-gray-200 rounded-lg px-4 py-3 text-gray-800 font-semibold focus:border-pink-500 focus:outline-none transition">
               ${menus.map(menu =>
