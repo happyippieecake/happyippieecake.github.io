@@ -265,8 +265,12 @@ if ($kategori_column_exists) {
         <div class="menu-grid">
           <?php foreach($menus as $m): ?>
           <div class="menu-card">
-            <?php if($m['gambar'] && file_exists($m['gambar'])): ?>
-              <img src="<?= $m['gambar']?>" class="menu-card-img" alt="<?= htmlspecialchars($m['nama'])?>">
+            <?php 
+              $imgPath = $m['gambar'];
+              $imgPath = str_replace('\\', '/', $imgPath);
+              if($imgPath && file_exists($imgPath)): 
+            ?>
+              <img src="<?= $imgPath ?>" class="menu-card-img" alt="<?= htmlspecialchars($m['nama'])?>">
             <?php else: ?>
               <div class="no-image">
                 <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor">

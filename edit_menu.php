@@ -40,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $namafile = uniqid('cake_').'.'.$ext;
       $dest = 'uploads/'.$namafile;
       if (move_uploaded_file($_FILES['gambar']['tmp_name'], $dest)) {
+        chmod($dest, 0644); // Ensure file is readable
         // Hapus file lama jika update
         if ($id && $gambar && file_exists($gambar)) unlink($gambar);
         $gambar = $dest;
@@ -94,6 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 function imgPreview($src) {
+  $src = str_replace('\\', '/', $src);
   if (!$src || !file_exists($src)) return 'https://dummyimage.com/200x150/e2e8f0/94a3b8.png&text=No+Image';
   return $src;
 }

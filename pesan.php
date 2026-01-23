@@ -591,7 +591,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       <?php
         $result = $conn->query("SELECT id, nama, harga, gambar FROM menu ORDER BY nama ASC");
         foreach($result as $row){
-          echo "{id:".$row['id'].",nama:'".addslashes($row['nama'])."',harga:".$row['harga'].",gambar:'".addslashes($row['gambar'])."'},";
+          $gambar = $row['gambar'];
+          // Normalize slashes to forward slashes
+          $gambar = str_replace('\\', '/', $gambar);
+          
+          // Check if file exists, if not use placeholder
+          if (empty($gambar) || !file_exists($gambar)) {
+             $gambar = 'https://dummyimage.com/300x300/e2e8f0/94a3b8.png&text=No+Image';
+          }
+          
+          echo "{id:".$row['id'].",nama:'".addslashes($row['nama'])."',harga:".$row['harga'].",gambar:'".addslashes($gambar)."'},";
         }
       ?>
     ];
