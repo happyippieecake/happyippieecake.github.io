@@ -45,8 +45,7 @@ if ($has_stok) {
       <div class="flex justify-between items-center h-20">
         <!-- Logo -->
         <a href="index.php" class="flex-shrink-0 flex items-center gap-2 group">
-           <div class="w-10 h-10 bg-gradient-to-tr from-pink-500 to-rose-400 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg group-hover:scale-110 transition-transform">H</div>
-           <span class="text-xl md:text-2xl font-bold text-pink-600 font-['Pacifico'] tracking-wide group-hover:text-pink-500 transition-colors">HappyippieCake</span>
+           <span class="text-xl md:text-2xl font-bold text-pink-600 tracking-wide group-hover:text-pink-500 transition-colors">HappyippieCake</span>
         </a>
 
         <!-- Desktop Menu -->
