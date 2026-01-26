@@ -14,8 +14,8 @@ $total_orders = $conn->query("SELECT COUNT(*) FROM pesanan")->fetch_row()[0] ?: 
 // Total Customers (Unique)
 $total_customers = $conn->query("SELECT COUNT(DISTINCT nama_pemesan) FROM pesanan")->fetch_row()[0] ?: 0;
 
-// Perlu Diproses (Pending Orders)
-$pending_orders = $conn->query("SELECT COUNT(*) FROM pesanan WHERE status='pending'")->fetch_row()[0] ?: 0;
+// Perlu Diproses (Pending Orders) - only confirmed payments
+$pending_orders = $conn->query("SELECT COUNT(*) FROM pesanan JOIN payments ON pesanan.order_id = payments.order_id COLLATE utf8mb4_general_ci WHERE pesanan.status='pending' AND payments.status='confirmed'")->fetch_row()[0] ?: 0;
 
 // Hari Ini Stats
 $orders_hari_ini = $conn->query("SELECT COUNT(*) FROM pesanan WHERE DATE(tanggal_pesan)='$hari_ini'")->fetch_row()[0] ?: 0;
@@ -25,15 +25,15 @@ $revenue_hari_ini = $conn->query("SELECT SUM(p.amount) FROM payments p JOIN pesa
 $orders_bulan_ini = $conn->query("SELECT COUNT(*) FROM pesanan WHERE tanggal_pesan >= '$bulan_awal'")->fetch_row()[0] ?: 0;
 $revenue_bulan_ini = $conn->query("SELECT SUM(p.amount) FROM payments p JOIN pesanan ps ON p.pesanan_id=ps.id WHERE ps.tanggal_pesan >= '$bulan_awal' AND p.status='confirmed' AND ps.status='selesai'")->fetch_row()[0] ?: 0;
 
-// Order Terbaru (5 latest pending)
+// Order Terbaru (5 latest pending with confirmed payment)
 $recent_orders = $conn->query(
     "SELECT pesanan.id, pesanan.nama_pemesan, pesanan.tanggal_pesan, pesanan.order_id,
             menu.nama as menu_nama, menu.harga, pesanan.jumlah,
             payments.status as payment_status
      FROM pesanan 
      JOIN menu ON pesanan.menu_id=menu.id
-     LEFT JOIN payments ON pesanan.id=payments.pesanan_id
-     WHERE pesanan.status='pending'
+     JOIN payments ON pesanan.order_id = payments.order_id COLLATE utf8mb4_general_ci
+     WHERE pesanan.status='pending' AND payments.status='confirmed'
      ORDER BY pesanan.id DESC
      LIMIT 5"
 );
