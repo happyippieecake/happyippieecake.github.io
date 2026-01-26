@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $jumlah = intval($jumlah);
             if ($jumlah > 0) {
                 // Insert with order_id
-                $stmt = $conn->prepare("INSERT INTO pesanan (nama_pemesan, alamat, menu_id, jumlah, tanggal_pesan, status, order_id) VALUES (?, ?, ?, ?, CURDATE(), 'pending', ?)");
+                $stmt = $conn->prepare("INSERT INTO pesanan (nama_pemesan, alamat, menu_id, jumlah, tanggal_pesan, status, order_id) VALUES (?, ?, ?, ?, NOW(), 'pending', ?)");
                 $stmt->bind_param("ssiis", $nama, $alamat, $menu_id, $jumlah, $orderId);
                 $stmt->execute();
                 

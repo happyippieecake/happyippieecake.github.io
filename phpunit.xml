@@ -15,9 +15,10 @@
     </testsuites>
 
     <!-- Coverage Configuration -->
-    <source>
+    <!-- Coverage Configuration -->
+    <coverage>
         <include>
-            <directory suffix=".php">.</directory>
+            <directory suffix=".php">c:/baru xampp/htdocs/happy/happyippieecake.github.io</directory>
         </include>
         <exclude>
             <directory>vendor</directory>
@@ -26,9 +27,14 @@
             <file>info.php</file>
             <file>check_orders.php</file>
             <file>export_laporan.php</file>
+            <file>migration_fix_date.php</file>
+            <file>debug_order_time.php</file>
             <file>migration_add_order_id.php</file>
         </exclude>
-    </source>
+        <report>
+            <html outputDirectory="c:/baru xampp/htdocs/happy/happyippieecake.github.io/coverage"/>
+        </report>
+    </coverage>
 
     <!-- PHP Settings -->
     <php>
