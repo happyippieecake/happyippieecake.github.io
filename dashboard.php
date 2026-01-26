@@ -5,8 +5,8 @@ require_once __DIR__ . '/db_connect.php';
 $hari_ini = date('Y-m-d');
 $bulan_awal = date('Y-m-01');
 
-// Total Revenue (All Time) - from payments
-$total_revenue = $conn->query("SELECT SUM(amount) FROM payments WHERE status='confirmed'")->fetch_row()[0] ?: 0;
+// Total Revenue (All Time) - from completed orders
+$total_revenue = $conn->query("SELECT SUM(p.amount) FROM payments p JOIN pesanan ps ON p.pesanan_id=ps.id WHERE p.status='confirmed' AND ps.status='selesai'")->fetch_row()[0] ?: 0;
 
 // Total Orders (All Time)
 $total_orders = $conn->query("SELECT COUNT(*) FROM pesanan")->fetch_row()[0] ?: 0;
@@ -19,11 +19,11 @@ $pending_orders = $conn->query("SELECT COUNT(*) FROM pesanan WHERE status='pendi
 
 // Hari Ini Stats
 $orders_hari_ini = $conn->query("SELECT COUNT(*) FROM pesanan WHERE DATE(tanggal_pesan)='$hari_ini'")->fetch_row()[0] ?: 0;
-$revenue_hari_ini = $conn->query("SELECT SUM(p.amount) FROM payments p JOIN pesanan ps ON p.pesanan_id=ps.id WHERE DATE(ps.tanggal_pesan)='$hari_ini' AND p.status='confirmed'")->fetch_row()[0] ?: 0;
+$revenue_hari_ini = $conn->query("SELECT SUM(p.amount) FROM payments p JOIN pesanan ps ON p.pesanan_id=ps.id WHERE DATE(ps.tanggal_pesan)='$hari_ini' AND p.status='confirmed' AND ps.status='selesai'")->fetch_row()[0] ?: 0;
 
 // Bulan Ini Stats  
 $orders_bulan_ini = $conn->query("SELECT COUNT(*) FROM pesanan WHERE tanggal_pesan >= '$bulan_awal'")->fetch_row()[0] ?: 0;
-$revenue_bulan_ini = $conn->query("SELECT SUM(p.amount) FROM payments p JOIN pesanan ps ON p.pesanan_id=ps.id WHERE ps.tanggal_pesan >= '$bulan_awal' AND p.status='confirmed'")->fetch_row()[0] ?: 0;
+$revenue_bulan_ini = $conn->query("SELECT SUM(p.amount) FROM payments p JOIN pesanan ps ON p.pesanan_id=ps.id WHERE ps.tanggal_pesan >= '$bulan_awal' AND p.status='confirmed' AND ps.status='selesai'")->fetch_row()[0] ?: 0;
 
 // Order Terbaru (5 latest pending)
 $recent_orders = $conn->query(
@@ -55,7 +55,7 @@ $chart_data = [];
 for ($i = 6; $i >= 0; $i--) {
     $date = date('Y-m-d', strtotime("-$i days"));
     $chart_labels[] = date('d M', strtotime($date));
-    $rev = $conn->query("SELECT COALESCE(SUM(p.amount), 0) FROM payments p JOIN pesanan ps ON p.pesanan_id=ps.id WHERE DATE(ps.tanggal_pesan)='$date' AND p.status='confirmed'")->fetch_row()[0] ?: 0;
+    $rev = $conn->query("SELECT COALESCE(SUM(p.amount), 0) FROM payments p JOIN pesanan ps ON p.pesanan_id=ps.id WHERE DATE(ps.tanggal_pesan)='$date' AND p.status='confirmed' AND ps.status='selesai'")->fetch_row()[0] ?: 0;
     $chart_data[] = (int)$rev;
 }
 

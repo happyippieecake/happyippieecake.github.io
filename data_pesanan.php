@@ -54,7 +54,7 @@ if (!function_exists('formatRupiah')) {
 }
 
 // Count stats
-$pending_count = $conn->query("SELECT COUNT(*) FROM pesanan WHERE status='pending'")->fetch_row()[0];
+$pending_count = $conn->query("SELECT COUNT(*) FROM pesanan JOIN payments ON pesanan.order_id = payments.order_id COLLATE utf8mb4_general_ci WHERE pesanan.status='pending' AND payments.status='confirmed'")->fetch_row()[0];
 $completed_count = $conn->query("SELECT COUNT(*) FROM pesanan WHERE status='selesai'")->fetch_row()[0];
 ?>
 <!DOCTYPE html>
@@ -294,8 +294,8 @@ $completed_count = $conn->query("SELECT COUNT(*) FROM pesanan WHERE status='sele
                   payments.amount, payments.payment_method, payments.bukti_transfer, payments.status as payment_status, payments.order_id
            FROM pesanan 
            JOIN menu ON pesanan.menu_id=menu.id
-           LEFT JOIN payments ON pesanan.id=payments.pesanan_id
-           WHERE pesanan.status = 'pending'
+           JOIN payments ON pesanan.order_id = payments.order_id COLLATE utf8mb4_general_ci
+           WHERE pesanan.status = 'pending' AND payments.status = 'confirmed'
            ORDER BY pesanan.id DESC"
       );
 
