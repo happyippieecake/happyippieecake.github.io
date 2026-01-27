@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/db_connect.php';
 
+// Set timezone to Indonesia/WIB
+date_default_timezone_set('Asia/Jakarta');
+
 // Get current dates
 $hari_ini = date('Y-m-d');
 $bulan_awal = date('Y-m-01');
@@ -49,14 +52,15 @@ $top_menu = $conn->query(
      LIMIT 5"
 );
 
-// Chart Data - Revenue 7 hari terakhir
+// Chart Data - Sales Quantity (Total Cakes) 7 hari terakhir
 $chart_labels = [];
 $chart_data = [];
 for ($i = 6; $i >= 0; $i--) {
     $date = date('Y-m-d', strtotime("-$i days"));
     $chart_labels[] = date('d M', strtotime($date));
-    $rev = $conn->query("SELECT COALESCE(SUM(p.amount), 0) FROM payments p JOIN pesanan ps ON p.pesanan_id=ps.id WHERE DATE(ps.tanggal_pesan)='$date' AND p.status='confirmed' AND ps.status='selesai'")->fetch_row()[0] ?: 0;
-    $chart_data[] = (int)$rev;
+    // Count SUM(jumlah) for total cakes sold instead of revenue
+    $qty = $conn->query("SELECT COALESCE(SUM(ps.jumlah), 0) FROM payments p JOIN pesanan ps ON p.pesanan_id=ps.id WHERE DATE(ps.tanggal_pesan)='$date' AND p.status='confirmed' AND ps.status='selesai'")->fetch_row()[0] ?: 0;
+    $chart_data[] = (int)$qty;
 }
 
 if (!function_exists('formatRupiah')) {
@@ -252,9 +256,11 @@ if (!function_exists('formatRupiah')) {
         </div>
       </div>
 
-      <!-- Sales Chart -->
+      <!-- Chart Section -->
       <div class="chart-card">
-        <h3>📈 Grafik Penjualan 7 Hari Terakhir</h3>
+        <div class="header-actions" style="justify-content: space-between;">
+          <h3>Grafik Penjualan 7 Hari Terakhir</h3>
+        </div>
         <canvas id="salesChart" height="100"></canvas>
       </div>
 
@@ -328,47 +334,62 @@ if (!function_exists('formatRupiah')) {
   <script>
     // Chart initialization
     const ctx = document.getElementById('salesChart').getContext('2d');
-    new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: <?= json_encode($chart_labels) ?>,
-        datasets: [{
-          label: 'Revenue (Rp)',
-          data: <?= json_encode($chart_data) ?>,
-          borderColor: '#0d9488',
-          backgroundColor: 'rgba(13, 148, 136, 0.1)',
-          borderWidth: 3,
-          fill: true,
-          tension: 0.4,
-          pointBackgroundColor: '#0d9488',
-          pointBorderColor: '#fff',
-          pointBorderWidth: 2,
-          pointRadius: 5
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            callbacks: {
-              label: function(context) {
-                return 'Rp ' + context.raw.toLocaleString('id-ID');
-              }
-            }
-          }
+    const salesChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: <?= json_encode($chart_labels) ?>,
+            datasets: [{
+                label: 'Total Kue Terjual (Pcs)',
+                data: <?= json_encode($chart_data) ?>,
+                borderColor: '#0d9488',
+                backgroundColor: 'rgba(13, 148, 136, 0.1)',
+                borderWidth: 2,
+                tension: 0.4,
+                fill: true,
+                pointBackgroundColor: '#ffffff',
+                pointBorderColor: '#0d9488',
+                pointBorderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 6
+            }]
         },
-        scales: {
-          y: {
-            beginAtZero: true,
-            ticks: {
-              callback: function(value) {
-                return 'Rp ' + (value/1000) + 'K';
-              }
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.parsed.y + ' Pcs';
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        borderDash: [2, 2],
+                        drawBorder: false,
+                    },
+                    ticks: {
+                        stepSize: 1,
+                        precision: 0,
+                        callback: function(value) {
+                            return value + ' Pcs';
+                        }
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false,
+                        drawBorder: false,
+                    }
+                }
             }
-          }
         }
-      }
     });
 
     // Sidebar toggle
